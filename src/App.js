@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./Components/Login";
+import Cadastro from "./Components/Cadastro";
+import RecuperarSenha from "./Components/RecuperarSenha";
 
 function App() {
+  const [tela, setTela] = useState("login");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {tela === "login" && (
+        <Login
+          onSwitchCadastro={() => setTela("cadastro")}
+          onSwitchRecuperar={() => setTela("recuperar")}
+        />
+      )}
+      {tela === "cadastro" && (
+        <Cadastro
+          onSwitchLogin={() => setTela("login")}
+        />
+      )}
+      {tela === "recuperar" && (
+        <RecuperarSenha
+          onSwitchLogin={() => setTela("login")}
+        />
+      )}
+    </>
   );
 }
 
