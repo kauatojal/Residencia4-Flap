@@ -4,28 +4,78 @@ import "./Cadastro.css";
 function Cadastro({ onSwitchLogin }) {
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aqui você pode colocar a lógica para enviar os dados do cadastro
+    alert("Conta criada! Agora faça login.");
+    onSwitchLogin(); // Volta para a tela de login após cadastro
+  };
+
   return (
     <div className="cadastro-container">
-      <div className="cadastro-side">
+      <div className="cadastro-center-full">
         <img src="/Logo_flap.png" alt="Logo FIAP 15 anos" className="cadastro-logo" />
-        <h2>Criação de contas</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
+          <h2>Criação de contas</h2>
+          
           <label>Nome Completo</label>
-          <input type="text" placeholder="Nome completo" required className="cadastro-input" />
-
+          <input
+            type="text"
+            placeholder="Nome completo"
+            required
+            className="cadastro-input"
+          />
+          
           <label>Data de Nascimento</label>
           <div className="cadastro-date">
-            <input type="number" placeholder="01" required className="cadastro-input" min="1" max="31" maxLength={2} onInput={e => e.target.value = e.target.value.slice(0,2)} />
-            <input type="number" placeholder="05" required className="cadastro-input" min="1" max="12" maxLength={2} onInput={e => e.target.value = e.target.value.slice(0,2)} />
-            <input type="number" placeholder="1998" required className="cadastro-input" min="1900" max="2100" maxLength={4} onInput={e => e.target.value = e.target.value.slice(0,4)} />
+            <input
+              type="number"
+              placeholder="01"
+              required
+              className="cadastro-input"
+              min="1"
+              max="31"
+              maxLength={2}
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 2))}
+            />
+            <input
+              type="number"
+              placeholder="05"
+              required
+              className="cadastro-input"
+              min="1"
+              max="12"
+              maxLength={2}
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 2))}
+            />
+            <input
+              type="number"
+              placeholder="1998"
+              required
+              className="cadastro-input"
+              min="1900"
+              max="2100"
+              maxLength={4}
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 4))}
+            />
           </div>
-
+          
           <label>Email</label>
-          <input type="email" placeholder="example@gmail.com" required className="cadastro-input" />
-
+          <input
+            type="email"
+            placeholder="example@gmail.com"
+            required
+            className="cadastro-input"
+          />
+          
           <label>Usuário</label>
-          <input type="text" placeholder="johnkevin4362" required className="cadastro-input" />
-
+          <input
+            type="text"
+            placeholder="johnkevin4362"
+            required
+            className="cadastro-input"
+          />
+          
           <label>Senha</label>
           <div className="password-field">
             <input
@@ -41,7 +91,6 @@ function Cadastro({ onSwitchLogin }) {
               tabIndex={0}
               style={{ userSelect: "none" }}
             >
-              {/* SVG de olho simples */}
               <svg
                 height="22"
                 viewBox="0 0 24 24"
@@ -57,20 +106,23 @@ function Cadastro({ onSwitchLogin }) {
               </svg>
             </span>
           </div>
-
-          <button type="submit" className="cadastro-btn">Criar conta</button>
+          
+          <button type="submit" className="cadastro-btn">
+            Criar conta
+          </button>
+          
+          <div className="register-link">
+            <p>
+              Já tem conta?{" "}
+              <span
+                onClick={onSwitchLogin}
+                style={{ color: "#5865f2", cursor: "pointer", fontWeight: "600" }}
+              >
+                Entre
+              </span>
+            </p>
+          </div>
         </form>
-        <div className="register-link">
-          <p>
-            Já tem conta?{" "}
-            <span onClick={onSwitchLogin} style={{ color: "#5865f2", cursor: "pointer", fontWeight: "600" }}>
-              Entre
-            </span>
-          </p>
-        </div>
-      </div>
-      <div className="cadastro-art">
-        <img src="/Logo_flap.png" alt="Logo FIAP 15 anos" className="cadastro-logo-large" />
       </div>
     </div>
   );

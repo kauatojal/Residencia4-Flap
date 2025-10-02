@@ -1,26 +1,32 @@
 import React, { useState } from "react";
 import "./Login.css";
 
-function Login({ onSwitchCadastro, onSwitchRecuperar }) {
+function Login({ onSwitchCadastro, onSwitchRecuperar, onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin();
+  };
+
   return (
-    <div className="login-container">
-      <div className="login-side">
+    <div className="login-container-fullscreen">
+      <div className="login-center-full">
         <img src="/Logo_flap.png" alt="Logo FIAP 15 anos" className="login-logo" />
-        <h2>Login</h2>
-        <form>
-          <label>Email</label>
+        <form onSubmit={handleSubmit}>
+          <h2>Login</h2>
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             placeholder="example@gmail.com"
             required
             className="login-input"
           />
-
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
           <div className="password-field">
             <input
+              id="password"
               type={showPassword ? "text" : "password"}
               placeholder="********"
               required
@@ -33,13 +39,21 @@ function Login({ onSwitchCadastro, onSwitchRecuperar }) {
               tabIndex={0}
               style={{ userSelect: "none" }}
             >
-              <svg height="22" viewBox="0 0 24 24" width="22" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                height="22"
+                viewBox="0 0 24 24"
+                width="22"
+                fill="none"
+                stroke="#555"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <circle cx="12" cy="12" r="3" />
                 <path d="M2.05 12C3.81 7.61 7.93 4 12 4s8.19 3.61 9.95 8c-1.76 4.39-5.88 8-9.95 8S3.81 16.39 2.05 12z" />
               </svg>
             </span>
           </div>
-
           <div className="login-options">
             <label>
               <input type="checkbox" /> Lembrar-me
@@ -47,7 +61,7 @@ function Login({ onSwitchCadastro, onSwitchRecuperar }) {
             <a
               href="#"
               className="forgot"
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 onSwitchRecuperar();
               }}
@@ -55,22 +69,21 @@ function Login({ onSwitchCadastro, onSwitchRecuperar }) {
               Recuperar senha?
             </a>
           </div>
-          <button type="submit" className="login-btn">Entrar</button>
+          <button type="submit" className="login-btn">
+            Entrar
+          </button>
+          <div className="register-link">
+            <p>
+              Não tem conta?{" "}
+              <span
+                onClick={onSwitchCadastro}
+                style={{ color: "#5865f2", cursor: "pointer", fontWeight: "600" }}
+              >
+                Cadastre-se
+              </span>
+            </p>
+          </div>
         </form>
-        <div className="register-link">
-          <p>
-            Não tem conta?{" "}
-            <span
-              onClick={onSwitchCadastro}
-              style={{ color: "#5865f2", cursor: "pointer", fontWeight: "600" }}
-            >
-              Cadastre-se
-            </span>
-          </p>
-        </div>
-      </div>
-      <div className="login-art">
-        <img src="/Logo_flap.png" alt="Logo FIAP 15 anos" className="logo-centered" />
       </div>
     </div>
   );

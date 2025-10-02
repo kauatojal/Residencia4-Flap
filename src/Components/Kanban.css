@@ -1,0 +1,665 @@
+.kanban-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.kanban-sidebar {
+  background: #f7f7fa;
+  width: 240px;
+  padding: 32px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+}
+.kanban-logo {
+  width: 120px;
+  margin-bottom: 28px;
+}
+
+/* Menu lateral - alinhamento vertical */
+.sidebar-main-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: auto;
+}
+.sidebar-btn {
+  border: none;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 18px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-btn:hover {
+  background: #5865f2;
+  color: #fff;
+}
+.kanban-notification-dot {
+  display: inline-block;
+  background: #ea3c3c;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 12px;
+  padding: 2px 9px;
+  margin-left: 6px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+/* Bloco de usuário */
+.kanban-user {
+  margin-top: auto;
+  width: 100%;
+  padding-top: 20px;
+}
+
+/* MAIN */
+.kanban-main {
+  flex: 1;
+  padding: 32px 28px 0 28px;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.kanban-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+.kanban-header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.kanban-header-switch {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}
+.switch-btn {
+  background: #fff;
+  border: none;
+  border-radius: 18px;
+  color: #333;
+  padding: 8px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px #0001;
+  cursor: pointer;
+}
+.switch-btn.active,
+.switch-btn:hover {
+  background: #5865f2;
+  color: #fff;
+}
+.kanban-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+.kanban-header-search {
+  border: 1px solid #ecefff;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 15px;
+  outline: none;
+  width: 180px;
+  background: #fff;
+}
+.kanban-header-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  background: #ecefff;
+  color: #5865f2;
+  font-weight: 550;
+  transition: background 0.18s;
+}
+.kanban-header-btn.add {
+  background: #38c08f;
+  color: #fff;
+}
+.kanban-header-btn:hover {
+  background: #5865f2;
+  color: #fff;
+}
+
+/* COLUNAS */
+.kanban-columns {
+  display: flex;
+  gap: 26px;
+  justify-content: flex-start;
+}
+.kanban-column {
+  flex: 1;
+  min-width: 260px;
+}
+.kanban-column h2 {
+  font-size: 22px;
+  font-weight: 550;
+  margin-bottom: 12px;
+  color: #444;
+}
+
+/* CARDS */
+.kanban-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 14px rgba(160, 160, 160, 0.08);
+  padding: 18px 18px 14px 18px;
+  margin-bottom: 16px;
+  min-width: 220px;
+  max-width: 340px;
+  position: relative;
+}
+.kanban-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kanban-circle {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background: #f6f6f6;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 1.8px solid #ddd;
+}
+.kanban-task {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 500;
+}
+.kanban-card-more {
+  background: transparent;
+  border: none;
+  font-size: 19px;
+  color: #bbb;
+  cursor: pointer;
+}
+.kanban-card-client {
+  font-size: 15px;
+  color: #657;
+  margin-bottom: 2px;
+}
+.kanban-card-prazo {
+  margin-bottom: 8px;
+}
+
+/* BADGES DE STATUS */
+.kanban-alert {
+  border-radius: 15px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.alert-green {
+  background: #4caf50;
+  color: #fff;
+}
+
+.alert-red {
+  background: #f34d4d;
+  color: #fff;
+}
+
+.kanban-card-date {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #858585;
+}
+.kanban-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kanban-user-group {
+  background: #ecefff;
+  color: #5865f2;
+  border-radius: 8px;
+  padding: 1px 9px;
+  font-size: 16px;
+}
+.kanban-card-views {
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Menu Dropdown */
+.kanban-card-menu-wrapper {
+  position: relative;
+}
+
+.kanban-card-dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 140px;
+  overflow: hidden;
+}
+
+.kanban-dropdown-item {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kanban-dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.kanban-dropdown-item.delete {
+  color: #f34d4d;
+}
+
+.kanban-dropdown-item.delete:hover {
+  background: #ffe5e5;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 900px) {
+  .kanban-columns {
+    flex-direction: column;
+  }
+  .kanban-column {
+    min-width: 250px;
+  }
+  .kanban-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .kanban-header-controls {
+    margin-top: 8px;
+  }
+}
+
+/* Drag handle */
+.kanban-drag-handle {
+  cursor: grab;
+  font-size: 18px;
+  color: #bbb;
+  margin-right: 8px;
+  user-select: none;
+}
+.kanban-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+}
+.modal-close:hover {
+  color: #333;
+}
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+.modal-content p {
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #555;
+}
+
+/* Modal de Exclusão */
+.delete-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.delete-modal h2 {
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+
+.delete-modal p {
+  margin-bottom: 24px;
+  color: #666;
+  font-size: 15px;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.delete-modal-cancel,
+.delete-modal-confirm {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-modal-cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.delete-modal-cancel:hover {
+  background: #d0d0d0;
+}
+
+.delete-modal-confirm {
+  background: #f34d4d;
+  color: #fff;
+}
+
+.delete-modal-confirm:hover {
+  background: #d43f3f;
+}
+
+/* Estilos do Calendário */
+.calendario-container {
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calendario-year-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.year-nav-btn {
+  background: #5b8def;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(91, 141, 239, 0.3);
+}
+
+.year-nav-btn:hover {
+  background: #4a7bd8;
+  transform: scale(1.05);
+}
+
+.year-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.year-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+  color: #1e3a5f;
+  letter-spacing: -0.5px;
+}
+
+.calendario-year-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.calendario-month-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.calendario-month-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.month-title {
+  text-align: center;
+  margin: 0 0 18px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e3a5f;
+  letter-spacing: 0.3px;
+}
+
+.month-weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.month-weekdays-header div {
+  padding: 4px 0;
+}
+
+.month-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.month-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #374151;
+  font-weight: 600;
+  position: relative;
+}
+
+.month-day-cell:hover:not(.inactive-day) {
+  background: #e0f2fe;
+  transform: scale(1.1);
+}
+
+.month-day-cell.inactive-day {
+  color: #d1d5db;
+  cursor: default;
+  font-weight: 400;
+}
+
+.month-day-cell.inactive-day:hover {
+  background: transparent;
+  transform: none;
+}
+
+.month-day-cell.today-day {
+  background: linear-gradient(135deg, #5b8def 0%, #4a7bd8 100%);
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(91, 141, 239, 0.4);
+}
+
+.month-day-cell.has-task-day {
+  background: #dbeafe;
+  font-weight: 800;
+  color: #1e40af;
+}
+
+.month-day-cell.has-task-day::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  background: #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.5);
+}
+
+.month-day-cell.has-task-day:hover {
+  background: #bfdbfe;
+}
+
+.month-day-cell.today-day.has-task-day::after {
+  background: white;
+}
+
+/* Modal do Calendário */
+.calendario-modal {
+  max-width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.calendario-modal-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendario-modal-task {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  background: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.calendario-modal-task:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: #5b8def;
+  transform: translateX(5px);
+}
+
+.calendario-modal-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 15px;
+}
+
+.calendario-modal-task-name {
+  font-weight: 700;
+  font-size: 18px;
+  color: #1e3a5f;
+}
+
+.calendario-modal-task-client,
+.calendario-modal-task-column,
+.calendario-modal-task-desc {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.calendario-modal-task-client strong,
+.calendario-modal-task-column strong {
+  color: #374151;
+  font-weight: 700;
+}
+
+.calendario-no-tasks {
+  text-align: center;
+  color: #9ca3af;
+  padding: 50px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Responsividade do Calendário */
+@media (max-width: 1400px) {
+  .calendario-year-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .calendario-year-grid {
+    grid-template-columns: 1fr;
+  }
+}
