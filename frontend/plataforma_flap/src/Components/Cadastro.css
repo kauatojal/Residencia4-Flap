@@ -1,0 +1,133 @@
+.cadastro-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #fff;
+}
+
+.cadastro-side {
+  width: 32%;
+  padding: 40px 32px 40px 32px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-right: 2px solid #f2f2f2; /* Divisão branca sutil */
+  box-sizing: border-box;
+}
+
+.cadastro-logo {
+  width: 150px;
+  margin-bottom: 30px;
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.cadastro-side h2 {
+  font-weight: normal;
+  margin-bottom: 36px;
+  color: #222;
+  text-align: center;
+  width: 100%;
+}
+
+form {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #444;
+  align-self: flex-start;
+}
+
+.cadastro-input {
+  width: 100%;
+  background: #f5f5f7;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 15px;
+  margin: 6px 0 14px 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cadastro-date {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.show-hide-icon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #555;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.cadastro-btn {
+  margin-top: 24px;
+  background: #5865f2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 0;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.2s background;
+  width: 100%;
+}
+
+.cadastro-btn:hover {
+  background: #2b36fb;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+  color: #444;
+}
+
+.register-link span {
+  color: #5865f2;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.register-link span:hover {
+  text-decoration: underline;
+}
+
+.cadastro-art {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+
+.cadastro-logo-large {
+  width: 340px;
+  max-width: 84%;
+  display: block;
+  height: auto;
+}
