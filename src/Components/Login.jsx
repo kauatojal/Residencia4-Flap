@@ -12,7 +12,7 @@ function Login({ onSwitchCadastro, onSwitchRecuperar, onLogin }) {
   return (
     <div className="login-container-fullscreen">
       <div className="login-center-full">
-        <img src="/Logo_flap.png" alt="Logo FIAP 15 anos" className="login-logo" />
+        <img src="/logo.png" alt="Flap" className="login-logo" />
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
           <label htmlFor="email">Email</label>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AdicionarTarefa from "./AdicionarTarefa";
 import "./Kanban.css";
+import KanbanFilter from "./KanbanFilter";
+console.log('KanbanFilter importado:', KanbanFilter);
 
 const initialData = {
   "Iniciar": [
@@ -211,10 +213,87 @@ function Kanban({
   const [cardToDelete, setCardToDelete] = useState(null);
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [activeView, setActiveView] = useState("quadros");
-  
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState(null);
+
+  useEffect(() => {
+    console.log('isFilterOpen:', isFilterOpen);
+  }, [isFilterOpen]);
+
   // Estados do calendário
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDay, setSelectedDay] = useState(null);
+
+  const applyFiltersToTasks = (tasks, filters, currentUser = null) => {
+    if (!filters || !tasks) return tasks;
+
+    return tasks.filter(task => {
+      if (!task) return false;
+
+      if (filters.keyword) {
+        const kw = filters.keyword.toLowerCase();
+        const searchableText = `
+          ${task.name || ''} 
+          ${task.descricao || ''}
+          ${task.client || ''}
+        `.toLowerCase();
+        if (!searchableText.includes(kw)) return false;
+      }
+
+      if (filters.selectedMembers && filters.selectedMembers.length) {
+        const sel = filters.selectedMembers;
+        if (sel.includes("Sem membros")) {
+          if (task.participantes && task.participantes > 0) return false;
+        }
+        if (sel.includes("Cartões atribuídos a mim")) {
+          if (!currentUser) return false;
+        }
+        const names = sel.filter(s => s !== "Sem membros" && s !== "Cartões atribuídos a mim");
+        if (names.length) {
+          return false;
+        }
+      }
+
+      if (filters.cardStatus) {
+        const isConcluido = task.sector === "Concluídos";
+        if (filters.cardStatus === "concluido" && !isConcluido) return false;
+        if (filters.cardStatus === "nao-concluido" && isConcluido) return false;
+      }
+
+      if (filters.deliveryDate && task.prazo) {
+        const opt = filters.deliveryDate;
+        const [day, month, year] = task.prazo.split('/');
+        const due = new Date(year, month - 1, day);
+        const now = new Date();
+
+        if (opt === "Sem datas") return false;
+        else if (opt === "Em Atraso") {
+          if (due >= now) return false;
+        } else {
+          const diffDays = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+          if (opt === "A ser entregue em um dia" && (diffDays < 0 || diffDays > 1)) return false;
+          if (opt === "A ser entregue em uma semana" && (diffDays < 0 || diffDays > 7)) return false;
+          if (opt === "A ser entregue em um mês" && (diffDays < 0 || diffDays > 30)) return false;
+        }
+      }
+
+      if (filters.selectedLabels && filters.selectedLabels.length) {
+        const sl = filters.selectedLabels;
+        if (sl.includes("Sem etiquetas")) {
+          if (task.tag) return false;
+        } else {
+          if (!task.tag || !sl.includes(task.tag)) return false;
+        }
+      }
+
+      return true;
+    });
+  };
+
+  const getFilteredCards = (cards, columnId) => {
+    if (!appliedFilters) return cards;
+    return applyFiltersToTasks(cards, appliedFilters, "Hana");
+  };
 
   // Funções do Calendário
   const parseDateString = (dateStr) => {
@@ -415,10 +494,12 @@ function Kanban({
     setTaskToEdit(null);
   };
 
+  console.log('Renderizando KanbanFilter?', isFilterOpen);
+
   return (
     <div className="kanban-wrapper">
       <aside className="kanban-sidebar">
-        <img src="/Logo_flap.png" alt="Flap 15 anos" className="kanban-logo" />
+        <img src="/logo.png" alt="Flap" className="kanban-logo" />
 
         <nav className="sidebar-main-menu">
           <button onClick={onSwitchKanban} className="sidebar-btn">
@@ -464,13 +545,13 @@ function Kanban({
           <div className="kanban-header-left">
             <h1>Flap</h1>
             <div className="kanban-header-switch">
-              <button 
+              <button
                 className={`switch-btn ${activeView === "quadros" ? "active" : ""}`}
                 onClick={() => setActiveView("quadros")}
               >
                 Quadros
               </button>
-              <button 
+              <button
                 className={`switch-btn ${activeView === "calendario" ? "active" : ""}`}
                 onClick={() => setActiveView("calendario")}
               >
@@ -484,7 +565,12 @@ function Kanban({
               placeholder="Pesquisar"
               className="kanban-header-search"
             />
-            <button className="kanban-header-btn">Filtrar</button>
+            <button
+              className="kanban-header-btn"
+              onClick={() => setIsFilterOpen(true)}
+            >
+              Filtrar
+            </button>
             <button
               className="kanban-header-btn add"
               onClick={() => setShowAddTask(true)}
@@ -512,7 +598,7 @@ function Kanban({
                       }}
                     >
                       <h2>{columnId}</h2>
-                      {cards.map((card, index) => (
+                      {getFilteredCards(cards, columnId).map((card, index) => (
                         <Draggable key={card.id} draggableId={card.id} index={index}>
                           {(provided, snapshot) => (
                             <div
@@ -565,7 +651,7 @@ function Kanban({
                                 </div>
                               </div>
                               <div className="kanban-card-client">{card.client}</div>
-                              
+
                               <div className="kanban-card-prazo" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' }}>
                                 {card.tag && (
                                   <span
@@ -582,16 +668,15 @@ function Kanban({
                                   </span>
                                 )}
                                 <span
-                                  className={`kanban-alert ${
-                                    card.alerta === "Atrasado"
-                                      ? "alert-red"
-                                      : "alert-green"
-                                  }`}
+                                  className={`kanban-alert ${card.alerta === "Atrasado"
+                                    ? "alert-red"
+                                    : "alert-green"
+                                    }`}
                                 >
                                   {card.alerta}
                                 </span>
                               </div>
-                              
+
                               <div className="kanban-card-date">
                                 Prazo: {card.prazo}
                               </div>
@@ -628,11 +713,11 @@ function Kanban({
             <div className="calendario-year-grid">
               {monthNames.map((monthName, monthIndex) => {
                 const days = getDaysInMonth(currentYear, monthIndex);
-                
+
                 return (
                   <div key={monthIndex} className="calendario-month-card">
                     <h3 className="month-title">{monthName} {currentYear}</h3>
-                    
+
                     <div className="month-weekdays-header">
                       <div>D</div>
                       <div>S</div>
@@ -648,7 +733,7 @@ function Kanban({
                         const tasksForDay = dayObj.isCurrentMonth && dayObj.date ? getTasksForDay(dayObj.date) : [];
                         const hasTask = tasksForDay.length > 0;
                         const isTodayDay = dayObj.isCurrentMonth && dayObj.date && isToday(dayObj.date);
-                        
+
                         return (
                           <div
                             key={idx}
@@ -796,6 +881,18 @@ function Kanban({
             onClose={handleCloseAddTask}
             onAddTask={handleAddTask}
             taskToEdit={taskToEdit}
+          />
+        )}
+
+        {isFilterOpen && (
+          <KanbanFilter
+            onClose={() => setIsFilterOpen(false)}
+            onApply={(filters) => {
+              setAppliedFilters(filters);
+              setIsFilterOpen(false);
+            }}
+            members={["Membro 1", "Membro 2", "Membro 3"]}
+            currentUser="Membro 1"
           />
         )}
       </main>
