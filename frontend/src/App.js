@@ -6,6 +6,9 @@ import RecuperarSenha from "./Components/RecuperarSenha";
 import Configuracoes from "./Components/Configuracoes";
 import Projetos from "./Components/Projetos";
 import Notificacoes from "./Components/Notificacoes";
+import ListaFuncionarios from "./Components/ListaFuncionarios";
+import CadastroCliente from "./Components/CadastroCliente";
+import EditarPerfil from "./Components/EditarPerfil";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -36,6 +39,7 @@ function App() {
       if (screen === "recuperarSenha")
         return <RecuperarSenha onSwitchLogin={() => setScreen("login")} />;
     }
+
     switch (screen) {
       case "kanban":
         return (
@@ -44,6 +48,9 @@ function App() {
             onSwitchProjetos={() => setScreen("projetos")}
             onSwitchConfiguracoes={() => setScreen("configuracoes")}
             onSwitchNotificacoes={() => setScreen("notificacoes")}
+            onSwitchUsuarios={() => setScreen("usuarios")}
+            onSwitchClientes={() => setScreen("clientes")}
+            onSwitchPerfil={() => setScreen("perfil")}
             onLogout={handleLogout}
           />
         );
@@ -53,6 +60,12 @@ function App() {
         return <Projetos />;
       case "notificacoes":
         return <Notificacoes />;
+      case "usuarios":
+        return <ListaFuncionarios />;
+      case "clientes":
+        return <CadastroCliente />;
+      case "perfil":
+        return <EditarPerfil />;
       default:
         return <Kanban />;
     }
