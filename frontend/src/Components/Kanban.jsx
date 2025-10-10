@@ -508,6 +508,15 @@ function Kanban({
           <button onClick={onSwitchProjetos} className="sidebar-btn">
             Projetos
           </button>
+          <button onClick={onSwitchUsuarios} className="sidebar-btn">
+            Usuários
+          </button>
+          <button onClick={onSwitchClientes} className="sidebar-btn">
+            Clientes
+          </button>
+          <button onClick={onSwitchPerfil} className="sidebar-btn">
+            Perfil
+          </button>
           <button onClick={onSwitchConfiguracoes} className="sidebar-btn">
             Configurações
           </button>
