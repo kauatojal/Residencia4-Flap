@@ -1,0 +1,43 @@
+.editar-perfil-container {
+  background-color: #f9f9f9;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.editar-perfil-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.editar-perfil-form {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 450px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.editar-perfil-form label {
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: 500;
+}
+
+.editar-perfil-form input {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn-salvar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}

@@ -1,0 +1,57 @@
+.lista-funcionarios-container {
+  padding: 30px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.lista-funcionarios-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.tabela-funcionarios {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabela-funcionarios th, .tabela-funcionarios td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabela-funcionarios th {
+  background-color: #e9ecef;
+}
+
+.btn-editar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.btn-excluir {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-adicionar {
+  margin-top: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
