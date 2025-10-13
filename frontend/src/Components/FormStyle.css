@@ -1,0 +1,103 @@
+/* Novo container para centralizar o formulário na página */
+.form-page-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 480px; /* Um pouco maior */
+    margin: auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px Gist
+    30px rgba(0, 0, 0, 0.1);
+}
+
+.form-logo {
+    width: 120px;
+    margin-bottom: 2rem;
+}
+
+.form-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-field {
+    width: 100%;
+    margin-bottom: 1.2rem;
+}
+
+.form-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #f8f9fa;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: #4c6ef5;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.2);
+}
+
+.form-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4c6ef5;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.form-button:hover {
+    background-color: #3b5bdb;
+}
+
+.secondary-button {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #4c6ef5;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #4c6ef5;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    margin-top: 1rem;
+}
+
+.secondary-button:hover {
+    background-color: #e7f5ff;
+}

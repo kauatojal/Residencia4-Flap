@@ -1,0 +1,107 @@
+/* CONTAINER PRINCIPAL: Adaptação para o Layout com Sidebar */
+.main-content-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  width: 100%;
+  padding: 40px 20px;
+}
+
+/* CARD CENTRALIZADO: Onde o formulário realmente fica */
+.cadastro-center-card {
+  width: 100%;
+  max-width: 450px; 
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* CLASSES DE FORMULÁRIO (Reutilizadas do seu código original, mas com ajustes) */
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-center-card h2 {
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 28px;
+    color: #222;
+    text-align: center;
+    width: 100%;
+}
+
+form label {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  align-self: flex-start;
+  margin-bottom: 6px;
+}
+
+.cadastro-input {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 15px;
+  margin-bottom: 16px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.cadastro-input:focus {
+  border-color: #5865f2;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.1);
+}
+
+/* BOTÃO CADASTRAR */
+.cadastro-btn {
+  margin-top: 12px;
+  background: #4a67ff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+}
+
+.cadastro-btn:hover {
+  background: #3a56e0;
+  box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+  transform: translateY(-2px);
+}
+
+/* BOTÃO RECUPERAR SENHA (Exclusivo ADM) */
+.btn-recuperar-adm {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 15px;
+    border: 1px solid #4a67ff; 
+    border-radius: 8px;
+    background: none;
+    color: #4a67ff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-recuperar-adm:hover {
+    background: #f0f2ff;
+}

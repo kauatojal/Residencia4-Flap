@@ -1,0 +1,245 @@
+.kanban-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.kanban-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.kanban-header-left h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.kanban-header-switch {
+  display: flex;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.switch-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.switch-btn.active {
+  background-color: #fff;
+  color: #4c6ef5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.kanban-header-search {
+  padding: 10px 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  width: 200px;
+}
+
+.kanban-header-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.kanban-header-btn.add {
+  background-color: #4c6ef5;
+  color: #fff;
+  border-color: #4c6ef5;
+}
+
+.kanban-columns {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 1rem 1rem 1rem;
+  overflow-x: auto;
+  min-height: calc(100vh - 120px);
+}
+
+.kanban-column {
+  flex: 1;
+  min-width: 300px;
+  max-width: 320px;
+}
+
+.kanban-column h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #868e96;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+}
+
+.kanban-card {
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.kanban-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.kanban-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.kanban-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kanban-card-title .kanban-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #adb5bd;
+  background-color: #f8f9fa;
+}
+
+.kanban-card-title .kanban-task {
+  font-weight: 600;
+}
+
+.kanban-card-more {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #adb5bd;
+  padding: 0;
+}
+
+.kanban-card-client {
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 0.8rem;
+}
+
+.kanban-card-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.kanban-tag, .kanban-alert {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.alert-green { background-color: #d3f9d8; color: #2f9e44; }
+.alert-red { background-color: #ffe3e3; color: #c92a2a; }
+
+.kanban-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8rem;
+  border-top: 1px solid #f1f3f5;
+  font-size: 0.8rem;
+  color: #868e96;
+}
+
+.kanban-card-participants {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #e7f5ff;
+  color: #1c7ed6;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.kanban-card-menu-wrapper {
+  position: relative;
+}
+
+.kanban-card-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+  width: 120px;
+  overflow: hidden;
+  border: 1px solid #f1f3f5;
+}
+
+.kanban-card-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.kanban-card-dropdown button:hover {
+  background-color: #f1f3f5;
+}
+.kanban-card-dropdown button.delete { color: #fa5252; }
+
+.calendario-container { padding: 1rem; text-align: center; }
+.calendario-container h2 { margin-bottom: 1rem; }
+
+.delete-modal {
+    text-align: center;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.delete-modal-actions button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-modal-actions button.delete {
+    background-color: #fa5252;
+    color: #fff;
+    border-color: #fa5252;
+}
