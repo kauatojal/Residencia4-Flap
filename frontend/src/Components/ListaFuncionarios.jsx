@@ -1,33 +1,48 @@
 import React, { useState } from "react";
 import "./ListaFuncionarios.css";
-import { BsThreeDotsVertical } from 'react-icons/bs'; // Ícone para o menu de ações
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { EditarUsuario } from "./EditarUsuario";
+
 
 export default function ListaFuncionarios({ onAddFuncionario }) {
-  // Dados de exemplo, agora com mais informações como no Figma
-  const funcionarios = [
+  // State para os funcionários
+  const [funcionarios, setFuncionarios] = useState([
     { id: 1, nome: "João Silva", email: "joao.silva@flap.com", celular: "+55 79 91234-5678", cargo: "Designer", setor: "Design", avatar: "https://placehold.co/100x100/EFEFEF/333?text=JS" },
     { id: 2, nome: "Maria Souza", email: "maria.souza@flap.com", celular: "+55 79 98765-4321", cargo: "Atendimento", setor: "Comercial", avatar: "https://placehold.co/100x100/EFEFEF/333?text=MS" },
     { id: 3, nome: "Carlos Lima", email: "carlos.lima@flap.com", celular: "+55 79 95555-4444", cargo: "Social Media", setor: "Mídia", avatar: "https://placehold.co/100x100/EFEFEF/333?text=CL" },
     { id: 4, nome: "Adriene Watson", email: "adriene.w@flap.com", celular: "+55 79 94444-3333", cargo: "Marketing Lead", setor: "Marketing", avatar: "https://placehold.co/100x100/EFEFEF/333?text=AW" },
-  ];
+  ]);
 
   // State para controlar qual menu de ações está aberto
   const [openMenuId, setOpenMenuId] = useState(null);
 
+  // State para controlar qual funcionário está sendo editado
+  const [funcionarioEditando, setFuncionarioEditando] = useState(null);
+
   const handleEdit = (id) => {
-    console.log(`Editar funcionário ID: ${id}`);
-    setOpenMenuId(null); // Fecha o menu após a ação
+    const funcionario = funcionarios.find(f => f.id === id);
+    setFuncionarioEditando(funcionario);
+    setOpenMenuId(null); // Fecha o menu
+  };
+
+  const handleSalvar = (funcionarioAtualizado) => {
+    setFuncionarios(funcionarios.map(f => 
+      f.id === funcionarioAtualizado.id ? funcionarioAtualizado : f
+    ));
+    setFuncionarioEditando(null); // Fecha o modal
+  };
+
+  const handleCancelar = () => {
+    setFuncionarioEditando(null); // Fecha o modal
   };
 
   const handleDelete = (id) => {
-    // Substitua window.confirm por um modal de confirmação em um projeto real
     if (window.confirm("Deseja realmente excluir este funcionário?")) {
-      console.log(`Funcionário ID ${id} excluído`);
+      setFuncionarios(funcionarios.filter(f => f.id !== id));
     }
-    setOpenMenuId(null); // Fecha o menu após a ação
+    setOpenMenuId(null);
   };
 
-  // Função para mapear o setor para uma classe de CSS
   const getSetorClass = (setor) => {
     return `setor-${setor.toLowerCase()}`;
   };
@@ -40,8 +55,6 @@ export default function ListaFuncionarios({ onAddFuncionario }) {
           + Add Funcionário
         </button>
       </div>
-
-      {/* Filtros podem ser adicionados aqui no futuro */}
 
       <table className="funcionarios-table">
         <thead>
@@ -87,6 +100,15 @@ export default function ListaFuncionarios({ onAddFuncionario }) {
           ))}
         </tbody>
       </table>
+
+      {/* Modal de edição - só aparece quando houver um funcionário selecionado */}
+      {funcionarioEditando && (
+        <EditarUsuario 
+          usuario={funcionarioEditando}
+          onSave={handleSalvar}
+          onCancel={handleCancelar}
+        />
+      )}
     </div>
   );
 }
