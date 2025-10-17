@@ -243,3 +243,280 @@
     color: #fff;
     border-color: #fa5252;
 }
+
+/* Botão Adicionar Cartão */
+.btn-adicionar-cartao {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-adicionar-cartao:hover {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-adicionar-cartao:active {
+  background: #cbd5e0;
+}
+
+/* Header da Coluna */
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.column-header h2 {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.column-header h2:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.column-title-input {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  border: 2px solid #4a67ff;
+  border-radius: 4px;
+  background: white;
+}
+
+.column-menu-btn {
+  background: transparent;
+  border: none;
+  color: #718096;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.column-menu-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #4a5568;
+}
+
+/* Botão Adicionar Nova Coluna */
+.btn-add-column {
+  min-width: 320px;
+  padding: 12px;
+  background: rgba(74, 103, 255, 0.1);
+  border: 2px dashed #4a67ff;
+  border-radius: 12px;
+  color: #4a67ff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-add-column:hover {
+  background: rgba(74, 103, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.add-column-form {
+  background: white;
+  padding: 16px;
+}
+
+.add-column-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.add-column-input:focus {
+  outline: none;
+  border-color: #4a67ff;
+}
+
+.add-column-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-confirm,
+.btn-cancel {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-confirm {
+  background: #4a67ff;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background: #3a56e0;
+}
+
+.btn-cancel {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-cancel:hover {
+  background: #cbd5e0;
+}
+
+/* Menu da Coluna */
+.column-menu-wrapper {
+  position: relative;
+}
+
+.column-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 140px;
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.column-dropdown button {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2d3748;
+  transition: background 0.3s ease;
+}
+
+.column-dropdown button:hover {
+  background: #f7fafc;
+}
+
+.column-dropdown button.delete {
+  color: #e53e3e;
+}
+
+.column-dropdown button.delete:hover {
+  background: #fff5f5;
+}
+
+/* Divisor entre colunas */
+.column-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  position: relative;
+}
+
+.btn-add-column-divider {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid transparent;
+  color: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column-divider:hover .btn-add-column-divider {
+  background: #4a67ff;
+  border-color: #4a67ff;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(74, 103, 255, 0.3);
+}
+
+/* Formulário inline de adicionar coluna */
+.add-column-inline {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inline-column-input {
+  width: 150px;
+  padding: 6px 10px;
+  border: 2px solid #4a67ff;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.btn-confirm-inline,
+.btn-cancel-inline {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-confirm-inline {
+  background: #10b981;
+  color: white;
+}
+
+.btn-confirm-inline:hover {
+  background: #059669;
+}
+
+.btn-cancel-inline {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-cancel-inline:hover {
+  background: #dc2626;
+}
+
+/* Ajuste no container das colunas */
+.kanban-columns {
+  display: flex;
+  gap: 0;
+  min-height: calc(100vh - 120px);
+}

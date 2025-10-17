@@ -266,3 +266,250 @@
 .popup-button:hover {
     background-color: #364fc7;
 }
+
+/* Sistema de Comentários */
+.comment-input-container,
+.reply-input-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4a67ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.comment-input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.comment-input:focus {
+  border-color: #4a67ff;
+}
+
+.comment-submit-btn {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: #4a67ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.comment-submit-btn:hover:not(:disabled) {
+  background: #3a56e0;
+}
+
+.comment-submit-btn:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.comment-cancel-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.comment-cancel-btn:hover {
+  background: #f7fafc;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.activity-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+.comment-text {
+  background: #f7fafc;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: #2d3748;
+  line-height: 1.5;
+}
+
+.reply-btn {
+  background: transparent;
+  border: none;
+  color: #4a67ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.3s ease;
+}
+
+.reply-btn:hover {
+  color: #3a56e0;
+  text-decoration: underline;
+}
+
+/* Respostas */
+.replies-container {
+  margin-left: 48px;
+  margin-top: 12px;
+}
+
+.reply-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.reply-icon {
+  color: #cbd5e0;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.reply-input-container {
+  margin-left: 48px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Remove barra de rolagem horizontal e padroniza */
+.task-details-modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.activity-list {
+  overflow-x: hidden;
+}
+
+.task-details-content {
+  overflow-x: hidden;
+}
+
+/* Estiliza a barra de rolagem vertical (opcional) */
+.task-details-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-details-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.task-details-modal::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.task-details-modal::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.task-main-content,
+.comment-input-container,
+.reply-input-container,
+.activity-item,
+.reply-item {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+/* Ações do comentário (Responder e Ver respostas) */
+.comment-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.toggle-replies-btn {
+  background: transparent;
+  border: none;
+  color: #4a67ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.3s ease;
+}
+
+.toggle-replies-btn:hover {
+  color: #3a56e0;
+  text-decoration: underline;
+}
+
+.toggle-replies-btn svg {
+  flex-shrink: 0;
+}

@@ -3,13 +3,13 @@ import "./Kanban.css";
 
 function Kanban({
   onSwitchDashboard,
-  onSwitchKanban,
   onSwitchProjetos,
   onSwitchConfiguracoes,
   onSwitchNotificacoes,
   onLogout,
   onSwitchUsuarios,
   onSwitchClientes,
+  onSwitchKanban,
   children,
 }) {
   return (
@@ -24,9 +24,7 @@ function Kanban({
           <button onClick={onSwitchKanban} className="sidebar-btn">
             Kanban
           </button>
-          <button onClick={onSwitchProjetos} className="sidebar-btn">
-            Projetos
-          </button>
+          
           <button onClick={onSwitchUsuarios} className="sidebar-btn">
             Usuários
           </button>
@@ -69,7 +67,9 @@ function Kanban({
         </div>
       </aside>
 
-      <main className="kanban-main">{children}</main>
+      <main className="kanban-main">
+        {children}
+      </main>
     </div>
   );
 }

@@ -10,13 +10,14 @@ import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Dashboard from "./Components/Dashboard";
 import KanbanBoard from "./Components/KanbanBoard";
+import KanbanHome from "./Components/KanbanHome";
 
 function App() {
   const [user, setUser] = useState(null);
   const [screen, setScreen] = useState("login");
+  const [kanbanSelecionado, setKanbanSelecionado] = useState(null);
 
   function handleLogin() {
-    // Simulando um login de gestor para testes
     setUser({ role: 'gestor' });
     setScreen("dashboard");
   }
@@ -26,10 +27,22 @@ function App() {
     setScreen("login");
   }
 
-  // Props para navegação, passadas para o componente de Layout (Kanban)
+  function handleSelectKanban(kanban) {
+    setKanbanSelecionado(kanban);
+    setScreen("kanban-board");
+  }
+
+  function handleVoltarKanbans() {
+    setKanbanSelecionado(null);
+    setScreen("kanban-home");
+  }
+
   const switchProps = {
     onSwitchDashboard: () => setScreen("dashboard"),
-    onSwitchKanban: () => setScreen("kanban"),
+    onSwitchKanban: () => {
+      setKanbanSelecionado(null);
+      setScreen("kanban-home");
+    },
     onSwitchProjetos: () => setScreen("projetos"),
     onSwitchConfiguracoes: () => setScreen("configuracoes"),
     onSwitchNotificacoes: () => setScreen("notificacoes"),
@@ -39,13 +52,27 @@ function App() {
     onLogout: handleLogout,
   };
 
-  // Função que decide qual tela/componente renderizar na área de conteúdo
   const renderContent = () => {
     switch (screen) {
       case "dashboard":
         return <Dashboard userRole={user?.role} />;
-      case "kanban":
-        return <KanbanBoard />;
+      
+      case "kanban-home":
+        return <KanbanHome onSelectKanban={handleSelectKanban} />;
+      
+      case "kanban-board":
+        return (
+          <div className="kanban-board-container">
+            <div className="kanban-board-header-top">
+              <button className="btn-voltar-home" onClick={handleVoltarKanbans}>
+                ← Voltar
+              </button>
+              <h2 className="quadro-nome">{kanbanSelecionado?.nome}</h2>
+            </div>
+            <KanbanBoard />
+          </div>
+        );
+      
       case "configuracoes":
         return <Configuracoes />;
       case "projetos":
@@ -59,21 +86,17 @@ function App() {
       case "perfil":
         return <EditarPerfil />;
       case "cadastro-func":
-        // Ajuste final: Usando a prop 'onReturn' para voltar à lista de usuários
         return <Cadastro onReturn={() => setScreen("usuarios")} />;
       default:
         return null;
     }
   }
 
-  // Função principal que controla a renderização geral
   function renderScreen() {
-    // Se não há usuário logado, mostra apenas a tela de Login
     if (!user) {
       return <Login onLogin={handleLogin} />;
     }
 
-    // Se há um usuário, mostra o Layout Principal (Kanban) com a tela correta dentro
     return (
       <Kanban {...switchProps}>
         {renderContent()}

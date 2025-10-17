@@ -81,9 +81,11 @@
 }
 
 .form-field {
+  position: relative;
   display: flex;
   flex-direction: column;
 }
+
 
 .form-field.full-width {
   grid-column: 1 / -1;
@@ -347,3 +349,175 @@
   color: white;
   font-weight: bold;
 }
+/* Sistema de Etiquetas */
+.etiqueta-selector {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f7fafc;
+  height: 46px; /* Altura fixa igual ao select */
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+
+.etiqueta-selector:hover {
+  border-color: #cbd5e0;
+}
+
+.etiqueta-selected {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.etiqueta-placeholder {
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.etiqueta-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.etiqueta-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.etiqueta-option:hover {
+  background: #f7fafc;
+}
+
+.etiqueta-cor-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.btn-criar-etiqueta {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  background: transparent;
+  border: 2px dashed #cbd5e0;
+  border-radius: 8px;
+  color: #4a5568;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-criar-etiqueta:hover {
+  border-color: #4a67ff;
+  color: #4a67ff;
+  background: #f7fafc;
+}
+
+.criar-etiqueta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.criar-etiqueta-form input[type="text"] {
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.cor-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cor-selector label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.cor-selector input[type="color"] {
+  width: 60px;
+  height: 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.criar-etiqueta-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.criar-etiqueta-actions button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.criar-etiqueta-actions button:first-child {
+  background: #4a67ff;
+  color: white;
+}
+
+.criar-etiqueta-actions button:first-child:hover {
+  background: #3a56e0;
+}
+
+.criar-etiqueta-actions button:last-child {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.criar-etiqueta-actions button:last-child:hover {
+  background: #cbd5e0;
+}
+
+/* Estilos para campos com erro */
+.form-field input.error,
+.form-field select.error,
+.form-field textarea.error,
+.etiqueta-selector.error,
+.btn-agendar.error {
+  border-color: #ef4444 !important;
+}
+
+.error-message {
+  display: block;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
