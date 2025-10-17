@@ -1,0 +1,53 @@
+.main-content-wrapper {
+  /* Garante que o conteúdo centralize na área principal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* Ajuste de altura considerando um possível cabeçalho fixo */
+  padding: 40px 20px;
+}
+
+.cadastro-cliente-container {
+  /* Container interno que segura o h2 e o form */
+  width: 100%;
+}
+
+.cadastro-cliente-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.cadastro-cliente-form {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 30px; 
+  border-radius: 12px;
+  max-width: 400px; 
+  width: 100%; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+}
+
+.cadastro-cliente-form label {
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: 500;
+}
+
+.cadastro-cliente-form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-cadastrar {
+  background-color: #28a745; 
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 10px;
+}
