@@ -519,119 +519,212 @@
    ============================================ */
 
 @media (max-width: 1024px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+  .task-details-modal {
+    max-width: 90%;
   }
 
-  .header button,
-  .header .search-bar {
-    width: 100%;
+  .task-details-content {
+    padding: 8px 24px 24px 24px;
   }
 }
 
 @media (max-width: 768px) {
-  .container,
-  .main-content {
-    padding: 15px;
+  .task-details-overlay {
+    padding: 0;
+    align-items: stretch;
   }
 
-  h1, h2 {
+  .task-details-modal {
+    max-width: 100%;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .task-details-header {
+    padding: 60px 20px 20px;
+  }
+
+  .task-details-header h2 {
     font-size: 20px;
   }
 
-  .table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .task-details-content {
+    flex-direction: column;
+    padding: 8px 20px 20px;
   }
 
-  table {
-    min-width: 600px;
+  .task-main-content {
+    padding-right: 0;
+    margin-bottom: 24px;
   }
 
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .task-sidebar {
+    padding-left: 0;
+    border-top: 1px solid #dfe1e6;
+    padding-top: 20px;
   }
 
-  .modal-content {
-    width: 95%;
-    max-width: none;
-    padding: 20px;
+  .modal-close-btn {
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-button {
+    padding: 10px;
+  }
+
+  .action-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 360px;
+    z-index: 1100;
   }
 }
 
 @media (max-width: 640px) {
-  .container,
-  .main-content {
-    padding: 12px;
+  .task-details-header {
+    padding: 56px 16px 16px;
   }
 
-  h1, h2 {
+  .task-details-header h2 {
     font-size: 18px;
   }
 
-  button {
-    width: 100%;
-    padding: 10px 16px;
+  .task-details-content {
+    padding: 8px 16px 16px;
+  }
+
+  .section-header h3 {
+    font-size: 15px;
+  }
+
+  .description-box,
+  .comment-box {
+    padding: 10px;
     font-size: 14px;
   }
 
-  input,
-  select,
-  textarea {
-    padding: 10px 12px;
+  .comment-input {
+    padding: 9px 11px;
     font-size: 14px;
   }
 
-  .card {
-    padding: 15px;
+  .comment-avatar,
+  .activity-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
   }
 
-  .modal-content {
-    padding: 18px;
+  .replies-container {
+    margin-left: 32px;
+  }
+
+  .reply-input-container {
+    margin-left: 32px;
   }
 }
 
 @media (max-width: 480px) {
-  .container,
-  .main-content {
+  .task-details-header {
+    padding: 52px 12px 12px;
+  }
+
+  .task-details-header h2 {
+    font-size: 17px;
+    gap: 8px;
+  }
+
+  .task-details-header p {
+    font-size: 13px;
+    margin-left: 28px;
+  }
+
+  .task-details-content {
+    padding: 8px 12px 12px;
+  }
+
+  .modal-close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .section-header {
+    gap: 8px;
+  }
+
+  .section-header h3 {
+    font-size: 14px;
+  }
+
+  .sidebar-button {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .comment-submit-btn,
+  .comment-cancel-btn {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .activity-content p {
+    font-size: 13px;
+  }
+
+  .activity-time {
+    font-size: 11px;
+  }
+
+  .comment-text {
     padding: 10px;
-  }
-
-  h1, h2 {
-    font-size: 16px;
-  }
-
-  button {
-    padding: 9px 14px;
     font-size: 13px;
   }
 
-  input,
-  select,
-  textarea {
-    padding: 9px 11px;
-    font-size: 13px;
+  .reply-btn,
+  .toggle-replies-btn {
+    font-size: 12px;
   }
 
-  .card {
-    padding: 12px;
+  .replies-container {
+    margin-left: 24px;
   }
 
-  .modal-content {
-    padding: 15px;
+  .reply-input-container {
+    margin-left: 24px;
   }
 }
 
 @media (max-width: 360px) {
-  h1, h2 {
-    font-size: 15px;
+  .task-details-header {
+    padding: 48px 10px 10px;
   }
 
-  .container,
-  .main-content {
-    padding: 8px;
+  .task-details-header h2 {
+    font-size: 16px;
+  }
+
+  .task-details-content {
+    padding: 8px 10px 10px;
+  }
+
+  .section-header h3 {
+    font-size: 13px;
+  }
+
+  .sidebar-button {
+    padding: 7px 9px;
+    font-size: 12px;
   }
 }
