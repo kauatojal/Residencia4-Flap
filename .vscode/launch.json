@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Argon2Generator",
+            "request": "launch",
+            "mainClass": "com.backend.flap.Argon2Generator",
+            "projectName": "flap"
+        },
+        {
+            "type": "java",
+            "name": "BcryptTest",
+            "request": "launch",
+            "mainClass": "com.backend.flap.BcryptTest",
+            "projectName": "flap"
+        },
+        {
+            "type": "java",
+            "name": "FlapApplication",
+            "request": "launch",
+            "mainClass": "com.backend.flap.FlapApplication",
+            "projectName": "flap"
+        },
+        {
+            "type": "java",
+            "name": "Launch FlapApplication",
+            "request": "launch",
+            "mainClass": "com.backend.flap.FlapApplication",
+            "projectName": "backend",
+            "args": "--spring.profiles.active=local"
+        }
+    ]
+}
