@@ -1,0 +1,196 @@
+.dashboard-container {
+  display: flex;
+  background-color: #f4f7fe;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+}
+
+.dashboard-main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.date-picker {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card .icon-container {
+  padding: 0.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.stat-card-total .icon-container { background-color: #e6f3ff; color: #007bff; }
+.stat-card-concluidas .icon-container { background-color: #e4f8f0; color: #28a745; }
+.stat-card-pendentes .icon-container { background-color: #fff8e1; color: #ffc107; }
+.stat-card-atrasadas .icon-container { background-color: #ffeaef; color: #dc3545; }
+
+.stat-info h2 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #333;
+}
+
+.stat-info p {
+  margin: 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.card-header .more-options {
+  color: #aaa;
+  cursor: pointer;
+}
+
+.distribuicao-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.tarefas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tarefas-table th, .tarefas-table td {
+  text-align: left;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.tarefas-table th {
+  color: #888;
+  font-weight: 500;
+}
+
+.tarefas-table td {
+  color: #555;
+}
+
+.projetos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.projeto-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projeto-info h4 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.projeto-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.priority-tag {
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.priority-alta { background-color: #ffeaef; color: #dc3545; }
+.priority-media { background-color: #fff8e1; color: #ffc107; }
+.priority-baixa { background-color: #e4f8f0; color: #28a745; }
+
+.common-user-dashboard {
+  padding: 2rem;
+}
