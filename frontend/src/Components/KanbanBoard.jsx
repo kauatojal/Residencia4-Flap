@@ -104,7 +104,7 @@ export default function KanbanBoard() {
         // adiciona nova tarefa na primeira lista ("A Fazer" por padrão)
         const listaDefault = Object.keys(columns)[0];
         const listaId = listasMap[listaDefault];
-        const newTask = await kanbanService.create({ ...taskData, listaId });
+        const newTask = await kanbanService.createTarefa({ ...taskData, listaId }); //TODO : revisar
         setColumns((prev) => ({
           ...prev,
           [listaDefault]: [newTask, ...(prev[listaDefault] || [])],
@@ -134,7 +134,7 @@ export default function KanbanBoard() {
   // 🔹 atualizar pelo modal
   const handleUpdateTaskFromModal = async (updatedTask) => {
     try {
-      const result = await kanbanService.update(updatedTask.id, updatedTask);
+      const result = await kanbanService.updateTarefa(updatedTask.id, updatedTask);
       setColumns((prev) => {
         const newCols = { ...prev };
         for (const col in newCols) {

@@ -1,38 +1,62 @@
 import api from "./api";
 
-// Usa o endpoint de login para autenticação
-async function login(email, senha) {
-  const response = await api.post("/auth/login", { email, senha });
-  return response.data; // { token: ... }
-}
-
-// Retorna informações do usuário autenticado
-async function getMe() {
-  const response = await api.get("/user/me");
-  return response.data;
-}
-
-// CRUD usuário
 async function list() {
-  const response = await api.get("/user");
-  return response.data;
+  try {
+    const response = await api.get("/auth/usuarios");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao listar usuários:", error);
+    throw new Error("Falha ao carregar lista de usuários");
+  }
 }
 
-// endpoint para criação de usuário fica em /auth/register
+async function getMe() {
+  try {
+    const response = await api.get("/user/me");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao obter dados do usuário logado:", error);
+    throw new Error("Falha ao buscar usuário autenticado");
+  }
+}
 
 async function create(userData) {
-  const response = await api.post("/auth/user", userData);
-  return response.data;
+  try {
+    const response = await api.post("/auth/usuarios", userData);
+    if (response.status >= 200 && response.status < 300) {
+      return { success: true, data: response.data };
+    }
+    return { success: false };
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+    throw new Error("Falha ao criar usuário");
+  }
 }
 
 async function update(id, userData) {
-  const response = await api.put(`/auth/user/${id}`, userData);
-  return response.data;
+  try {
+    const response = await api.put(`/auth/usuarios/${id}`, userData);
+    if (response.status >= 200 && response.status < 300) {
+      return { success: true, data: response.data };
+    }
+    return { success: false };
+  } catch (error) {
+    console.error(`Erro ao atualizar usuário ${id}:`, error);
+    throw new Error("Falha ao atualizar usuário");
+  }
 }
 
-// endpoint para remoção de usuário deve ficar em /auth/user
 async function remove(id) {
-  await api.delete(`/auth/user/${id}`);
+  try {
+    const response = await api.delete(`/auth/usuarios/${id}`);
+    if (response.status >= 200 && response.status < 300) {
+      return { success: true };
+    }
+    return { success: false };
+  } catch (error) {
+    console.error(`Erro ao deletar usuário ${id}:`, error);
+    throw new Error("Falha ao deletar usuário");
+  }
 }
 
-export default { login, getMe, list, create, update, remove };
+export default { list, getMe, create, update, remove };

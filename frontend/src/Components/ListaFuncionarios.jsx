@@ -1,126 +1,196 @@
 import React, { useEffect, useState } from "react";
-import "./ListaFuncionarios.css";
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { EditarUsuario } from "./EditarUsuario";
 import userService from "../services/userService";
+import { EditarUsuario } from "./EditarUsuario";
+import { FiMoreVertical, FiPlus } from "react-icons/fi";
+import "./ListaFuncionarios.css";
 
-export default function ListaFuncionarios({ onAddFuncionario }) {
-  const [funcionarios, setFuncionarios] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState("");
-  const [openMenuId, setOpenMenuId] = useState(null);
-  const [funcionarioEditando, setFuncionarioEditando] = useState(null);
-
-  const carregarFuncionarios = async () => {
-    setLoading(true);
-    setErro("");
-    try {
-      const data = await userService.list();
-      setFuncionarios(data);
-    } catch {
-      setErro("Erro ao carregar funcionários.");
-    }
-    setLoading(false);
-  };
+export default function ListaFuncionarios() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+  const [dropdownAtivo, setDropdownAtivo] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState({ tipo: "", mensagem: "" });
 
   useEffect(() => {
-    carregarFuncionarios();
+    carregarUsuarios();
   }, []);
 
-  const handleEdit = (id) => {
-    const funcionario = funcionarios.find(f => f.id === id);
-    setFuncionarioEditando(funcionario);
-    setOpenMenuId(null);
-  };
-
-  const handleSalvar = async (funcionarioAtualizado) => {
+  async function carregarUsuarios() {
     try {
-      await userService.update(funcionarioAtualizado.id, funcionarioAtualizado);
-      carregarFuncionarios();
+      setLoading(true);
+      const data = await userService.list();
+      setUsuarios(data);
     } catch {
-      setErro("Erro ao salvar alteração!");
+      setFeedback({ tipo: "erro", mensagem: "Erro ao carregar usuários." });
+    } finally {
+      setLoading(false);
     }
-    setFuncionarioEditando(null);
-  };
+  }
 
-  const handleCancelar = () => {
-    setFuncionarioEditando(null);
-  };
+  // Fecha feedback automaticamente
+  useEffect(() => {
+    if (feedback.mensagem) {
+      const timer = setTimeout(() => setFeedback({ tipo: "", mensagem: "" }), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Deseja realmente excluir este funcionário?")) {
-      try {
-        await userService.remove(id);
-        carregarFuncionarios();
-      } catch {
-        setErro("Erro ao excluir funcionário.");
+  // Fecha dropdown ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (!e.target.closest(".actions-cell")) setDropdownAtivo(null);
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  async function handleSalvar(dadosAtualizados) {
+    try {
+      setLoading(true);
+      if (usuarioSelecionado?.id) {
+        await userService.update(usuarioSelecionado.id, dadosAtualizados);
+        setFeedback({ tipo: "sucesso", mensagem: "Usuário atualizado com sucesso!" });
+      } else {
+        await userService.create(dadosAtualizados);
+        setFeedback({ tipo: "sucesso", mensagem: "Usuário criado com sucesso!" });
       }
+      setMostrarModal(false);
+      carregarUsuarios();
+    } catch {
+      setFeedback({ tipo: "erro", mensagem: "Erro ao salvar alterações." });
+    } finally {
+      setLoading(false);
     }
-    setOpenMenuId(null);
-  };
+  }
 
-  const getSetorClass = (setor) => `setor-${setor?.toLowerCase() || ""}`;
+  async function handleRemoverUsuario(id) {
+    if (!window.confirm("Tem certeza que deseja remover este usuário?")) return;
+    try {
+      setLoading(true);
+      await userService.remove(id);
+      setFeedback({ tipo: "sucesso", mensagem: "Usuário removido com sucesso!" });
+      carregarUsuarios();
+    } catch {
+      setFeedback({ tipo: "erro", mensagem: "Erro ao remover usuário." });
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  if (loading) return <div>Carregando funcionários...</div>;
-  if (erro) return <div>{erro}</div>;
+  function abrirEditarUsuario(usuario) {
+    setUsuarioSelecionado(usuario);
+    setMostrarModal(true);
+  }
+
+  function abrirNovoUsuario() {
+    setUsuarioSelecionado({
+      nome: "",
+      email: "",
+      celular: "",
+      setor: "",
+      senha: "",
+    });
+    setMostrarModal(true);
+  }
+
+  function fecharModal() {
+    setMostrarModal(false);
+    setUsuarioSelecionado(null);
+  }
 
   return (
     <div className="funcionarios-container">
       <div className="funcionarios-header">
-        <h2>Lista de funcionários</h2>
-        <button className="btn-adicionar" onClick={onAddFuncionario}>
-          + Add Funcionário
+        <h2>Lista de Funcionários</h2>
+        <button className="btn-adicionar" onClick={abrirNovoUsuario}>
+          <FiPlus /> Adicionar Novo
         </button>
       </div>
-      <table className="funcionarios-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Número de celular</th>
-            <th>Setor</th>
-            <th style={{ textAlign: 'right' }}>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {funcionarios.map((func) => (
-            <tr key={func.id}>
-              <td>
-                <div className="user-cell">
-                  <img src={func.avatar || "/icon-user.png"} alt={`Avatar de ${func.nome}`} className="user-avatar" />
-                  <span className="user-name">{func.nome}</span>
-                </div>
-              </td>
-              <td>{func.email}</td>
-              <td>{func.celular}</td>
-              <td>
-                <span className={`setor-tag ${getSetorClass(func.setor)}`}>
-                  {func.setor}
-                </span>
-              </td>
-              <td className="actions-cell">
-                <button
-                  className="btn-actions"
-                  onClick={() => setOpenMenuId(openMenuId === func.id ? null : func.id)}
-                >
-                  <BsThreeDotsVertical />
-                </button>
-                {openMenuId === func.id && (
-                  <div className="actions-dropdown">
-                    <button className="dropdown-item edit" onClick={() => handleEdit(func.id)}>Editar</button>
-                    <button className="dropdown-item delete" onClick={() => handleDelete(func.id)}>Deletar</button>
-                  </div>
-                )}
-              </td>
+
+      {feedback.mensagem && (
+        <div
+          className={
+            feedback.tipo === "sucesso" ? "mensagem-sucesso" : "mensagem-erro"
+          }
+        >
+          {feedback.mensagem}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="loading-spinner"></div>
+      ) : (
+        <table className="funcionarios-table">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Email</th>
+              <th>Celular</th>
+              <th>Setor</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      {funcionarioEditando && (
+          </thead>
+          <tbody>
+            {usuarios.map((user) => (
+              <tr key={user.id}>
+                <td data-label="Usuário" className="user-cell">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      user.nome
+                    )}&background=random`}
+                    alt={user.nome}
+                    className="user-avatar"
+                  />
+                  <span className="user-name">{user.nome}</span>
+                </td>
+                <td data-label="Email">{user.email}</td>
+                <td data-label="Celular">{user.celular}</td>
+                <td data-label="Setor">
+                  <span
+                    className={`setor-tag setor-${user.setor?.toLowerCase()}`}
+                  >
+                    {user.setor}
+                  </span>
+                </td>
+                <td className="actions-cell">
+                  <button
+                    className="btn-actions"
+                    onClick={() =>
+                      setDropdownAtivo(dropdownAtivo === user.id ? null : user.id)
+                    }
+                  >
+                    <FiMoreVertical />
+                  </button>
+
+                  {dropdownAtivo === user.id && (
+                    <div className="actions-dropdown">
+                      <button
+                        className="dropdown-item edit"
+                        onClick={() => abrirEditarUsuario(user)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="dropdown-item delete"
+                        onClick={() => handleRemoverUsuario(user.id)}
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {mostrarModal && (
         <EditarUsuario
-          usuario={funcionarioEditando}
+          usuario={usuarioSelecionado}
           onSave={handleSalvar}
-          onCancel={handleCancelar}
+          onCancel={fecharModal}
         />
       )}
     </div>

@@ -27,11 +27,15 @@ export default function Cadastro({ onReturn }) {
     setLoading(true);
     try {
       await userService.create({
-        nome: form.nome,
+        name: form.nome,
         email: form.email,
-        celular: form.celular,
+        password: form.senha,
         setor: form.setor,
-        senha: form.senha
+        celular: form.celular,
+        dataNascimento: new Date().toISOString(),
+        ativo: true,
+        cargosIds: [],
+        permissoesIds: [],
       });
       setSucesso("Funcionário cadastrado com sucesso!");
       setTimeout(onReturn, 1500);

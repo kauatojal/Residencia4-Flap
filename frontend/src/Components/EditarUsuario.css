@@ -1,207 +1,226 @@
+/* ===============================
+   OVERLAY DO MODAL
+   =============================== */
 .editar-usuario-modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Overlay cinza escuro */
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.25s ease-in-out;
 }
 
+/* ===============================
+   CONTEÚDO DO MODAL
+   =============================== */
 .editar-usuario-modal form {
-  background: #ffffff;               /* Fundo branco limpo */
-  border-radius: 12px;
-  padding: 32px 32px 24px 32px;
-  min-width: 340px;
-  max-width: 400px;
-  box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 34px 36px 28px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
+  position: relative;
+  animation: popUp 0.28s ease forwards;
+  transform-origin: center;
+  transition: all 0.3s ease;
 }
 
+/* ===============================
+   TÍTULO
+   =============================== */
 .editar-usuario-modal h2 {
-  margin-bottom: 14px;
+  margin-bottom: 6px;
   text-align: center;
-  color: #333333;                    /* Cinza escuro para o título */
+  color: #111827;
   font-weight: 600;
+  letter-spacing: 0.2px;
+  font-size: 1.5rem;
 }
 
+/* ===============================
+   LABELS E INPUTS
+   =============================== */
 .editar-usuario-modal label {
   font-weight: 500;
   font-size: 0.95rem;
-  color: #555555;                    /* Cinza médio para labels */
-  margin-bottom: 2px;
+  color: #374151;
+  margin-bottom: 3px;
 }
 
 .editar-usuario-modal input,
 .editar-usuario-modal select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;         /* Cinza claro para borda */
-  font-size: 1rem;
-  background: #f9fafb;               /* Fundo cinza bem claro */
-  margin-bottom: 10px;
-  color: #333333;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  color: #111827;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.editar-usuario-modal input:hover,
+.editar-usuario-modal select:hover {
+  background-color: #ffffff;
+  border-color: #9ca3af;
 }
 
 .editar-usuario-modal input:focus,
 .editar-usuario-modal select:focus {
-  border-color: #6b7280;             /* Cinza médio ao focar */
-  outline: none;
+  border-color: #2563eb;
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
 }
 
+/* ===============================
+   BOTÕES DE AÇÃO
+   =============================== */
 .editar-usuario-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .editar-usuario-actions button {
-  padding: 8px 18px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  background: #4b5563;               /* Cinza médio-escuro */
-  color: #fff;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
+/* Botão Confirmar */
+.editar-usuario-actions button[type="submit"] {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+.editar-usuario-actions button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(37, 99, 235, 0.35);
+}
+
+.editar-usuario-actions button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Botão Cancelar */
 .editar-usuario-actions button[type="button"] {
-  background: #e5e7eb;               /* Cinza claro para cancelar */
-  color: #374151;                    /* Texto cinza escuro */
+  background: #e5e7eb;
+  color: #374151;
 }
 
-.editar-usuario-actions button:hover {
-  filter: brightness(1.1);
+.editar-usuario-actions button[type="button"]:hover:not(:disabled) {
+  background: #d1d5db;
+  transform: translateY(-1px);
 }
 
-.editar-usuario-actions button[type="submit"]:hover {
-  background: #374151;               /* Cinza mais escuro no hover */
+/* ===============================
+   FEEDBACK VISUAL
+   =============================== */
+.mensagem-sucesso,
+.mensagem-erro {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+  margin-top: 4px;
+  line-height: 1.5;
 }
 
-/* ============================================
+.mensagem-sucesso {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.mensagem-erro {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* ===============================
+   CAMPOS COM ERRO / VALIDAÇÃO
+   =============================== */
+.input-erro {
+  border-color: #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+.erro-campo {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin-top: -6px;
+  margin-bottom: 6px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ===============================
+   ANIMAÇÕES
+   =============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===============================
    RESPONSIVIDADE
-   ============================================ */
-
-@media (max-width: 1024px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .header button,
-  .header .search-bar {
-    width: 100%;
-  }
-}
-
+   =============================== */
 @media (max-width: 768px) {
-  .container,
-  .main-content {
-    padding: 15px;
+  .editar-usuario-modal form {
+    width: 92%;
+    padding: 26px;
+    border-radius: 14px;
   }
 
-  h1, h2 {
-    font-size: 20px;
+  .editar-usuario-modal h2 {
+    font-size: 1.25rem;
   }
 
-  .table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .editar-usuario-actions {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  table {
-    min-width: 600px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .modal-content {
-    width: 95%;
-    max-width: none;
-    padding: 20px;
-  }
-}
-
-@media (max-width: 640px) {
-  .container,
-  .main-content {
-    padding: 12px;
-  }
-
-  h1, h2 {
-    font-size: 18px;
-  }
-
-  button {
+  .editar-usuario-actions button {
     width: 100%;
-    padding: 10px 16px;
-    font-size: 14px;
-  }
-
-  input,
-  select,
-  textarea {
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-
-  .card {
-    padding: 15px;
-  }
-
-  .modal-content {
-    padding: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container,
-  .main-content {
-    padding: 10px;
-  }
-
-  h1, h2 {
-    font-size: 16px;
-  }
-
-  button {
-    padding: 9px 14px;
-    font-size: 13px;
-  }
-
-  input,
-  select,
-  textarea {
-    padding: 9px 11px;
-    font-size: 13px;
-  }
-
-  .card {
-    padding: 12px;
-  }
-
-  .modal-content {
-    padding: 15px;
-  }
-}
-
-@media (max-width: 360px) {
-  h1, h2 {
-    font-size: 15px;
-  }
-
-  .container,
-  .main-content {
-    padding: 8px;
   }
 }
