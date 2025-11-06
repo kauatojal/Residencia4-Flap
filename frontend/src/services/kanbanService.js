@@ -7,11 +7,11 @@ const kanbanService = {
   getQuadro: async (id) => (await api.get(`/quadro/${id}`)).data,
 
   // 🟩 LISTAS
-  listListas: async (quadroId) => (await api.get(`/lista/by-quadro/${quadroId}`)).data,
+  listListas: async () => (await api.get(`/lista/all`)).data,
   createLista: async (data) => (await api.post("/lista", data)).data,
 
   // 🟨 TAREFAS
-  listTarefas: async (listaId) => (await api.get(`/tarefa/by-lista/${listaId}`)).data,
+  listTarefas: async (listaId) => (await api.get(`/tarefa/${listaId}`)).data,
   getTarefa: async (id) => (await api.get(`/tarefa/${id}`)).data,
   createTarefa: async (data) => (await api.post("/tarefa", data)).data,
   updateTarefa: async (id, data) => (await api.put(`/tarefa/${id}`, data)).data,
