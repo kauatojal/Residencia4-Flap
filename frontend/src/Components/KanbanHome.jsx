@@ -6,7 +6,7 @@ import kanbanService from "../services/kanbanService";
 export default function KanbanHome({ onSelectKanban }) {
   const [quadros, setQuadros] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [novoQuadro, setNovoQuadro] = useState({ nome: "", cor: "#4a67ff" });
+  const [novoQuadro, setNovoQuadro] = useState({ titulo: "", descricao: "Description", cor: "#4a67ff", });
 
   const cores = [
     "#4a67ff",
@@ -35,11 +35,11 @@ export default function KanbanHome({ onSelectKanban }) {
 
   // 🔹 Criar novo quadro
   async function criarQuadro() {
-    if (!novoQuadro.nome.trim()) return;
+    if (!novoQuadro.titulo.trim()) return;
     try {
       await kanbanService.createQuadro(novoQuadro);
       setShowCreateModal(false);
-      setNovoQuadro({ nome: "", cor: "#4a67ff" });
+      setNovoQuadro({ titulo: "", descricao: "#4a67ff" });
       loadQuadros();
     } catch (error) {
       console.error("Erro ao criar quadro:", error);
@@ -66,7 +66,7 @@ export default function KanbanHome({ onSelectKanban }) {
               style={{ background: quadro.cor }}
             >
               <div className="quadro-overlay"></div>
-              <h3>{quadro.nome}</h3>
+              <h3>{quadro.titulo}</h3>
             </div>
           ))
         ) : (
@@ -113,9 +113,9 @@ export default function KanbanHome({ onSelectKanban }) {
                 <input
                   type="text"
                   placeholder="Ex: Projetos 2025, Marketing..."
-                  value={novoQuadro.nome}
+                  value={novoQuadro.titulo}
                   onChange={(e) =>
-                    setNovoQuadro({ ...novoQuadro, nome: e.target.value })
+                    setNovoQuadro({ ...novoQuadro, titulo: e.target.value })
                   }
                   autoFocus
                 />
@@ -150,7 +150,7 @@ export default function KanbanHome({ onSelectKanban }) {
               <button
                 className="btn-criar"
                 onClick={criarQuadro}
-                disabled={!novoQuadro.nome.trim()}
+                disabled={!novoQuadro.titulo.trim()}
               >
                 Criar
               </button>

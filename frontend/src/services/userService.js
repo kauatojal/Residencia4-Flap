@@ -2,7 +2,7 @@ import api from "./api";
 
 async function list() {
   try {
-    const response = await api.get("/auth/usuarios");
+    const response = await api.get("/user");
     return response.data;
   } catch (error) {
     console.error("Erro ao listar usuários:", error);
@@ -22,7 +22,7 @@ async function getMe() {
 
 async function create(userData) {
   try {
-    const response = await api.post("/auth/usuarios", userData);
+    const response = await api.post("/auth/register", userData);
     if (response.status >= 200 && response.status < 300) {
       return { success: true, data: response.data };
     }

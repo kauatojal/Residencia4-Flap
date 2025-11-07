@@ -24,7 +24,8 @@ export default function KanbanBoard() {
         if (!quadros.length) return;
 
         const quadro = quadros[0];
-        const listas = await kanbanService.listListas(quadro.id);
+        let listas = await kanbanService.listListas()
+        console.log(listas.filter(obj => obj.quadroId.quadroId == quadro.id))
 
         // 🟢 salva o map nome → id pra poder mover tarefas depois
         const map = {};
