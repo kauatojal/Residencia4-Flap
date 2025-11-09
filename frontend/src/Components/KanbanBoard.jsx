@@ -24,8 +24,7 @@ export default function KanbanBoard() {
         if (!quadros.length) return;
 
         const quadro = quadros[0];
-        let listas = await kanbanService.listListas()
-        console.log(listas.filter(obj => obj.quadroId.quadroId == quadro.id))
+        const listas = await kanbanService.listListasByQuadroId(quadro.id)
 
         // 🟢 salva o map nome → id pra poder mover tarefas depois
         const map = {};
@@ -35,7 +34,7 @@ export default function KanbanBoard() {
         const listasComTarefas = await Promise.all(
           listas.map(async (lista) => ({
             ...lista,
-            tarefas: await kanbanService.listTarefas(lista.id),
+            tarefas: await kanbanService.listTarefasByListaId(lista.id),
           }))
         );
 
