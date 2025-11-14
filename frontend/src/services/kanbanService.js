@@ -8,6 +8,8 @@ const kanbanService = {
 
   // 🟩 LISTAS
   listListas: async () => (await api.get(`/lista/all`)).data,
+  listListasWithTarefas: async (quadroId, data) =>
+    (await api.get(`/lista/listas-com-tarefas`, {quadroId, ...data})).data,
   listListasByQuadroId: async (quadroId) => (await api.get(`/lista/by-quadro/${quadroId}`)).data,
   createLista: async (data) => (await api.post("/lista", data)).data,
 
