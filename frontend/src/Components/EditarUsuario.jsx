@@ -3,10 +3,10 @@ import "./EditarUsuario.css";
 
 export function EditarUsuario({ usuario, onSave, onCancel }) {
   const [form, setForm] = useState({
-    nome: "",
+    name: "",
     email: "",
     celular: "",
-    senha: "",
+    password: "",
   });
 
   const [erros, setErros] = useState({});
@@ -18,10 +18,10 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
   useEffect(() => {
     if (usuario) {
       setForm({
-        nome: usuario.nome || "",
+        name: usuario.name || "",
         email: usuario.email || "",
         celular: usuario.celular || "",
-        senha: "",
+        password: "",
       });
       setMensagem({ tipo: "", texto: "" });
       setErros({});
@@ -62,13 +62,13 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
       setErros((prev) => ({ ...prev, email: "" }));
     }
 
-    if (name === "senha" && !validarSenha(value)) {
+    if (name === "password" && !validarSenha(value)) {
       setErros((prev) => ({
         ...prev,
-        senha: "A senha deve ter pelo menos 6 caracteres",
+        password: "A senha deve ter pelo menos 6 caracteres",
       }));
-    } else if (name === "senha") {
-      setErros((prev) => ({ ...prev, senha: "" }));
+    } else if (name === "password") {
+      setErros((prev) => ({ ...prev, password: "" }));
     }
   }
 
@@ -81,10 +81,10 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
       return;
     }
 
-    if (!isEditando && !validarSenha(form.senha)) {
+    if (!isEditando && !validarSenha(form.password)) {
       setErros((prev) => ({
         ...prev,
-        senha: "A senha deve ter pelo menos 6 caracteres",
+        password: "A senha deve ter pelo menos 6 caracteres",
       }));
       return;
     }
@@ -117,12 +117,12 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
       <form onSubmit={handleSubmit} noValidate>
         <h2>{isEditando ? "Editar Usuário" : "Adicionar Usuário"}</h2>
 
-        <label htmlFor="nome">Nome:</label>
+        <label htmlFor="name">Nome:</label>
         <input
           id="nome"
           type="text"
-          name="nome"
-          value={form.nome}
+          name="name"
+          value={form.name}
           onChange={handleChange}
           placeholder="Digite o nome completo"
           autoFocus
@@ -153,24 +153,24 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
           required
         />
 
-        <label htmlFor="senha">
-          {isEditando ? "Nova Senha (opcional):" : "Senha:"}
+        <label htmlFor="password">
+          {isEditando ? "Nova senha (opcional):" : "Senha:"}
         </label>
         <input
-          id="senha"
+          id="password"
           type="password"
-          name="senha"
-          value={form.senha}
+          name="password"
+          value={form.password}
           onChange={handleChange}
           placeholder={
             isEditando
               ? "Deixe em branco para não alterar"
               : "Mínimo 6 caracteres"
           }
-          className={erros.senha ? "input-erro" : ""}
+          className={erros.password ? "input-erro" : ""}
           required={!isEditando}
         />
-        {erros.senha && <p className="erro-campo">{erros.senha}</p>}
+        {erros.password && <p className="erro-campo">{erros.password}</p>}
 
         {mensagem.texto && (
           <div

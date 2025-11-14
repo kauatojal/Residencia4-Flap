@@ -85,10 +85,10 @@ export default function ListaFuncionarios() {
 
   function abrirNovoUsuario() {
     setUsuarioSelecionado({
-      nome: "",
+      name: "",
       email: "",
       celular: "",
-      senha: "",
+      password: "",
     });
     setMostrarModal(true);
   }
@@ -135,12 +135,12 @@ export default function ListaFuncionarios() {
                 <td data-label="Usuário" className="user-cell">
                   <img
                     src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      user.nome
+                      user.name
                     )}&background=random`}
-                    alt={user.nome}
+                    alt={user.name}
                     className="user-avatar"
                   />
-                  <span className="user-name">{user.nome}</span>
+                  <span className="user-name">{user.name}</span>
                 </td>
                 <td data-label="Email">{user.email}</td>
                 <td data-label="Celular">{user.celular}</td>
