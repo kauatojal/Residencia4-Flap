@@ -39,7 +39,7 @@ export default function KanbanHome({ onSelectKanban }) {
     try {
       await kanbanService.createQuadro(novoQuadro);
       setShowCreateModal(false);
-      setNovoQuadro({ titulo: "", descricao: "#4a67ff" });
+      setNovoQuadro({ titulo: "", descricao: "descricao", cor: "#4a67ff" });
       loadQuadros();
     } catch (error) {
       console.error("Erro ao criar quadro:", error);
