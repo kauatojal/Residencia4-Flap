@@ -15,17 +15,15 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
-      console.log(email)
-      console.log(password)
       await login(email, password);
-      // se seu hook login redireciona, ótimo — caso contrário, você pode navegar manualmente
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Falha no login. Verifique suas credenciais.");
     } finally {
       setLoading(false);
-      navigate("/dashboard");
     }
   };
 
