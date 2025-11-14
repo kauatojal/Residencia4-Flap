@@ -97,9 +97,9 @@ export default function App() {
         <Route
           path="/*"
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <MainApp />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
       </Routes>
