@@ -18,7 +18,7 @@ async function create(roleData) {
 }
 
 async function update(id, roleData) {
-  const response = await api.put("/cargo", { id, ...roleData });
+  const response = await api.put(`/cargo/${id}`, roleData);
   return response.data;
 }
 

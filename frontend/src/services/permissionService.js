@@ -18,7 +18,7 @@ async function create(data) {
 }
 
 async function update(id, data) {
-  const response = await api.put("/permissao", { id, ...data });
+  const response = await api.put(`/permissao/${id}`, data);
   return response.data;
 }
 
