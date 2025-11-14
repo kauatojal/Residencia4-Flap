@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./EditarUsuario.css";
 
-const setores = [
-  { label: "Design", value: "Design" },
-  { label: "Comercial", value: "Comercial" },
-  { label: "Mídia", value: "Mídia" },
-  { label: "Marketing", value: "Marketing" },
-];
-
 export function EditarUsuario({ usuario, onSave, onCancel }) {
   const [form, setForm] = useState({
     nome: "",
     email: "",
     celular: "",
-    setor: "",
     senha: "",
   });
 
@@ -29,7 +21,6 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
         nome: usuario.nome || "",
         email: usuario.email || "",
         celular: usuario.celular || "",
-        setor: usuario.setor || "",
         senha: "",
       });
       setMensagem({ tipo: "", texto: "" });
@@ -161,22 +152,6 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
           placeholder="(00) 00000-0000"
           required
         />
-
-        <label htmlFor="setor">Setor:</label>
-        <select
-          id="setor"
-          name="setor"
-          value={form.setor}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Selecione o setor</option>
-          {setores.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </select>
 
         <label htmlFor="senha">
           {isEditando ? "Nova Senha (opcional):" : "Senha:"}

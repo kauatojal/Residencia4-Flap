@@ -88,7 +88,6 @@ export default function ListaFuncionarios() {
       nome: "",
       email: "",
       celular: "",
-      setor: "",
       senha: "",
     });
     setMostrarModal(true);
@@ -127,7 +126,6 @@ export default function ListaFuncionarios() {
               <th>Usuário</th>
               <th>Email</th>
               <th>Celular</th>
-              <th>Setor</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -146,13 +144,7 @@ export default function ListaFuncionarios() {
                 </td>
                 <td data-label="Email">{user.email}</td>
                 <td data-label="Celular">{user.celular}</td>
-                <td data-label="Setor">
-                  <span
-                    className={`setor-tag setor-${user.setor?.toLowerCase()}`}
-                  >
-                    {user.setor}
-                  </span>
-                </td>
+
                 <td className="actions-cell">
                   <button
                     className="btn-actions"
