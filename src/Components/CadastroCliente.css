@@ -1,0 +1,386 @@
+/* ===============================
+   OVERLAY DO MODAL (FUNDO ESCURO)
+   =============================== */
+.cadastro-cliente-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===============================
+   MODAL CONTAINER
+   =============================== */
+.cadastro-cliente-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease;
+  z-index: 10001;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===============================
+   BOTÃO FECHAR (X)
+   =============================== */
+.btn-fechar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f1f3f5;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #495057;
+  z-index: 10;
+}
+
+.btn-fechar:hover {
+  background: #e9ecef;
+  transform: rotate(90deg);
+}
+
+/* ===============================
+   CONTEÚDO DO MODAL
+   =============================== */
+.cadastro-cliente-container {
+  width: 100%;
+}
+
+.cadastro-cliente-container h2 {
+  margin: 0 0 24px 0;
+  font-size: 1.75rem;
+  color: #1a202c;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ===============================
+   FORMULÁRIO
+   =============================== */
+.cadastro-cliente-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cadastro-cliente-form label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.cadastro-cliente-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  background: #fafbfc;
+}
+
+.cadastro-cliente-form input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  background: white;
+}
+
+.cadastro-cliente-form input.input-erro {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.erro-campo {
+  display: block;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ===============================
+   AÇÕES DO FORMULÁRIO (BOTÕES)
+   =============================== */
+.cadastro-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cadastro-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cadastrar {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.btn-cadastrar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.btn-cadastrar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancelar {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-cancelar:hover {
+  background: #d1d5db;
+}
+
+/* ===============================
+   SCROLLBAR PERSONALIZADA
+   =============================== */
+.cadastro-cliente-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cadastro-cliente-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cadastro-cliente-modal::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.cadastro-cliente-modal::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===============================
+   RESPONSIVIDADE
+   =============================== */
+@media (max-width: 640px) {
+  .cadastro-cliente-modal {
+    width: 95%;
+    padding: 24px 20px;
+    max-height: 90vh;
+  }
+
+  .cadastro-cliente-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .cadastro-cliente-form {
+    gap: 16px;
+  }
+
+  .cadastro-cliente-form label {
+    font-size: 13px;
+  }
+
+  .cadastro-cliente-form input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .cadastro-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cadastro-actions button {
+    width: 100%;
+    padding: 11px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cadastro-cliente-modal {
+    padding: 20px 16px;
+  }
+
+  .cadastro-cliente-container h2 {
+    font-size: 1.25rem;
+  }
+
+  .cadastro-cliente-form input {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .cadastro-actions button {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .btn-fechar {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+}
+
+/* ===============================
+   UPLOAD DE LOGO
+   =============================== */
+.logo-upload-container {
+  width: 100%;
+}
+
+.logo-upload-box {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f7fafc;
+  position: relative;
+}
+
+.logo-upload-box:hover {
+  border-color: #4a67ff;
+  background: #f0f4ff;
+}
+
+.logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #718096;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.logo-upload-box:hover .logo-placeholder {
+  color: #4a67ff;
+}
+
+.logo-placeholder svg {
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.logo-upload-box:hover .logo-placeholder svg {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.logo-placeholder span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.logo-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  pointer-events: none;
+}
+
+.logo-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.logo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logo-upload-box:hover .logo-overlay {
+  opacity: 1;
+}
+
+.input-file {
+  display: none;
+}
+
+/* ===============================
+   RESPONSIVIDADE DO UPLOAD
+   =============================== */
+@media (max-width: 640px) {
+  .logo-upload-box {
+    height: 140px;
+  }
+
+  .logo-placeholder svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-placeholder span {
+    font-size: 13px;
+  }
+}
