@@ -1,0 +1,175 @@
+.main-content-wrapper {
+  /* Garante que o conteúdo centralize na área principal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px;
+}
+
+.editar-perfil-container {
+  /* Container interno que segura o h2 e o form */
+  width: 100%;
+}
+
+.editar-perfil-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.editar-perfil-form {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.editar-perfil-form label {
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: 500;
+}
+
+.editar-perfil-form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn-salvar {
+  /* Cor principal do Figma (roxo/azul) */
+  background-color: #4a67ff; 
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 10px;
+}
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .header button,
+  .header .search-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .main-content {
+    padding: 15px;
+  }
+
+  h1, h2 {
+    font-size: 20px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container,
+  .main-content {
+    padding: 12px;
+  }
+
+  h1, h2 {
+    font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .modal-content {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .main-content {
+    padding: 10px;
+  }
+
+  h1, h2 {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  h1, h2 {
+    font-size: 15px;
+  }
+
+  .container,
+  .main-content {
+    padding: 8px;
+  }
+}
