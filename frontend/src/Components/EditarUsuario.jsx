@@ -116,6 +116,8 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
       return;
     }
 
+    form.dataNascimento = new Date(form.dataNascimento)
+
     setSalvando(true);
     setMensagem({ tipo: "", texto: "" });
 
