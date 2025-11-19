@@ -773,3 +773,188 @@
     font-size: 13px;
   }
 }
+
+/* Sistema de Etiquetas */
+.etiquetas-field {
+  position: relative;
+}
+
+.etiqueta-selector {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid #dfe1e6;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fafbfc;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.etiqueta-selector:hover {
+  border-color: #cbd5e0;
+  background: #fff;
+}
+
+.etiqueta-selector.error {
+  border-color: #ef4444;
+}
+
+.etiqueta-placeholder {
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.etiquetas-selected-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.etiqueta-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.etiqueta-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.etiqueta-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.etiqueta-option:hover {
+  background: #f7fafc;
+}
+
+.etiqueta-option.selected {
+  background: #e6f2ff;
+}
+
+.etiqueta-cor-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.etiqueta-check {
+  margin-left: auto;
+  color: #4a67ff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.btn-criar-etiqueta {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  background: transparent;
+  border: 2px dashed #cbd5e0;
+  border-radius: 8px;
+  color: #4a5568;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-criar-etiqueta:hover {
+  border-color: #4a67ff;
+  color: #4a67ff;
+  background: #f7fafc;
+}
+
+.criar-etiqueta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+.criar-etiqueta-form input[type="text"] {
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.cor-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cor-selector label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.cor-selector input[type="color"] {
+  width: 60px;
+  height: 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.criar-etiqueta-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.criar-etiqueta-actions button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.criar-etiqueta-actions button:first-child {
+  background: #4a67ff;
+  color: white;
+}
+
+.criar-etiqueta-actions button:first-child:hover {
+  background: #3a56e0;
+}
+
+.criar-etiqueta-actions button:last-child {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.criar-etiqueta-actions button:last-child:hover {
+  background: #cbd5e0;
+}

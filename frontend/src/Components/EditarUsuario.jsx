@@ -6,6 +6,7 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
     name: "",
     email: "",
     celular: "",
+    dataNascimento: "",
     password: "",
   });
 
@@ -21,6 +22,7 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
         name: usuario.name || "",
         email: usuario.email || "",
         celular: usuario.celular || "",
+        dataNascimento: usuario.dataNascimento || "",
         password: "",
       });
       setMensagem({ tipo: "", texto: "" });
@@ -35,6 +37,14 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
 
   function validarSenha(senha) {
     return senha.length >= 6 || isEditando;
+  }
+
+  function validarDataNascimento(data) {
+    if (!data) return false;
+    const hoje = new Date();
+    const dataNasc = new Date(data);
+    const idade = hoje.getFullYear() - dataNasc.getFullYear();
+    return idade >= 18 && idade <= 120;
   }
 
   function aplicarMascaraCelular(valor) {
@@ -70,6 +80,15 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
     } else if (name === "password") {
       setErros((prev) => ({ ...prev, password: "" }));
     }
+
+    if (name === "dataNascimento" && value && !validarDataNascimento(value)) {
+      setErros((prev) => ({
+        ...prev,
+        dataNascimento: "Usuário deve ter entre 18 e 120 anos",
+      }));
+    } else if (name === "dataNascimento") {
+      setErros((prev) => ({ ...prev, dataNascimento: "" }));
+    }
   }
 
   async function handleSubmit(e) {
@@ -85,6 +104,14 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
       setErros((prev) => ({
         ...prev,
         password: "A senha deve ter pelo menos 6 caracteres",
+      }));
+      return;
+    }
+
+    if (!validarDataNascimento(form.dataNascimento)) {
+      setErros((prev) => ({
+        ...prev,
+        dataNascimento: "Usuário deve ter entre 18 e 120 anos",
       }));
       return;
     }
@@ -171,6 +198,20 @@ export function EditarUsuario({ usuario, onSave, onCancel }) {
           required={!isEditando}
         />
         {erros.password && <p className="erro-campo">{erros.password}</p>}
+
+        <label htmlFor="dataNascimento">Data de Nascimento:</label>
+        <input
+          id="dataNascimento"
+          type="date"
+          name="dataNascimento"
+          value={form.dataNascimento}
+          onChange={handleChange}
+          className={erros.dataNascimento ? "input-erro" : ""}
+          required
+        />
+        {erros.dataNascimento && (
+          <p className="erro-campo">{erros.dataNascimento}</p>
+        )}
 
         {mensagem.texto && (
           <div

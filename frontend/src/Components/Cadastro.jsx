@@ -70,7 +70,6 @@ export default function Cadastro({ onReturn }) {
             <label>Telefone</label>
             <input type="tel" name="celular" value={form.celular} onChange={handleChange} placeholder="+55 79 91234-5678" required />
           </div>
-
           <div className="form-field">
             <label>Senha Provisória</label>
             <input type="password" name="senha" value={form.senha} onChange={handleChange} required />
