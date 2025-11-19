@@ -6,7 +6,7 @@ import kanbanService from "../services/kanbanService";
 export default function KanbanHome({ onSelectKanban }) {
   const [quadros, setQuadros] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [novoQuadro, setNovoQuadro] = useState({ titulo: "", descricao: "Description", cor: "#4a67ff", });
+  const [novoQuadro, setNovoQuadro] = useState({ titulo: "", descricao: "", cor: "#4a67ff", });
 
   const cores = [
     "#4a67ff",
@@ -109,13 +109,26 @@ export default function KanbanHome({ onSelectKanban }) {
 
             <div className="modal-body">
               <div className="form-field">
-                <label>Nome do Quadro *</label>
+                <label>Título do quadro *</label>
                 <input
                   type="text"
                   placeholder="Ex: Projetos 2025, Marketing..."
                   value={novoQuadro.titulo}
                   onChange={(e) =>
                     setNovoQuadro({ ...novoQuadro, titulo: e.target.value })
+                  }
+                  autoFocus
+                />
+              </div>
+
+              <div className="form-field">
+                <label>Descrição do quadro</label>
+                <input
+                  type="text"
+                  placeholder="Descrição"
+                  value={novoQuadro.descricao}
+                  onChange={(e) =>
+                    setNovoQuadro({ ...novoQuadro, descricao: e.target.value })
                   }
                   autoFocus
                 />
