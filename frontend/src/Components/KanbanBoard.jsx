@@ -5,6 +5,7 @@ import TaskDetailsModal from "./TaskDetailsModal";
 import "./KanbanBoard.css";
 import CalendarioAnual from "./CalendarioAnual";
 import kanbanService from "../services/kanbanService";
+import { useParams } from "react-router-dom";
 
 export default function KanbanBoard() {
   const [columns, setColumns] = useState({});
@@ -15,6 +16,8 @@ export default function KanbanBoard() {
   const [loading, setLoading] = useState(true);
   const [listasMap, setListasMap] = useState({}); // map listaNome → listaId
 
+  const { id } = useParams()
+
   useEffect(() => {
     let intervalId;
 
@@ -23,9 +26,10 @@ export default function KanbanBoard() {
         const quadros = await kanbanService.listQuadros();
         if (!quadros.length) return;
 
-        const quadro = quadros[0];
-        let listas = await kanbanService.listListas()
-        console.log(listas.filter(obj => obj.quadroId.quadroId == quadro.id))
+        const quadroId = id
+
+        // const quadro = quadros[17];
+        const listas = await kanbanService.listListasByQuadroId(quadroId)
 
         // 🟢 salva o map nome → id pra poder mover tarefas depois
         const map = {};
@@ -35,7 +39,7 @@ export default function KanbanBoard() {
         const listasComTarefas = await Promise.all(
           listas.map(async (lista) => ({
             ...lista,
-            tarefas: await kanbanService.listTarefas(lista.id),
+            tarefas: await kanbanService.listTarefasByListaId(lista.id),
           }))
         );
 

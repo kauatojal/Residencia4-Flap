@@ -9,7 +9,6 @@ export default function Cadastro({ onReturn }) {
     nome: "",
     email: "",
     celular: "",
-    setor: "",
     senha: ""
   });
   const [loading, setLoading] = useState(false);
@@ -30,7 +29,6 @@ export default function Cadastro({ onReturn }) {
         name: form.nome,
         email: form.email,
         password: form.senha,
-        setor: form.setor,
         celular: form.celular,
         dataNascimento: new Date().toISOString(),
         ativo: true,
@@ -71,16 +69,6 @@ export default function Cadastro({ onReturn }) {
           <div className="form-field">
             <label>Telefone</label>
             <input type="tel" name="celular" value={form.celular} onChange={handleChange} placeholder="+55 79 91234-5678" required />
-          </div>
-          <div className="form-field">
-            <label>Setor</label>
-            <select name="setor" value={form.setor} onChange={handleChange} required>
-              <option value="">Selecione um setor</option>
-              <option value="Design">Design</option>
-              <option value="Comercial">Comercial</option>
-              <option value="Mídia">Mídia</option>
-              <option value="Marketing">Marketing</option>
-            </select>
           </div>
           <div className="form-field">
             <label>Senha Provisória</label>

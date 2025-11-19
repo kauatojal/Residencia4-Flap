@@ -94,7 +94,10 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
   if (!user) return <p>Carregando...</p>;
 
-  return user.cargo?.nome === "gestor" ? <GestorDashboard /> : <ComumDashboard />;
+  if (user.cargos.find(c => c.nome.toLowerCase() === "admin"))
+    return <GestorDashboard />
+  else
+    return <ComumDashboard />;
 };
 
 export default Dashboard;

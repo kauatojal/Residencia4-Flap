@@ -9,7 +9,7 @@ export const login = async (email, senha) => {
 
     const token = response.data.token;
 
-    if (token != undefined) {
+    if (token) {
       localStorage.setItem("token", token);
     }
 
@@ -45,7 +45,6 @@ export const getUserInfo = async () => {
   const token = getToken();
   if (!token) return null;
 
-  /*
   try {
     const response = await axios.get(`${API_URL}/me`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -54,5 +53,5 @@ export const getUserInfo = async () => {
   } catch (error) {
     console.error("Erro ao buscar dados do usuário:", error);
     return null;
-  }*/
+  }
 };

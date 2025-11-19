@@ -13,6 +13,7 @@ import Configuracoes from "./Components/Configuracoes";
 import Projetos from "./Components/Projetos";
 import Notificacoes from "./Components/Notificacoes";
 import ListaFuncionarios from "./Components/ListaFuncionarios";
+import Clientes from "./Components/Clientes"; // ✅ ALTERADO: importa a página de listagem
 import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Cadastro from "./Components/Cadastro";
@@ -79,7 +80,7 @@ function MainApp() {
             <ListaFuncionarios onAddFuncionario={() => (window.location.href = "/cadastro-func")} />
           }
         />
-        <Route path="/clientes" element={<CadastroCliente />} />
+        <Route path="/clientes" element={<Clientes />} /> {/* ✅ ALTERADO */}
         <Route path="/perfil" element={<EditarPerfil />} />
         <Route path="/cadastro-func" element={<Cadastro />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -97,9 +98,9 @@ export default function App() {
         <Route
           path="/*"
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <MainApp />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
       </Routes>

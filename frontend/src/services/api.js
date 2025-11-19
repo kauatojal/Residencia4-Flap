@@ -9,9 +9,12 @@ const api = axios.create({
 // 🟢 Interceptor para adicionar o token JWT automaticamente
 api.interceptors.request.use(
   (config) => {
-    const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (!config.url?.includes("/auth/login")) {
+      console.log("entrou no if do authlogin")
+      const token = getToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },

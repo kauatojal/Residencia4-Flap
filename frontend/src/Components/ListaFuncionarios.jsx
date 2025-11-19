@@ -85,11 +85,10 @@ export default function ListaFuncionarios() {
 
   function abrirNovoUsuario() {
     setUsuarioSelecionado({
-      nome: "",
+      name: "",
       email: "",
       celular: "",
-      setor: "",
-      senha: "",
+      password: "",
     });
     setMostrarModal(true);
   }
@@ -127,7 +126,6 @@ export default function ListaFuncionarios() {
               <th>Usuário</th>
               <th>Email</th>
               <th>Celular</th>
-              <th>Setor</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -137,22 +135,16 @@ export default function ListaFuncionarios() {
                 <td data-label="Usuário" className="user-cell">
                   <img
                     src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      user.nome
+                      user.name
                     )}&background=random`}
-                    alt={user.nome}
+                    alt={user.name}
                     className="user-avatar"
                   />
-                  <span className="user-name">{user.nome}</span>
+                  <span className="user-name">{user.name}</span>
                 </td>
                 <td data-label="Email">{user.email}</td>
                 <td data-label="Celular">{user.celular}</td>
-                <td data-label="Setor">
-                  <span
-                    className={`setor-tag setor-${user.setor?.toLowerCase()}`}
-                  >
-                    {user.setor}
-                  </span>
-                </td>
+
                 <td className="actions-cell">
                   <button
                     className="btn-actions"

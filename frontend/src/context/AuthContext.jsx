@@ -34,10 +34,12 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (email, password) => {
     try {
       const res = await api.post("/auth/login", { email, password });
-      const { token, user } = res.data;
+      const { token } = res.data;
 
       saveToken(token);
       api.defaults.headers.Authorization = `Bearer ${token}`;
+      const user = await api.post("/user/me").data
+
       setUser(user);
       setAuthenticated(true);
       return { success: true };
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     delete api.defaults.headers.Authorization;
   };
 
-  if (loading) return <div>Carregando...</div>;
+  // if (loading) return <div>Carregando...</div>;
 
   return (
     <AuthContext.Provider value={{ user, authenticated, loginUser, logoutUser }}>

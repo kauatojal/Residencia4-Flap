@@ -1,10 +1,10 @@
 import React from "react";
 import "./ModalSucesso.css";
 
-export default function ModalSucesso({ 
+export default function ModalSucesso({
   tipo = "sucesso", // "sucesso" | "erro" | "confirmacao"
-  mensagem, 
-  onFechar, 
+  mensagem,
+  onFechar,
   onConfirmar // usado só em tipo="confirmacao"
 }) {
   const icones = {
