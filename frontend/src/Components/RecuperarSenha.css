@@ -1,0 +1,245 @@
+.recuperar-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.recuperar-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 480px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recuperar-logo {
+  width: 160px;
+  margin-bottom: 32px;
+}
+
+.recuperar-title {
+  margin-bottom: 28px;
+  font-weight: 600;
+  font-size: 32px;
+  text-align: center;
+  color: #222;
+}
+
+.recuperar-label {
+  align-self: flex-start;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.recuperar-input {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 15px;
+  width: 100%;
+  margin-bottom: 20px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.recuperar-input:focus {
+  border-color: #5865f2;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.1);
+}
+
+.recuperar-btn {
+  background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 0;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+}
+
+.recuperar-btn:hover {
+  background: linear-gradient(135deg, #4752c4 0%, #3941a8 100%);
+  box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+  transform: translateY(-2px);
+}
+
+.recuperar-btn:active {
+  transform: translateY(0);
+}
+
+.recuperar-voltar {
+  margin-top: 24px;
+  background: none;
+  color: #5865f2;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.recuperar-voltar:hover {
+  color: #4752c4;
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .recuperar-container {
+    padding: 15px;
+  }
+
+  .recuperar-card {
+    padding: 36px 28px;
+  }
+
+  .recuperar-logo {
+    width: 130px;
+  }
+
+  .recuperar-title {
+    font-size: 28px;
+  }
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .header button,
+  .header .search-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .main-content {
+    padding: 15px;
+  }
+
+  h1, h2 {
+    font-size: 20px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container,
+  .main-content {
+    padding: 12px;
+  }
+
+  h1, h2 {
+    font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .modal-content {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .main-content {
+    padding: 10px;
+  }
+
+  h1, h2 {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  h1, h2 {
+    font-size: 15px;
+  }
+
+  .container,
+  .main-content {
+    padding: 8px;
+  }
+}
