@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Kanban.css";
+import userService from "../services/userService";
 
 function Kanban({
   onSwitchDashboard,
@@ -13,6 +14,7 @@ function Kanban({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mostrarNotif, setMostrarNotif] = useState(false);
+  const [username, setUsername] = useState(null)
   const navigate = useNavigate();
 
   // Mock de notificações - substituir por dados reais da API
@@ -32,6 +34,15 @@ function Kanban({
     callback();
     setMenuOpen(false);
   };
+
+  async function loadCurrentUserName() {
+    const user = await userService.getMe()
+    setUsername(user.name)
+  }
+
+  useEffect(() => {
+    loadCurrentUserName();
+  }, []);
 
   return (
     <div className="kanban-wrapper">
@@ -61,9 +72,9 @@ function Kanban({
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ background: "#ececec", borderRadius: "50%", padding: 10, fontSize: 20 }}>👤</span>
             <div>
-              <span style={{ fontWeight: 600 }}>Usuario1</span>
+              <span style={{ fontWeight: 600 }}>{username}</span>
               <br />
-              <small style={{ color: "#888" }}>Design</small>
+              <small style={{ color: "#888" }}>Editar perfil</small>
             </div>
           </div>
         </div>
