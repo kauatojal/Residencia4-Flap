@@ -6,7 +6,14 @@ import kanbanService from "../services/kanbanService";
 export default function KanbanHome({ onSelectKanban }) {
   const [quadros, setQuadros] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [novoQuadro, setNovoQuadro] = useState({ titulo: "", descricao: "Description", cor: "#4a67ff", });
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
+  const [quadroSelecionado, setQuadroSelecionado] = useState(null);
+
+  const [novoQuadro, setNovoQuadro] = useState({
+    titulo: "",
+    descricao: "Description",
+    cor: "#4a67ff",
+  });
 
   const cores = [
     "#4a67ff",
@@ -19,7 +26,6 @@ export default function KanbanHome({ onSelectKanban }) {
     "#64748b",
   ];
 
-  // 🔹 Carregar quadros reais do backend
   useEffect(() => {
     loadQuadros();
   }, []);
@@ -46,6 +52,33 @@ export default function KanbanHome({ onSelectKanban }) {
     }
   }
 
+  // 🔹 Abrir modal de arquivar
+  function abrirModalArquivar(quadro) {
+    setQuadroSelecionado(quadro);
+    setShowArchiveModal(true);
+  }
+
+  // 🔹 Confirmar arquivamento
+  async function confirmarArquivar() {
+    if (!quadroSelecionado) return;
+
+    try {
+      // 🔥 MOCK POR ENQUANTO (chamará /v1/quadro/{id}/arquivar depois)
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      const atualizados = quadros.map((q) =>
+        q.id === quadroSelecionado.id ? { ...q, arquivado: true } : q
+      );
+
+      setQuadros(atualizados);
+    } catch (error) {
+      console.error("Erro ao arquivar quadro:", error);
+    }
+
+    setShowArchiveModal(false);
+    setQuadroSelecionado(null);
+  }
+
   return (
     <div className="kanban-home">
       <div className="kanban-home-header">
@@ -55,17 +88,36 @@ export default function KanbanHome({ onSelectKanban }) {
         </div>
       </div>
 
-      {/* 🔹 Exibir os quadros reais */}
+      {/* 🔹 Exibir quadros */}
       <div className="quadros-recentes">
         {quadros.length > 0 ? (
           quadros.map((quadro) => (
             <div
               key={quadro.id}
-              className="quadro-card"
-              onClick={() => onSelectKanban(quadro)}
+              className={`quadro-card ${quadro.arquivado ? "arquivado" : ""}`}
+              onClick={() => !quadro.arquivado && onSelectKanban(quadro)}
               style={{ background: quadro.cor }}
             >
               <div className="quadro-overlay"></div>
+
+              {/* 🔹 Badge Arquivado */}
+              {quadro.arquivado && (
+                <span className="quadro-badge-arquivado">Arquivado</span>
+              )}
+
+              {/* 🔹 Botão Arquivar */}
+              {!quadro.arquivado && (
+                <button
+                  className="btn-arquivar-quadro"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    abrirModalArquivar(quadro);
+                  }}
+                >
+                  Arquivar
+                </button>
+              )}
+
               <h3>{quadro.titulo}</h3>
             </div>
           ))
@@ -74,7 +126,7 @@ export default function KanbanHome({ onSelectKanban }) {
         )}
       </div>
 
-      {/* 🔹 Seção de criação */}
+      {/* 🔹 Seção Criar */}
       <div className="kanban-home-section">
         <div className="criar-quadro-section">
           <h2>Criar Novo Quadro</h2>
@@ -131,9 +183,7 @@ export default function KanbanHome({ onSelectKanban }) {
                         novoQuadro.cor === cor ? "selected" : ""
                       }`}
                       style={{ background: cor }}
-                      onClick={() =>
-                        setNovoQuadro({ ...novoQuadro, cor })
-                      }
+                      onClick={() => setNovoQuadro({ ...novoQuadro, cor })}
                     />
                   ))}
                 </div>
@@ -153,6 +203,51 @@ export default function KanbanHome({ onSelectKanban }) {
                 disabled={!novoQuadro.titulo.trim()}
               >
                 Criar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🔹 Modal Arquivar */}
+      {showArchiveModal && quadroSelecionado && (
+        <div className="modal-overlay" onClick={() => setShowArchiveModal(false)}>
+          <div className="modal-arquivar" onClick={(e) => e.stopPropagation()}>
+            <svg
+              className="modal-alert-icon"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3m0 4h.01M10.29 3.86l-7.07 12.2A1 1 0 004.1 18h15.8a1 1 0 00.87-1.94l-7.07-12.2a1 1 0 00-1.74 0z"
+              />
+            </svg>
+
+            <h3>Arquivar Quadro</h3>
+            <p>
+              Tem certeza que deseja arquivar o quadro "
+              <strong>{quadroSelecionado.titulo}</strong>"?
+              <br />
+              Ele ficará oculto, mas poderá ser restaurado depois.
+            </p>
+
+            <div className="modal-arquivar-buttons">
+              <button
+                className="modal-arquivar-cancelar"
+                onClick={() => setShowArchiveModal(false)}
+              >
+                Cancelar
+              </button>
+
+              <button
+                className="modal-arquivar-confirmar"
+                onClick={confirmarArquivar}
+              >
+                Arquivar
               </button>
             </div>
           </div>

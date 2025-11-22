@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { LayoutGrid, Archive, Home, User, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Kanban.css";
+import userService from "../services/userService";
 
 function Kanban({
   onSwitchDashboard,
@@ -9,34 +11,52 @@ function Kanban({
   onSwitchUsuarios,
   onSwitchClientes,
   onSwitchKanban,
+  onSwitchArquivados,
   children,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mostrarNotif, setMostrarNotif] = useState(false);
+  const [username, setUsername] = useState(null)
   const navigate = useNavigate();
 
-  // Mock de notificações - substituir por dados reais da API
+  // Mock de notificações - substituir por dados reais
   const notificacoes = [
     { id: 1, texto: "Nova tarefa atribuída a você", tempo: "5 min", lida: false },
     { id: 2, texto: "Prazo do projeto se aproximando", tempo: "1 hora", lida: false },
     { id: 3, texto: "Comentário em sua tarefa", tempo: "2 horas", lida: true },
   ];
 
-  const naoLidas = notificacoes.filter(n => !n.lida).length;
+  const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const handleMenuClick = (callback) => {
     callback();
     setMenuOpen(false);
   };
 
+  async function loadCurrentUserName() {
+    const user = await userService.getMe()
+    setUsername(user.name)
+  }
+
+  useEffect(() => {
+    loadCurrentUserName();
+  }, []);
+
   return (
     <div className="kanban-wrapper">
       <button className="hamburger-btn" onClick={toggleMenu} aria-label="Menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -49,21 +69,58 @@ function Kanban({
         <img src="/Logo_flap.png" alt="Flap" className="kanban-logo" />
 
         <nav className="sidebar-main-menu">
-          <button onClick={() => handleMenuClick(onSwitchDashboard)} className="sidebar-btn">Dashboard</button>
-          <button onClick={() => handleMenuClick(onSwitchKanban)} className="sidebar-btn">Kanban</button>
-          <button onClick={() => handleMenuClick(onSwitchUsuarios)} className="sidebar-btn">Usuários</button>
-          <button onClick={() => handleMenuClick(onSwitchClientes)} className="sidebar-btn">Clientes</button>
-          <button onClick={() => handleMenuClick(onSwitchProjetos)} className="sidebar-btn">Arquivados</button>
-          <button onClick={() => handleMenuClick(onLogout)} className="sidebar-btn">Sair</button>
+          <button
+            onClick={() => handleMenuClick(onSwitchDashboard)}
+            className="sidebar-btn"
+          >
+            <Home size={18} style={{ marginRight: 10 }} /> Dashboard
+          </button>
+
+          <button
+            onClick={() => handleMenuClick(onSwitchKanban)}
+            className="sidebar-btn"
+          >
+            <LayoutGrid size={18} style={{ marginRight: 10 }} /> Kanban
+          </button>
+
+          <button
+            onClick={() => handleMenuClick(onSwitchUsuarios)}
+            className="sidebar-btn"
+          >
+            <User size={18} style={{ marginRight: 10 }} /> Usuários
+          </button>
+
+          <button
+            onClick={() => handleMenuClick(onSwitchClientes)}
+            className="sidebar-btn"
+          >
+            <Users size={18} style={{ marginRight: 10 }} /> Clientes
+          </button>
+
+          <button
+            onClick={() => handleMenuClick(onSwitchProjetos)}
+            className="sidebar-btn"
+          >
+            <Archive size={18} style={{ marginRight: 10 }} /> Arquivados
+          </button>
         </nav>
 
         <div className="kanban-user">
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ background: "#ececec", borderRadius: "50%", padding: 10, fontSize: 20 }}>👤</span>
+            <span
+              style={{
+                background: "#ececec",
+                borderRadius: "50%",
+                padding: 10,
+                fontSize: 20,
+              }}
+            >
+              👤
+            </span>
             <div>
-              <span style={{ fontWeight: 600 }}>Usuario1</span>
+              <span style={{ fontWeight: 600 }}>{username}</span>
               <br />
-              <small style={{ color: "#888" }}>Design</small>
+              <small style={{ color: "#888" }}>Editar perfil</small>
             </div>
           </div>
         </div>
@@ -111,8 +168,11 @@ function Kanban({
                       <p>Nenhuma notificação</p>
                     </div>
                   ) : (
-                    notificacoes.map(n => (
-                      <div key={n.id} className={`notif-item ${!n.lida ? 'nao-lida' : ''}`}>
+                    notificacoes.map((n) => (
+                      <div
+                        key={n.id}
+                        className={`notif-item ${!n.lida ? "nao-lida" : ""}`}
+                      >
                         <div className="notif-conteudo">
                           <p className="notif-texto">{n.texto}</p>
                           <span className="notif-tempo">Há {n.tempo}</span>
