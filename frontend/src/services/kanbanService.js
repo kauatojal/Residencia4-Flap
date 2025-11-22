@@ -20,8 +20,8 @@ const kanbanService = {
   createTarefa: async (data) => (await api.post("/tarefa", data)).data,
   updateTarefa: async (id, data) => (await api.put(`/tarefa/${id}`, data)).data,
   deleteTarefa: async (id) => (await api.delete(`/tarefa/${id}`)).data,
-  moveTarefa: async (tarefaId, listaDestinoId) =>
-    (await api.put(`/tarefa/${tarefaId}/mover-lista`, { listaDestinoId })).data,
+  moveTarefa: async (tarefaId, novaListaId, quadroId) =>
+    (await api.put(`/tarefa/${tarefaId}/mover-lista`, { tarefaId }, { params: { novaListaId, quadroId} })).data,
 
   // 🟥 FLAGS
   listFlags: async () => (await api.get("/flag-tarefa/all")).data,

@@ -10,8 +10,8 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (!config.url?.includes("/auth/login")) {
-      console.log("entrou no if do authlogin")
       const token = getToken();
+
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
