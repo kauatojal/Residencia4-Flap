@@ -1,0 +1,86 @@
+.birthday-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+  padding: 16px;
+}
+.birthday-modal{
+  width: min(720px, 96%);
+  background: var(--surface, #fff);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 12px 40px rgba(2,6,23,0.4);
+  position: relative;
+  overflow: hidden;
+}
+.close-x{
+  position:absolute;
+  right:12px;
+  top:8px;
+  background:transparent;
+  border:none;
+  font-size:22px;
+  cursor:pointer;
+}
+.balloons-wrap{
+  position:absolute;
+  left:0; right:0; top:-40%;
+  height: 220%;
+  pointer-events:none;
+}
+.balloon{
+  position:absolute;
+  bottom:-10%;
+  font-size:32px;
+  animation: rise 6s infinite ease-in;
+  opacity:0.95;
+}
+.b1{ left:10%; animation-delay:0s; transform: scale(1.0); }
+.b2{ left:30%; animation-delay:1s; transform: scale(1.1); }
+.b3{ left:55%; animation-delay:0.6s; transform: scale(0.95); }
+.b4{ left:78%; animation-delay:1.6s; transform: scale(1.05); }
+@keyframes rise {
+  0% { transform: translateY(0) rotate(0deg); opacity:0; }
+  10% { opacity:1; }
+  100% { transform: translateY(-200%) rotate(30deg); opacity:0.9; }
+}
+
+.birthday-modal h2{
+  margin: 0 0 14px 0;
+  font-size: 22px;
+  color: var(--text, #1a202c);
+}
+.celebrants-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.celebrant-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-radius:8px;
+  background: rgba(0,0,0,0.02);
+}
+.small-muted{ color: var(--muted,#718096); font-size:13px; margin-top:4px; }
+.btn-wish{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  background:#4a67ff;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-wish:disabled{ opacity:0.7; cursor:progress; }
+
+@media (max-width:520px){
+  .birthday-modal{ padding:16px; }
+  .balloon{ font-size:26px; }
+}

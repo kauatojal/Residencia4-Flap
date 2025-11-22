@@ -8,6 +8,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     cnpj: "",
     email: "",
     telefone: "",
+    link: "", // NOVO CAMPO
     logo: null,
   });
 
@@ -23,6 +24,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
         cnpj: cliente.cnpj || "",
         email: cliente.email || "",
         telefone: cliente.telefone || "",
+        link: cliente.link || "", // CARREGA O LINK NA EDIÇÃO
         logo: cliente.logo || null,
       });
       if (cliente.logo) {
@@ -34,6 +36,16 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
   // ============ VALIDAÇÕES ============
   const validarEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  // Validação simples de URL
+  const validarUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (_) {
+      return false;
+    }
   };
 
   const validarCNPJ = (cnpj) => {
@@ -107,18 +119,30 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     setForm({ ...form, [name]: novoValor });
 
     // Validação em tempo real
-    if (name === "email" && value && !validarEmail(value)) {
-      setErros((prev) => ({ ...prev, email: "E-mail inválido" }));
-    } else if (name === "email") {
-      setErros((prev) => ({ ...prev, email: "" }));
+    if (name === "email") {
+       if (value && !validarEmail(value)) {
+          setErros((prev) => ({ ...prev, email: "E-mail inválido" }));
+       } else {
+          setErros((prev) => ({ ...prev, email: "" }));
+       }
     }
 
-    if (name === "cnpj" && value) {
-      const cnpjLimpo = value.replace(/\D/g, '');
-      if (cnpjLimpo.length === 14 && !validarCNPJ(value)) {
-        setErros((prev) => ({ ...prev, cnpj: "CNPJ inválido" }));
-      } else {
-        setErros((prev) => ({ ...prev, cnpj: "" }));
+    if (name === "link") {
+        if (value && !validarUrl(value)) {
+            setErros((prev) => ({ ...prev, link: "Link inválido (inclua http:// ou https://)" }));
+        } else {
+            setErros((prev) => ({ ...prev, link: "" }));
+        }
+    }
+
+    if (name === "cnpj") {
+      if (value) {
+        const cnpjLimpo = value.replace(/\D/g, '');
+        if (cnpjLimpo.length === 14 && !validarCNPJ(value)) {
+          setErros((prev) => ({ ...prev, cnpj: "CNPJ inválido" }));
+        } else {
+          setErros((prev) => ({ ...prev, cnpj: "" }));
+        }
       }
     }
   };
@@ -156,6 +180,10 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     if (!validarCNPJ(form.cnpj)) novosErros.cnpj = "CNPJ inválido";
     if (!validarEmail(form.email)) novosErros.email = "E-mail inválido";
     if (!form.telefone.trim()) novosErros.telefone = "Telefone é obrigatório";
+    
+    // Validação do Link (opcional: se for obrigatório, descomente a linha abaixo)
+    if (form.link && !validarUrl(form.link)) novosErros.link = "Link inválido";
+    // if (!form.link.trim()) novosErros.link = "Link é obrigatório";
 
     if (Object.keys(novosErros).length > 0) {
       setErros(novosErros);
@@ -165,7 +193,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     setSalvando(true);
     try {
       await onSave(form);
-      setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", logo: null });
+      setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", link: "", logo: null });
       setPreviewLogo(null);
     } catch (error) {
       alert("Erro ao salvar cliente");
@@ -252,23 +280,55 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
               {erros.telefone && <span className="erro-campo">{erros.telefone}</span>}
             </div>
 
-          <div className="form-group">
-            <label htmlFor="logo">Logo da Empresa</label>
-            <div className="logo-upload-container">
-              <div
-                className="logo-upload-box"
-                onClick={() => document.getElementById('logo').click()}
-              >
-                {previewLogo ? (
-                  <div className="logo-preview">
-                    <img src={previewLogo} alt="Preview logo" />
-                    <div className="logo-overlay">
+            {/* NOVO CAMPO LINK */}
+            <div className="form-group">
+              <label htmlFor="link">Link Personalizado (IA)</label>
+              <input
+                id="link"
+                name="link"
+                value={form.link}
+                onChange={handleChange}
+                placeholder="https://exemplo.com/ia-do-cliente"
+                className={erros.link ? "input-erro" : ""}
+                // Adicione 'required' aqui se o campo for obrigatório
+              />
+              {erros.link && <span className="erro-campo">{erros.link}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="logo">Logo da Empresa</label>
+              <div className="logo-upload-container">
+                <div
+                  className="logo-upload-box"
+                  onClick={() => document.getElementById('logo').click()}
+                >
+                  {previewLogo ? (
+                    <div className="logo-preview">
+                      <img src={previewLogo} alt="Preview logo" />
+                      <div className="logo-overlay">
+                        <svg
+                          width="32"
+                          height="32"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                          <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="logo-placeholder">
                       <svg
-                        width="32"
-                        height="32"
+                        width="48"
+                        height="48"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="white"
+                        stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -276,43 +336,25 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                         <circle cx="12" cy="13" r="4"></circle>
                       </svg>
+                      <span>Clique para adicionar logo</span>
                     </div>
-                  </div>
-                ) : (
-                  <div className="logo-placeholder">
-                    <svg
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                      <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                    <span>Clique para adicionar logo</span>
-                  </div>
-                )}
+                  )}
+                </div>
+                <input
+                  id="logo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoChange}
+                  className="input-file"
+                  style={{ display: 'none' }}
+                />
               </div>
-              <input
-                id="logo"
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-                className="input-file"
-                style={{ display: 'none' }}
-              />
+              {erros.logo && <span className="erro-campo">{erros.logo}</span>}
             </div>
-            {erros.logo && <span className="erro-campo">{erros.logo}</span>}
-          </div>
-
 
             <div className="cadastro-actions">
               <button type="submit" className="btn-cadastrar" disabled={salvando}>
-                {salvando ? "Salvando..." : "Cadastrar Cliente"}
+                {salvando ? "Salvando..." : (cliente ? "Salvar Alterações" : "Cadastrar Cliente")}
               </button>
               <button type="button" className="btn-cancelar" onClick={onCancel}>
                 Cancelar

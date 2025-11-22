@@ -1,0 +1,66 @@
+/* src/Components/Arquivados.css */
+
+.arquivados-page {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.arquivados-page h1 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.arquivados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.arquivado-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.06);
+  transition: transform .28s ease, opacity .28s ease;
+}
+
+.badge-arquivado {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  background: #facc15;
+  color: #7c6503;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.arquivado-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.cliente-avatar { width:50px; height:50px; border-radius:50%; background:#e6e6e6; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#374151; }
+.cliente-info h3 { margin:0; font-size:1rem; font-weight:700; }
+.cliente-empresa { margin:4px 0 0 0; font-size:0.9rem; color:#6b7280; }
+
+.btn-restaurar {
+  margin-top:12px; width:100%; padding:10px; background:#22c55e; color:white; border-radius:8px; border:none; cursor:pointer; font-weight:700;
+}
+.btn-restaurar:hover { background:#16a34a; }
+
+/* animation on restore */
+.anim-restaurar { animation: restoreFade .36s ease forwards; }
+@keyframes restoreFade {
+  from { opacity:1; transform: translateY(0); }
+  to { opacity:0; transform: translateY(-8px) scale(.98); }
+}
+
+/* vazio */
+.arquivados-vazio { text-align:center; color:#9aa3b2; padding:60px 0; }
+
+/* skeleton loading */
+.skeleton-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px; }
+.skeleton-card { height:140px; border-radius:12px; background: linear-gradient(90deg, #f3f4f6, #eceff4, #f3f4f6); background-size:300% 100%; animation: shimmer 1.6s linear infinite; }
+@keyframes shimmer { 0%{background-position:0%} 100%{background-position:100%} }

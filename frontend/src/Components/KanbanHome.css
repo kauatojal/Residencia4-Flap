@@ -1,3 +1,7 @@
+/* ===========================
+   BASE ORIGINAL (mantida)
+   =========================== */
+
 .kanban-home {
   padding: 40px;
   background: #f8f9fa;
@@ -76,7 +80,141 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Seção Áreas de Trabalho */
+/* ===========================
+   🔥 ADIÇÕES IMPORTANTES
+   =========================== */
+
+/* Badge “Arquivado” */
+.quadro-badge-arquivado {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #facc15;
+  color: #7c6503;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 5;
+}
+
+/* Card quando arquivado */
+.quadro-card.arquivado {
+  opacity: 0.55;
+  filter: grayscale(0.3);
+  backdrop-filter: blur(1px);
+  transform: none !important;
+  box-shadow: 0 0 0 !important;
+}
+
+/* Animação ao arquivar/restaurar */
+@keyframes fadeSlide {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.quadro-card.animated {
+  animation: fadeSlide 0.35s ease both;
+}
+
+/* Botão Arquivar dentro do card */
+.btn-arquivar-quadro {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-arquivar-quadro:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+/* ===========================
+   MODAL DE ARQUIVAR (NOVO)
+   =========================== */
+
+.modal-arquivar {
+  background: white;
+  width: 95%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 12px;
+  animation: fadeSlide 0.25s ease;
+}
+
+.modal-arquivar h3 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.modal-arquivar p {
+  color: #4a5568;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.modal-arquivar-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+  gap: 10px;
+}
+
+.modal-arquivar-cancelar {
+  padding: 10px 16px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #4a5568;
+  transition: 0.2s ease;
+}
+
+.modal-arquivar-cancelar:hover {
+  background: #cbd5e0;
+}
+
+.modal-arquivar-confirmar {
+  padding: 10px 16px;
+  background: #ef4444;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.modal-arquivar-confirmar:hover {
+  background: #dc2626;
+}
+
+/* Ícone SVG de alerta */
+.modal-alert-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  color: #facc15;
+}
+
+/* ===========================
+   RESTO DO ARQUIVO (Original)
+   Mantido sem alteração
+   =========================== */
+
 .kanban-home-section {
   margin-top: 60px;
 }
@@ -111,7 +249,7 @@
   color: #3a56e0;
 }
 
-/* Modal */
+/* Modal base já existente */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -623,3 +761,5 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(74, 103, 255, 0.3);
 }
+
+

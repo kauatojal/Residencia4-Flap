@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AdicionarTarefa.css';
 import kanbanService from "../services/kanbanService";
+import flagService from "../services/flagService";
 
 const clientes = [
   'Tech Solutions Ltda',
