@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
+import clientService from "../services/clientService";
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -9,16 +10,15 @@ export default function Clientes() {
   const [clienteParaArquivar, setClienteParaArquivar] = useState(null);
   const [busca, setBusca] = useState("");
 
+  async function loadClients() {
+    const clientes = await clientService.list()
+    setClientes(clientes)
+  }
+
   // Carregar clientes + arquivados do localStorage
   useEffect(() => {
-    const armazenados = JSON.parse(localStorage.getItem("clientes")) || [];
-    setClientes(armazenados);
+    loadClients()
   }, []);
-
-  // Salvar no localStorage sempre que alterar
-  const salvarLocal = (lista) => {
-    localStorage.setItem("clientes", JSON.stringify(lista));
-  };
 
   // Salvar cliente
   const handleSalvarCliente = (clienteNovo) => {
@@ -48,7 +48,6 @@ export default function Clientes() {
       }
 
       setClientes(novaLista);
-      salvarLocal(novaLista);
 
       setMostrarCadastro(false);
       setClienteEditando(null);
@@ -56,11 +55,11 @@ export default function Clientes() {
   };
 
   // Excluir
-  const handleExcluirCliente = (id) => {
+  const handleExcluirCliente = async (id) => {
     if (window.confirm("Deseja realmente excluir este cliente?")) {
+      await clientService.remove(id)
       const listaAtual = clientes.filter((c) => c.id !== id);
       setClientes(listaAtual);
-      salvarLocal(listaAtual);
     }
   };
 
@@ -75,7 +74,6 @@ export default function Clientes() {
       c.id === clienteParaArquivar.id ? { ...c, arquivado: true } : c
     );
     setClientes(listaAtual);
-    salvarLocal(listaAtual);
     setClienteParaArquivar(null);
   };
 

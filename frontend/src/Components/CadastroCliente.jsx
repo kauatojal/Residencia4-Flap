@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./CadastroCliente.css";
+import clientService from "../services/clientService";
 
 export default function CadastroCliente({ cliente, onSave, onCancel }) {
   const [form, setForm] = useState({
@@ -180,7 +181,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     if (!validarCNPJ(form.cnpj)) novosErros.cnpj = "CNPJ inválido";
     if (!validarEmail(form.email)) novosErros.email = "E-mail inválido";
     if (!form.telefone.trim()) novosErros.telefone = "Telefone é obrigatório";
-    
+
     // Validação do Link (opcional: se for obrigatório, descomente a linha abaixo)
     if (form.link && !validarUrl(form.link)) novosErros.link = "Link inválido";
     // if (!form.link.trim()) novosErros.link = "Link é obrigatório";
@@ -192,7 +193,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
 
     setSalvando(true);
     try {
-      await onSave(form);
+      await clientService.create(form)
       setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", link: "", logo: null });
       setPreviewLogo(null);
     } catch (error) {
