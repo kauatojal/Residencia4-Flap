@@ -28,7 +28,6 @@ export default function KanbanBoard() {
 
         const quadroId = id
 
-        // const quadro = quadros[17];
         const listas = await kanbanService.listListasByQuadroId(quadroId)
 
         // 🟢 salva o map nome → id pra poder mover tarefas depois
@@ -82,8 +81,9 @@ export default function KanbanBoard() {
     setColumns(updated);
 
     try {
-      const listaDestinoId = listasMap[destination.droppableId];
-      await kanbanService.moveToList(movedCard.id, listaDestinoId);
+      const novaListaId = listasMap[destination.droppableId];
+      await kanbanService.moveTarefa(movedCard.id, novaListaId, id);
+
     } catch (error) {
       console.error("Erro ao mover tarefa:", error);
     }
