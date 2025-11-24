@@ -127,7 +127,7 @@ export default function KanbanBoard() {
   // 🔹 excluir tarefa
   const handleDeleteTask = async (colId, taskId) => {
     try {
-      await kanbanService.remove(taskId);
+      await kanbanService.deleteTarefa(taskId);
       setColumns((prev) => ({
         ...prev,
         [colId]: prev[colId].filter((task) => task.id !== taskId),
