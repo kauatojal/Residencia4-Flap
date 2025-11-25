@@ -2,19 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './AdicionarTarefa.css';
 import kanbanService from "../services/kanbanService";
 import flagService from "../services/flagService";
-
-const clientes = [
-  'Tech Solutions Ltda',
-  'Inovare Sistemas',
-  'CloudBusiness Corp',
-  'Digital Marketing Pro',
-  'Agência Criativa Design',
-  'StartUp Tech Hub',
-  'Empresa XYZ Comércio',
-  'Consultoria Estratégica',
-  'Indústria ABC S.A.',
-  'Varejo Online Brasil'
-];
+import clientService from '../services/clientService';
+import { useParams } from 'react-router-dom';
 
 const etiquetasIniciais = [
   { id: 1, nome: 'Normal', cor: '#3B82F6' },
@@ -24,13 +13,14 @@ const etiquetasIniciais = [
   { id: 5, nome: 'Aprovado', cor: '#8B5CF6' },
 ];
 
-export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
+export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit, currentListId }) {
   const [form, setForm] = useState({
-    client: '',
-    name: '',
+    cliente: '',
+    titulo: '',
     descricao: '',
   });
 
+  const [clientes, setClientes] = useState([]);
   const [etiquetas, setEtiquetas] = useState(etiquetasIniciais);
   const [etiquetasSelecionadas, setEtiquetasSelecionadas] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -42,15 +32,25 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
   const [novaEtiqueta, setNovaEtiqueta] = useState({ nome: '', cor: '#3B82F6' });
   const [mostrarPopupEtiquetas, setMostrarPopupEtiquetas] = useState(false);
 
+  async function loadClients() {
+    const clientes = await clientService.list()
+    setClientes(clientes)
+  }
+
+  const { id } = useParams()
+  const quadroId = id
+
   useEffect(() => {
+    loadClients()
+
     if (taskToEdit) {
       setForm({
-        client: taskToEdit.client || '',
-        name: taskToEdit.name || '',
+        cliente: taskToEdit.cliente || '',
+        titulo: taskToEdit.tituli || '',
         descricao: taskToEdit.descricao || '',
       });
-      if (taskToEdit.prazo) {
-        const [day, month, year] = taskToEdit.prazo.split('/');
+      if (taskToEdit.Fim) {
+        const [day, month, year] = taskToEdit.prazoFim.split('/');
         setSelectedDate(new Date(year, month - 1, day));
       }
       if (taskToEdit.etiquetas) {
@@ -90,8 +90,8 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.client) newErrors.client = 'Cliente é obrigatório';
-    if (!form.name) newErrors.name = 'Nome da tarefa é obrigatório';
+    if (!form.cliente) newErrors.client = 'Cliente é obrigatório';
+    if (!form.titulo) newErrors.name = 'Nome da tarefa é obrigatório';
     if (!form.descricao) newErrors.descricao = 'Descrição é obrigatória';
     if (!selectedDate) newErrors.data = 'Data é obrigatória';
     if (etiquetasSelecionadas.length === 0) newErrors.etiquetas = 'Selecione pelo menos uma etiqueta';
@@ -103,12 +103,16 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
     e.preventDefault();
     if (!validateForm()) return;
 
+    console.log(selectedDate)
     const payload = {
-      client: form.client,
-      nome: form.name,
+      cliente: {id: form.cliente},
+      titulo: form.titulo,
       descricao: form.descricao,
-      etiquetas: etiquetasSelecionadas,
-      prazo: selectedDate ? selectedDate.toLocaleDateString('pt-BR') : '',
+      // etiquetas: etiquetasSelecionadas,
+      flagTarefas: [], // TODO: implementar integração de etiquetas
+      quadro: {id: quadroId},
+      lista: {id: currentListId},
+      prazoFim: selectedDate
     };
 
     try {
@@ -118,7 +122,7 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
       } else {
         await kanbanService.createTarefa(payload);
       }
-      onAddTask(payload);
+      // onAddTask(payload);
       onClose();
     } catch (error) {
       console.error("Erro ao salvar tarefa:", error);
@@ -142,26 +146,26 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
               <select
                 name="client"
                 id="client"
-                className={errors.client ? "error" : ""}
-                value={form.client}
-                onChange={(e) => setForm({ ...form, client: e.target.value })}
+                className={errors.cliente ? "error" : ""}
+                value={form.cliente}
+                onChange={(e) => setForm({ ...form, cliente: e.target.value })}
               >
                 <option value="">Selecione um cliente</option>
-                {clientes.map((c, i) => <option key={i} value={c}>{c}</option>)}
+                {clientes.map((c, i) => <option key={i} value={c.id}>{c.nome}</option>)}
               </select>
-              {errors.client && <span className="error-message">{errors.client}</span>}
+              {errors.cliente && <span className="error-message">{errors.cliente}</span>}
             </div>
 
             <div className="form-field full-width">
-              <label className="required" htmlFor="name">Título</label>
+              <label className="required" htmlFor="titulo">Título</label>
               <input
-                name="name"
+                name="titulo"
                 id="name"
-                className={errors.name ? "error" : ""}
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className={errors.titulo ? "error" : ""}
+                value={form.titulo}
+                onChange={(e) => setForm({ ...form, titulo: e.target.value })}
               />
-              {errors.name && <span className="error-message">{errors.name}</span>}
+              {errors.titulo && <span className="error-message">{errors.titulo}</span>}
             </div>
 
             <div className="form-field full-width">
@@ -177,10 +181,10 @@ export default function AdicionarTarefa({ onClose, onAddTask, taskToEdit }) {
             </div>
 
                       <div className="form-field full-width">
-            <label className="required" htmlFor="prazo">Prazo</label>
+            <label className="required" htmlFor="prazoFim">Prazo</label>
             <input
               type="date"
-              id="prazo"
+              id="prazoFim"
               className={errors.data ? "error" : ""}
               value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
               onChange={(e) => setSelectedDate(new Date(e.target.value))}

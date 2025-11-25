@@ -12,6 +12,7 @@ export default function KanbanBoard() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [showAddTask, setShowAddTask] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const [currentListId, setCurrentListId] = useState(null)
   const [activeView, setActiveView] = useState("quadros");
   const [loading, setLoading] = useState(true);
   const [listasMap, setListasMap] = useState({}); // map listaNome → listaId
@@ -211,7 +212,11 @@ export default function KanbanBoard() {
                   </Draggable>
                 ))}
                 {provided.placeholder}
-                <button className="btn-adicionar-cartao" onClick={() => { setTaskToEdit(null); setShowAddTask(true); }}>
+                <button className="btn-adicionar-cartao" onClick={() => {
+                  setCurrentListId(listasMap[columnId]);
+                  setTaskToEdit(null);
+                  setShowAddTask(true);
+                }}>
                   + Adicionar
                 </button>
               </div>
@@ -254,6 +259,7 @@ export default function KanbanBoard() {
           onClose={() => { setShowAddTask(false); setTaskToEdit(null); }}
           onSave={handleSaveTask}
           taskToEdit={taskToEdit}
+          currentListId={currentListId}
         />
       )}
     </>
