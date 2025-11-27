@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import './Dashboard.css';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip,
@@ -91,7 +90,7 @@ const ComumDashboard = () => (
 );
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuthContext()
   if (!user) return <p>Carregando...</p>;
 
   if (user.cargos.find(c => {

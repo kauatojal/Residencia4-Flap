@@ -1,8 +1,8 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { getToken, saveToken, removeToken } from "../api/auth";
 import api from "../services/api"; // axios configurado com baseURL
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -71,3 +71,17 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuthContext = () => {
+  const ctx = useContext(AuthContext)
+
+  if (!ctx)
+    throw new Error("useAuthContext deve ser usado dentro de um AuthProvider")
+
+  return ctx
+}
+
+export const useIsAuthenticated = () => {
+  const { user } = useAuthContext()
+  return user !== null
+}
