@@ -111,7 +111,7 @@ function Kanban({ children }) {
             <div>
               <span style={{ fontWeight: 600 }}>{username}</span>
               <br />
-              <small style={{ color: "#888" }}>Editar perfil</small>
+              <small style={{ color: "#888" }}>Sair</small>
             </div>
           </div>
         </div>
