@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     delete api.defaults.headers.Authorization;
   };
 
-  // if (loading) return <div>Carregando...</div>;
+  if (loading) return <div>Carregando...</div>;
 
   return (
     <AuthContext.Provider value={{ user, authenticated, loginUser, logoutUser, accessToken }}>
