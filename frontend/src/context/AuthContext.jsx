@@ -6,13 +6,17 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null)
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // 🔁 Mantém login mesmo após recarregar a página
   useEffect(() => {
     const token = getToken();
+
     if (token) {
+      setAccessToken(token)
+
       api.defaults.headers.Authorization = `Bearer ${token}`;
       // Opcional: buscar dados do usuário logado
       api.get("/user/me")
@@ -35,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post("/auth/login", { email, password });
       const { token } = res.data;
+      setAccessToken(token)
 
       saveToken(token);
       api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -51,6 +56,7 @@ export const AuthProvider = ({ children }) => {
 
   // 🚪 Logout
   const logoutUser = () => {
+    setAccessToken(null)
     removeToken();
     setUser(null);
     setAuthenticated(false);
@@ -60,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   // if (loading) return <div>Carregando...</div>;
 
   return (
-    <AuthContext.Provider value={{ user, authenticated, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, authenticated, loginUser, logoutUser, accessToken }}>
       {children}
     </AuthContext.Provider>
   );
