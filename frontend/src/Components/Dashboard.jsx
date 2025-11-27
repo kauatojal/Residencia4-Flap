@@ -94,7 +94,10 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
   if (!user) return <p>Carregando...</p>;
 
-  if (user.cargos.find(c => c.nome.toLowerCase() === "admin"))
+  if (user.cargos.find(c => {
+    let cargo = c.nome.toLowerCase()
+    return cargo === "admin" || cargo === "gestor"
+  }))
     return <GestorDashboard />
   else
     return <ComumDashboard />;
