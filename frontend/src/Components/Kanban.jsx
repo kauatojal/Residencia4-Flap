@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { LayoutGrid, Archive, Home, User, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Kanban.css";
 import userService from "../services/userService";
 
-function Kanban({
-  onSwitchDashboard,
-  onSwitchProjetos,
-  onLogout,
-  onSwitchUsuarios,
-  onSwitchClientes,
-  onSwitchKanban,
-  onSwitchArquivados,
-  children,
-}) {
+function Kanban({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mostrarNotif, setMostrarNotif] = useState(false);
   const [username, setUsername] = useState(null)
@@ -69,40 +60,40 @@ function Kanban({
         <img src="/Logo_flap.png" alt="Flap" className="kanban-logo" />
 
         <nav className="sidebar-main-menu">
-          <button
-            onClick={() => handleMenuClick(onSwitchDashboard)}
+          <Link
+            to="/dashboard"
             className="sidebar-btn"
           >
             <Home size={18} style={{ marginRight: 10 }} /> Dashboard
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleMenuClick(onSwitchKanban)}
+          <Link
+            to="/kanban"
             className="sidebar-btn"
           >
             <LayoutGrid size={18} style={{ marginRight: 10 }} /> Kanban
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleMenuClick(onSwitchUsuarios)}
+          <Link
+            to="/usuarios"
             className="sidebar-btn"
           >
             <User size={18} style={{ marginRight: 10 }} /> Usuários
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleMenuClick(onSwitchClientes)}
+          <Link
+            to="/clientes"
             className="sidebar-btn"
           >
             <Users size={18} style={{ marginRight: 10 }} /> Clientes
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleMenuClick(onSwitchProjetos)}
+          <Link
+            to="/projetos"
             className="sidebar-btn"
           >
             <Archive size={18} style={{ marginRight: 10 }} /> Arquivados
-          </button>
+          </Link>
         </nav>
 
         <div className="kanban-user">

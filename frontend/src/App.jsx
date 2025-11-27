@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Link, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import useAuth from "./context/useAuth";
 
@@ -37,20 +37,8 @@ function MainApp() {
     navigate(`/kanban/${kanban.id}`);
   };
 
-  const handleVoltarKanbans = () => navigate("/kanban");
-
   return (
-    <Kanban
-      onSwitchDashboard={() => (window.location.href = "/dashboard")}
-      onSwitchKanban={() => (window.location.href = "/kanban")}
-      onSwitchProjetos={() => (window.location.href = "/projetos")}
-      onSwitchConfiguracoes={() => (window.location.href = "/configuracoes")}
-      onSwitchNotificacoes={() => (window.location.href = "/notificacoes")}
-      onSwitchUsuarios={() => (window.location.href = "/usuarios")}
-      onSwitchClientes={() => (window.location.href = "/clientes")}
-      onSwitchPerfil={() => (window.location.href = "/perfil")}
-      onLogout={logout}
-    >
+    <Kanban onLogout={logout}>
       <Routes>
         <Route path="/dashboard" element={<Dashboard userRole={user?.role} />} />
         <Route
@@ -62,9 +50,9 @@ function MainApp() {
           element={
             <div className="kanban-board-container">
               <div className="kanban-board-header-top">
-                <button className="btn-voltar-home" onClick={handleVoltarKanbans}>
+                <Link className="btn-voltar-home" to="/kanban">
                   ← Voltar
-                </button>
+                </Link>
                 <h2 className="quadro-nome">{kanbanSelecionado?.nome}</h2>
               </div>
               <KanbanBoard />
