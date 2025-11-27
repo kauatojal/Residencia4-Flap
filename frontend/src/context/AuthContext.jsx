@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
       saveToken(token);
       api.defaults.headers.Authorization = `Bearer ${token}`;
-      const user = await api.post("/user/me").data
+      const user = await api.get("/user/me").data
 
       setUser(user);
       setAuthenticated(true);
