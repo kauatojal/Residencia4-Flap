@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // 🔐 Login
   const loginUser = async (email, password) => {
     try {
       const res = await api.post("/auth/login", { email, password });
@@ -54,7 +53,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🚪 Logout
   const logoutUser = () => {
     setAccessToken(null)
     removeToken();

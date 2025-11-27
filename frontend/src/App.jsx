@@ -17,14 +17,6 @@ import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Cadastro from "./Components/Cadastro";
 
-// 🔒 Rota protegida
-function ProtectedRoute({ children }) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" replace />;
-  return children;
-}
-
-// 🌟 App principal
 function MainApp() {
   const { user, logoutUser } = useAuthContext();
   const [kanbanSelecionado, setKanbanSelecionado] = useState(null);
