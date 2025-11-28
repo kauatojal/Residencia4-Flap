@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import useAuth from "./context/useAuth";
+import { Link, Routes, Route, Navigate, useNavigate, BrowserRouter } from "react-router-dom";
+import { AuthProvider, useAuthContext, useIsAuthenticated } from "./context/AuthContext";
 
 // Componentes
 import Login from "./Components/Login";
@@ -18,16 +17,8 @@ import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Cadastro from "./Components/Cadastro";
 
-// 🔒 Rota protegida
-function ProtectedRoute({ children }) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" replace />;
-  return children;
-}
-
-// 🌟 App principal
 function MainApp() {
-  const { user, logout } = useAuth();
+  const { user, logoutUser } = useAuthContext();
   const [kanbanSelecionado, setKanbanSelecionado] = useState(null);
   const navigate = useNavigate();
 
@@ -37,20 +28,8 @@ function MainApp() {
     navigate(`/kanban/${kanban.id}`);
   };
 
-  const handleVoltarKanbans = () => navigate("/kanban");
-
   return (
-    <Kanban
-      onSwitchDashboard={() => (window.location.href = "/dashboard")}
-      onSwitchKanban={() => (window.location.href = "/kanban")}
-      onSwitchProjetos={() => (window.location.href = "/projetos")}
-      onSwitchConfiguracoes={() => (window.location.href = "/configuracoes")}
-      onSwitchNotificacoes={() => (window.location.href = "/notificacoes")}
-      onSwitchUsuarios={() => (window.location.href = "/usuarios")}
-      onSwitchClientes={() => (window.location.href = "/clientes")}
-      onSwitchPerfil={() => (window.location.href = "/perfil")}
-      onLogout={logout}
-    >
+    <Kanban onLogout={logoutUser}>
       <Routes>
         <Route path="/dashboard" element={<Dashboard userRole={user?.role} />} />
         <Route
@@ -62,9 +41,9 @@ function MainApp() {
           element={
             <div className="kanban-board-container">
               <div className="kanban-board-header-top">
-                <button className="btn-voltar-home" onClick={handleVoltarKanbans}>
+                <Link className="btn-voltar-home" to="/kanban">
                   ← Voltar
-                </button>
+                </Link>
                 <h2 className="quadro-nome">{kanbanSelecionado?.nome}</h2>
               </div>
               <KanbanBoard />
@@ -89,21 +68,33 @@ function MainApp() {
   );
 }
 
-// 🚀 Export final
+function AppRoutes() {
+  const isAuthenticated = useIsAuthenticated()
+
+  return (
+    <BrowserRouter>
+      {!isAuthenticated && (
+        <div>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      )}
+
+      {isAuthenticated && (
+        <div>
+          <MainApp />
+        </div>
+      )}
+    </BrowserRouter>
+  )
+}
+
 export default function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/*"
-          element={
-            // <ProtectedRoute>
-              <MainApp />
-            // </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <AppRoutes />
     </AuthProvider>
   );
 }

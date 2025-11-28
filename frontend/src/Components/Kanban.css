@@ -77,6 +77,7 @@ body {
 }
 
 .sidebar-btn {
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -412,6 +413,7 @@ body {
 }
 
 .btn-voltar-home {
+  text-decoration: none;
   padding: 8px 16px;
   background: transparent;
   border: 2px solid #e2e8f0;
