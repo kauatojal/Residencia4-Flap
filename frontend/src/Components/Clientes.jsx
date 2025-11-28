@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { Plus, Search, Edit, Trash2, Archive, Mail, Phone, Building } from "lucide-react";
 import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
 import clientService from "../services/clientService";
+import Swal from "sweetalert2";
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [mostrarCadastro, setMostrarCadastro] = useState(false);
   const [clienteEditando, setClienteEditando] = useState(null);
   const [clienteParaArquivar, setClienteParaArquivar] = useState(null);
   const [busca, setBusca] = useState("");
 
-  async function loadClients() {
-    const clientes = await clientService.list()
-    setClientes(clientes)
-  }
+  // async function loadClients() {
+  //   const clientes = await clientService.list()
+  //   setClientes(clientes)
+  // }
 
-  // Carregar clientes + arquivados do localStorage
-  useEffect(() => {
-    loadClients()
-  }, []);
+  // useEffect(() => {
+  //   loadClients()
+  // }, []);
 
-  // Salvar cliente
   const handleSalvarCliente = (clienteNovo) => {
     const processarLogo = (logo) => {
       return new Promise((resolve) => {
@@ -48,49 +49,99 @@ export default function Clientes() {
       }
 
       setClientes(novaLista);
-
       setMostrarCadastro(false);
       setClienteEditando(null);
     });
   };
 
-  // Excluir
+  const fetchClientes = async () => {
+    setLoading(true);
+
+    try {
+      const clientes = await clientService.list()
+      setClientes(clientes)
+    } catch(e) {
+      console.error("Erro ao carregar clientes: ", e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchClientes();
+  }, []);
+
   const handleExcluirCliente = async (id) => {
-    if (window.confirm("Deseja realmente excluir este cliente?")) {
-      await clientService.remove(id)
-      const listaAtual = clientes.filter((c) => c.id !== id);
-      setClientes(listaAtual);
+    const result = await Swal.fire({
+      title: 'Tem certeza?',
+      text: "Isso removerá o cliente permanentemente.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await clientService.remove(id)
+
+        if (response.ok) {
+          setClientes(clientes.filter((c) => c.id !== id));
+          Swal.fire('Excluído!', 'Cliente removido.', 'success');
+        } else {
+          Swal.fire('Erro', 'Não foi possível excluir.', 'error');
+        }
+      } catch (error) {
+        console.error("Erro ao remover cliente: ", error)
+        Swal.fire('Erro', 'Erro de conexão.', 'error');
+      } finally {
+        setLoading(false)
+      }
     }
   };
 
-  // Abrir modal
-  const abrirModalArquivar = (cliente) => {
-    setClienteParaArquivar(cliente);
+  const confirmarArquivamento = async () => {
+    if (!clienteParaArquivar) return;
+
+    try {
+      const clienteAtualizado = { ...clienteParaArquivar, arquivado: true };
+
+      await clientService.update(clienteParaArquivar.id)
+
+      setClientes(clientes.map(c => c.id === clienteParaArquivar.id ? clienteAtualizado : c));
+      setClienteParaArquivar(null);
+      Swal.fire('Arquivado!', 'Cliente arquivado com sucesso.', 'success');
+    } catch (error) {
+      console.error("Erro ao alterar cliente: ", error)
+      Swal.fire('Erro', 'Erro de conexão.', 'error');
+    }
   };
 
-  // Confirmar arquivamento
-  const confirmarArquivamento = () => {
-    const listaAtual = clientes.map((c) =>
-      c.id === clienteParaArquivar.id ? { ...c, arquivado: true } : c
-    );
-    setClientes(listaAtual);
-    setClienteParaArquivar(null);
+  const handleSaveSuccess = () => {
+    setMostrarCadastro(false);
+    setClienteEditando(null);
+    fetchClientes();
   };
 
-  // Filtro (somente não arquivados)
   const clientesFiltrados = clientes.filter((cliente) => {
     if (cliente.arquivado) return false;
+    const termo = busca.toLowerCase();
     return (
-      cliente.nome.toLowerCase().includes(busca.toLowerCase()) ||
-      cliente.empresa.toLowerCase().includes(busca.toLowerCase()) ||
-      cliente.email.toLowerCase().includes(busca.toLowerCase())
+      (cliente.nome && cliente.nome.toLowerCase().includes(termo)) ||
+      (cliente.empresa && cliente.empresa.toLowerCase().includes(termo)) ||
+      (cliente.email && cliente.email.toLowerCase().includes(termo))
     );
   });
 
   return (
     <div className="clientes-page">
       <div className="clientes-header">
-        <h1>Clientes</h1>
+        <div className="header-title">
+          <h1>Clientes</h1>
+          <p>Gerencie sua base de clientes</p>
+        </div>
         <button
           className="btn-cadastrar-cliente"
           onClick={() => {
@@ -98,11 +149,12 @@ export default function Clientes() {
             setMostrarCadastro(true);
           }}
         >
-          + Cadastrar Cliente
+          <Plus size={18} /> Novo Cliente
         </button>
       </div>
 
       <div className="clientes-busca">
+        <Search className="busca-icon" size={20} />
         <input
           type="text"
           placeholder="Buscar por nome, empresa ou email..."
@@ -111,7 +163,9 @@ export default function Clientes() {
         />
       </div>
 
-      {clientesFiltrados.length === 0 ? (
+      {loading ? (
+        <div className="loading-state">Carregando clientes...</div>
+      ) : clientesFiltrados.length === 0 ? (
         <div className="clientes-vazio">
           <p>Nenhum cliente encontrado.</p>
         </div>
@@ -120,14 +174,11 @@ export default function Clientes() {
           {clientesFiltrados.map((cliente) => (
             <div key={cliente.id} className="cliente-card animated-card">
               <button
-                className="btn-arquivar"
-                onClick={() => abrirModalArquivar(cliente)}
+                className="btn-arquivar-card"
+                onClick={() => setClienteParaArquivar(cliente)}
+                title="Arquivar"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" stroke="#6b7280" fill="none" strokeWidth="2">
-                  <polyline points="21 8 21 21 3 21 3 8" />
-                  <rect x="3" y="3" width="18" height="5" />
-                  <line x1="12" y1="12" x2="12" y2="17" />
-                </svg>
+                <Archive size={16} />
               </button>
 
               <div className="cliente-card-header">
@@ -135,51 +186,43 @@ export default function Clientes() {
                   {cliente.logo ? (
                     <img src={cliente.logo} alt="Logo" className="cliente-logo-img" />
                   ) : (
-                    cliente.nome.charAt(0).toUpperCase()
+                    cliente.nome ? cliente.nome.charAt(0).toUpperCase() : '#'
                   )}
                 </div>
 
                 <div className="cliente-info">
                   <h3>{cliente.nome}</h3>
-                  <p className="cliente-empresa">{cliente.empresa}</p>
-
-                  {cliente.link && (
-                    <a
-                      className="cliente-link"
-                      href={cliente.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" stroke="#4a67ff" fill="none" strokeWidth="2">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.39 1.39" />
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.39-1.39" />
-                      </svg>
-                      Acessar IA
-                    </a>
-                  )}
+                  <p className="cliente-empresa">{cliente.empresa || "Empresa não informada"}</p>
                 </div>
               </div>
 
               <div className="cliente-card-body">
                 <div className="cliente-detalhe">
-                  <svg width="18" height="18" viewBox="0 0 24 24" stroke="#6b7280" fill="none" strokeWidth="2">
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                    <polyline points="3 7 12 13 21 7" />
-                  </svg>
-                  <span>{cliente.email}</span>
+                  <Mail size={16} />
+                  <span>{cliente.email || "Sem email"}</span>
                 </div>
-
                 <div className="cliente-detalhe">
-                  <svg width="18" height="18" viewBox="0 0 24 24" stroke="#e11d48" fill="none" strokeWidth="2">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0111 19a19.5 19.5 0 01-8-7A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.12.81.38 1.6.76 2.32l.23.44a2 2 0 01-.45 2.31L8.09 9.91a16 16 0 006 6l1.12-1.12a2 2 0 012.31-.45l.44.23c.72.38 1.51.64 2.32.76A2 2 0 0122 16.92z" />
-                  </svg>
-                  <span>{cliente.telefone}</span>
+                  <Phone size={16} />
+                  <span>{cliente.telefone || "Sem telefone"}</span>
                 </div>
+                {cliente.cnpj && (
+                  <div className="cliente-detalhe">
+                    <Building size={16} />
+                    <span>{cliente.cnpj}</span>
+                  </div>
+                )}
               </div>
 
               <div className="cliente-card-actions">
-                <button className="btn-editar" onClick={() => setClienteEditando(cliente)}>Editar</button>
-                <button className="btn-excluir" onClick={() => handleExcluirCliente(cliente.id)}>Excluir</button>
+                <button className="btn-editar" onClick={() => {
+                  setClienteEditando(cliente);
+                  setMostrarCadastro(true);
+                }}>
+                  <Edit size={16}/> Editar
+                </button>
+                <button className="btn-excluir" onClick={() => handleExcluirCliente(cliente.id)}>
+                  <Trash2 size={16}/> Excluir
+                </button>
               </div>
             </div>
           ))}
@@ -190,24 +233,18 @@ export default function Clientes() {
       {clienteParaArquivar && (
         <div className="modal-overlay">
           <div className="modal-arquivar">
-            <svg width="50" height="50" stroke="#eab308" fill="none" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <circle cx="12" cy="16" r="1" />
-            </svg>
-
-            <h2>Arquivar Empresa</h2>
+            <div className="modal-icon-warning">
+              <Archive size={40} />
+            </div>
+            <h2>Arquivar Cliente</h2>
             <p>
-              Tem certeza que deseja arquivar a empresa{" "}
-              <strong>{clienteParaArquivar.nome}</strong>? Ela ficará oculta mas poderá ser restaurada depois.
+              Tem certeza que deseja arquivar <strong>{clienteParaArquivar.nome}</strong>?
             </p>
-
             <div className="modal-buttons">
-              <button className="btn-cancelar" onClick={() => setClienteParaArquivar(null)}>
+              <button className="btn-cancelar-modal" onClick={() => setClienteParaArquivar(null)}>
                 Cancelar
               </button>
-
-              <button className="btn-confirmar" onClick={confirmarArquivamento}>
+              <button className="btn-confirmar-modal" onClick={confirmarArquivamento}>
                 Arquivar
               </button>
             </div>
@@ -215,10 +252,11 @@ export default function Clientes() {
         </div>
       )}
 
+      {/* MODAL CADASTRO */}
       {mostrarCadastro && (
         <CadastroCliente
           cliente={clienteEditando}
-          onSave={handleSalvarCliente}
+          onSave={handleSaveSuccess}
           onCancel={() => {
             setMostrarCadastro(false);
             setClienteEditando(null);

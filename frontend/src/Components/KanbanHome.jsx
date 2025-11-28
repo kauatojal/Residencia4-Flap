@@ -1,258 +1,242 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Plus, Filter, Briefcase, Calendar, MoreHorizontal, User } from "lucide-react";
 import "./KanbanHome.css";
-import { FiGrid, FiPlus } from "react-icons/fi";
-import kanbanService from "../services/kanbanService";
+import KanbanFilter from "./KanbanFilter";
+import TaskDetailsModal from "./TaskDetailsModal";
+import CalendarioAnual from "./CalendarioAnual";
+import CreateTaskModal from "./CreateTaskModal"; // Certifique-se de ter criado este arquivo
 
-export default function KanbanHome({ onSelectKanban }) {
-  const [quadros, setQuadros] = useState([]);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showArchiveModal, setShowArchiveModal] = useState(false);
-  const [quadroSelecionado, setQuadroSelecionado] = useState(null);
+export default function KanbanHome() {
+  const [activeTab, setActiveTab] = useState('kanban'); // 'kanban' ou 'calendar'
+  const [tasks, setTasks] = useState([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false); // Estado para o modal de criar tarefa
+  const [filters, setFilters] = useState({ member: null, company: null });
+  const [detailTask, setDetailTask] = useState(null);
 
-  const [novoQuadro, setNovoQuadro] = useState({
-    titulo: "",
-    descricao: "Description",
-    cor: "#4a67ff",
-  });
+  // Helper para headers
+  const getHeaders = () => {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+  };
 
-  const cores = [
-    "#4a67ff",
-    "#06b6d4",
-    "#10b981",
-    "#f59e0b",
-    "#ef4444",
-    "#8b5cf6",
-    "#ec4899",
-    "#64748b",
-  ];
+  // 1. Carregar tarefas da API
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch('http://localhost:8090/v1/tarefa/all', {
+        headers: getHeaders()
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data);
+      } else {
+        console.error("Erro ao buscar tarefas:", response.status);
+      }
+    } catch (error) {
+      console.error("Erro de conexão:", error);
+    }
+  };
 
   useEffect(() => {
-    loadQuadros();
+    fetchTasks();
   }, []);
 
-  async function loadQuadros() {
+  // Callback quando uma nova tarefa é criada (adiciona na lista sem reload)
+  const handleTaskCreated = (newTask) => {
+    setTasks(prev => [...prev, newTask]);
+  };
+
+  // 2. Lógica de Filtro (Frontend)
+  const filteredTasks = tasks.filter(task => {
+    // Filtro por Membro
+    const hasMember = filters.member 
+      ? task.usuarios?.some(u => u.id === filters.member) 
+      : true;
+    
+    // Filtro por Empresa/Cliente
+    const hasCompany = filters.company 
+      ? (task.cliente?.nome === filters.company) 
+      : true;
+
+    return hasMember && hasCompany;
+  });
+
+  // 3. Atualizar Tarefa (PUT)
+  const handleUpdateTask = async (updatedTask) => {
     try {
-      const data = await kanbanService.listQuadros();
-      setQuadros(data);
+      const response = await fetch('http://localhost:8090/v1/tarefa', {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify(updatedTask)
+      });
+
+      if (response.ok) {
+        setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
+        
+        if (detailTask && detailTask.id === updatedTask.id) {
+            setDetailTask(updatedTask);
+        }
+      } else {
+        alert("Não foi possível atualizar a tarefa.");
+      }
     } catch (error) {
-      console.error("Erro ao carregar quadros:", error);
+      console.error(error);
+      alert("Erro ao conectar com o servidor.");
     }
-  }
+  };
 
-  // 🔹 Criar novo quadro
-  async function criarQuadro() {
-    if (!novoQuadro.titulo.trim()) return;
-    try {
-      await kanbanService.createQuadro(novoQuadro);
-      setShowCreateModal(false);
-      setNovoQuadro({ titulo: "", descricao: "descricao", cor: "#4a67ff" });
-      loadQuadros();
-    } catch (error) {
-      console.error("Erro ao criar quadro:", error);
-    }
-  }
-
-  // 🔹 Abrir modal de arquivar
-  function abrirModalArquivar(quadro) {
-    setQuadroSelecionado(quadro);
-    setShowArchiveModal(true);
-  }
-
-  // 🔹 Confirmar arquivamento
-  async function confirmarArquivar() {
-    if (!quadroSelecionado) return;
-
-    try {
-      // 🔥 MOCK POR ENQUANTO (chamará /v1/quadro/{id}/arquivar depois)
-      await new Promise((resolve) => setTimeout(resolve, 400));
-
-      const atualizados = quadros.map((q) =>
-        q.id === quadroSelecionado.id ? { ...q, arquivado: true } : q
-      );
-
-      setQuadros(atualizados);
-    } catch (error) {
-      console.error("Erro ao arquivar quadro:", error);
-    }
-
-    setShowArchiveModal(false);
-    setQuadroSelecionado(null);
-  }
+  // 4. Agrupamento por Status
+  const getTasksByStatus = (statusKey) => {
+    return filteredTasks.filter(t => {
+      const s = (t.status || "").toUpperCase(); 
+      if (statusKey === 'todo') return s === 'A_FAZER' || s === 'TODO' || s === 'PENDENTE';
+      if (statusKey === 'doing') return s === 'FAZENDO' || s === 'DOING' || s === 'EM_ANDAMENTO';
+      if (statusKey === 'done') return s === 'FEITO' || s === 'DONE' || s === 'CONCLUIDO';
+      return false;
+    });
+  };
 
   return (
-    <div className="kanban-home">
-      <div className="kanban-home-header">
-        <div className="header-title">
-          <FiGrid size={24} />
-          <h2>Seus Quadros</h2>
-        </div>
+    <div className="kanban-home-container">
+      {/* BARRA DE CONTROLE */}
+      <div className="kanban-controls">
+         <div className="tab-switcher">
+            <button 
+              onClick={() => setActiveTab('kanban')} 
+              className={`tab-btn ${activeTab === 'kanban' ? 'active' : ''}`}
+            >
+              Quadros
+            </button>
+            <button 
+              onClick={() => setActiveTab('calendar')} 
+              className={`tab-btn ${activeTab === 'calendar' ? 'active' : ''}`}
+            >
+              Calendário
+            </button>
+         </div>
+
+         {activeTab === 'kanban' && (
+            <div className="action-buttons">
+               <button onClick={() => setFilterOpen(true)} className="btn-filter">
+                 <Filter size={16} /> 
+                 <span>{filters.member || filters.company ? 'Filtrado' : 'Filtrar'}</span>
+               </button>
+               
+               {/* BOTÃO PARA ABRIR MODAL DE CRIAÇÃO */}
+               <button onClick={() => setCreateOpen(true)} className="btn-new-board">
+                 <Plus size={18} /> <span>Novo board</span>
+               </button>
+            </div>
+         )}
       </div>
 
-      {/* 🔹 Exibir quadros */}
-      <div className="quadros-recentes">
-        {quadros.length > 0 ? (
-          quadros.map((quadro) => (
-            <div
-              key={quadro.id}
-              className={`quadro-card ${quadro.arquivado ? "arquivado" : ""}`}
-              onClick={() => !quadro.arquivado && onSelectKanban(quadro)}
-              style={{ background: quadro.cor }}
-            >
-              <div className="quadro-overlay"></div>
-
-              {/* 🔹 Badge Arquivado */}
-              {quadro.arquivado && (
-                <span className="quadro-badge-arquivado">Arquivado</span>
-              )}
-
-              {/* 🔹 Botão Arquivar */}
-              {!quadro.arquivado && (
-                <button
-                  className="btn-arquivar-quadro"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    abrirModalArquivar(quadro);
-                  }}
-                >
-                  Arquivar
-                </button>
-              )}
-
-              <h3>{quadro.titulo}</h3>
-            </div>
-          ))
+      {/* ÁREA PRINCIPAL */}
+      <div className="kanban-board-area">
+        {activeTab === 'kanban' ? (
+          <div className="kanban-columns-container">
+            <KanbanColumn 
+              title="A Fazer" 
+              tasks={getTasksByStatus('todo')} 
+              onTaskClick={setDetailTask} 
+              headerColor="#4a67ff" 
+            />
+            <KanbanColumn 
+              title="Fazendo" 
+              tasks={getTasksByStatus('doing')} 
+              onTaskClick={setDetailTask} 
+              headerColor="#f59e0b" 
+            />
+             <KanbanColumn 
+              title="Feito" 
+              tasks={getTasksByStatus('done')} 
+              onTaskClick={setDetailTask} 
+              headerColor="#10b981" 
+            />
+          </div>
         ) : (
-          <p className="sem-quadros">Nenhum quadro criado ainda.</p>
+          <div className="calendar-wrapper">
+             <CalendarioAnual tasks={tasks} />
+          </div>
         )}
       </div>
 
-      {/* 🔹 Seção Criar */}
-      <div className="kanban-home-section">
-        <div className="criar-quadro-section">
-          <h2>Criar Novo Quadro</h2>
-          <p>
-            Organize suas tarefas criando um novo quadro personalizado para seu
-            projeto ou equipe.
-          </p>
-          <button
-            className="btn-criar-novo-quadro"
-            onClick={() => setShowCreateModal(true)}
-          >
-            <FiPlus size={20} />
-            Criar Quadro
-          </button>
-        </div>
-      </div>
+      {/* MODALS */}
+      <KanbanFilter 
+        isOpen={filterOpen} 
+        onClose={() => setFilterOpen(false)} 
+        filters={filters} 
+        setFilters={setFilters} 
+      />
+      
+      <TaskDetailsModal 
+        isOpen={!!detailTask} 
+        task={detailTask} 
+        onClose={() => setDetailTask(null)} 
+        onUpdate={handleUpdateTask} 
+      />
 
-      {/* 🔹 Modal Criar Quadro */}
-      {showCreateModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowCreateModal(false)}
-        >
-          <div
-            className="modal-criar-quadro"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="modal-header">
-              <h2>Criar Novo Quadro</h2>
-              <button onClick={() => setShowCreateModal(false)}>✕</button>
-            </div>
-
-            <div className="modal-body">
-              <div className="form-field">
-                <label>Nome do Quadro *</label>
-                <input
-                  type="text"
-                  placeholder="Ex: Projetos 2025, Marketing..."
-                  value={novoQuadro.titulo}
-                  onChange={(e) =>
-                    setNovoQuadro({ ...novoQuadro, titulo: e.target.value })
-                  }
-                  autoFocus
-                />
-              </div>
-
-              <div className="form-field">
-                <label>Cor de Destaque</label>
-                <div className="cores-grid">
-                  {cores.map((cor) => (
-                    <button
-                      key={cor}
-                      className={`cor-option ${
-                        novoQuadro.cor === cor ? "selected" : ""
-                      }`}
-                      style={{ background: cor }}
-                      onClick={() => setNovoQuadro({ ...novoQuadro, cor })}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button
-                className="btn-cancelar"
-                onClick={() => setShowCreateModal(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="btn-criar"
-                onClick={criarQuadro}
-                disabled={!novoQuadro.titulo.trim()}
-              >
-                Criar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 🔹 Modal Arquivar */}
-      {showArchiveModal && quadroSelecionado && (
-        <div className="modal-overlay" onClick={() => setShowArchiveModal(false)}>
-          <div className="modal-arquivar" onClick={(e) => e.stopPropagation()}>
-            <svg
-              className="modal-alert-icon"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v3m0 4h.01M10.29 3.86l-7.07 12.2A1 1 0 004.1 18h15.8a1 1 0 00.87-1.94l-7.07-12.2a1 1 0 00-1.74 0z"
-              />
-            </svg>
-
-            <h3>Arquivar Quadro</h3>
-            <p>
-              Tem certeza que deseja arquivar o quadro "
-              <strong>{quadroSelecionado.titulo}</strong>"?
-              <br />
-              Ele ficará oculto, mas poderá ser restaurado depois.
-            </p>
-
-            <div className="modal-arquivar-buttons">
-              <button
-                className="modal-arquivar-cancelar"
-                onClick={() => setShowArchiveModal(false)}
-              >
-                Cancelar
-              </button>
-
-              <button
-                className="modal-arquivar-confirmar"
-                onClick={confirmarArquivar}
-              >
-                Arquivar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CreateTaskModal 
+        isOpen={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onTaskCreated={handleTaskCreated}
+      />
     </div>
   );
+}
+
+// Componente Interno de Coluna
+function KanbanColumn({ title, tasks, onTaskClick, headerColor }) {
+  return (
+    <div className="kanban-column">
+       <div className="column-header">
+          <span className="header-indicator" style={{ backgroundColor: headerColor }}></span>
+          <h2>{title}</h2>
+          <span className="task-count">{tasks.length}</span>
+       </div>
+       
+       <div className="tasks-list">
+          {tasks.map(task => (
+             <div key={task.id} onClick={() => onTaskClick(task)} className="kanban-card">
+                <div className="card-header">
+                   <h4>{task.titulo}</h4>
+                   <button className="more-btn" onClick={(e) => e.stopPropagation()}><MoreHorizontal size={16}/></button>
+                </div>
+
+                <div className="card-company">
+                   <Briefcase size={12}/> {task.cliente?.nome || "Sem cliente"}
+                </div>
+  
+                {task.flags && task.flags.length > 0 && (
+                   <div className="card-tags">
+                      {task.flags.map((flag, idx) => (
+                         <span key={idx} className="tag green">
+                           {flag.nome || flag}
+                         </span>
+                      ))}
+                   </div>
+                )}
+
+                <div className="card-footer">
+                   {task.usuarios && task.usuarios.length > 0 ? (
+                      <div className="card-participants">
+                         <User size={10} /> {task.usuarios.length} Partic.
+                      </div>
+                   ) : <div />}
+
+                   <div className="card-date">
+                      <Calendar size={12} />
+                      <span>
+                        {task.prazo 
+                          ? new Date(task.prazo).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) 
+                          : "S/ Prazo"}
+                      </span>
+                   </div>
+                </div>
+             </div>
+          ))}
+       </div>
+    </div>
+  )
 }

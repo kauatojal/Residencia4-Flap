@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { Link, Routes, Route, Navigate, useNavigate, BrowserRouter } from "react-router-dom";
 import { AuthProvider, useAuthContext, useIsAuthenticated } from "./context/AuthContext";
 
-// Componentes
 import Login from "./Components/Login";
 import Dashboard from "./Components/Dashboard";
 import Kanban from "./Components/Kanban";
-import KanbanBoard from "./Components/KanbanBoard";
 import KanbanHome from "./Components/KanbanHome";
+import KanbanBoard from "./Components/KanbanBoard";
 import Configuracoes from "./Components/Configuracoes";
-import Projetos from "./Components/Projetos";
+import Arquivados from "./Components/Arquivados";
 import Notificacoes from "./Components/Notificacoes";
 import ListaFuncionarios from "./Components/ListaFuncionarios";
-import Clientes from "./Components/Clientes"; // ✅ ALTERADO: importa a página de listagem
+import Clientes from "./Components/Clientes";
 import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Cadastro from "./Components/Cadastro";
@@ -22,7 +21,6 @@ function MainApp() {
   const [kanbanSelecionado, setKanbanSelecionado] = useState(null);
   const navigate = useNavigate();
 
-  // 🔹 Quando clica em um quadro, muda de rota automaticamente
   const handleSelectKanban = (kanban) => {
     setKanbanSelecionado(kanban);
     navigate(`/kanban/${kanban.id}`);
@@ -50,16 +48,13 @@ function MainApp() {
             </div>
           }
         />
-        <Route path="/projetos" element={<Projetos />} />
+        <Route path="/arquivados" element={<Arquivados />} />
+        <Route path="/projetos" element={<Navigate to="/arquivados" replace />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
         <Route path="/notificacoes" element={<Notificacoes />} />
-        <Route
-          path="/usuarios"
-          element={
-            <ListaFuncionarios onAddFuncionario={() => (window.location.href = "/cadastro-func")} />
-          }
-        />
-        <Route path="/clientes" element={<Clientes />} /> {/* ✅ ALTERADO */}
+        <Route path="/usuarios" element={<ListaFuncionarios />} />
+        <Route path="/clientes" element={<Clientes />} />
+        <Route path="/clientes/novo" element={<CadastroCliente />} />
         <Route path="/perfil" element={<EditarPerfil />} />
         <Route path="/cadastro-func" element={<Cadastro />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

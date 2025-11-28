@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CadastroCliente.css";
 import clientService from "../services/clientService";
+import Swal from "sweetalert2";
 
 export default function CadastroCliente({ cliente, onSave, onCancel }) {
   const [form, setForm] = useState({
@@ -9,7 +10,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     cnpj: "",
     email: "",
     telefone: "",
-    link: "", // NOVO CAMPO
+    link: "",
     logo: null,
   });
 
@@ -25,7 +26,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
         cnpj: cliente.cnpj || "",
         email: cliente.email || "",
         telefone: cliente.telefone || "",
-        link: cliente.link || "", // CARREGA O LINK NA EDIÇÃO
+        link: cliente.link || "",
         logo: cliente.logo || null,
       });
       if (cliente.logo) {
@@ -34,12 +35,25 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     }
   }, [cliente]);
 
+  // ============ UTILITÁRIO: CONVERTER PARA BASE64 ============
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
   // ============ VALIDAÇÕES ============
   const validarEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  // Validação simples de URL
   const validarUrl = (url) => {
     try {
       new URL(url);
@@ -109,33 +123,22 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     const { name, value } = e.target;
     let novoValor = value;
 
-    if (name === "telefone") {
-      novoValor = aplicarMascaraTelefone(value);
-    }
-
-    if (name === "cnpj") {
-      novoValor = aplicarMascaraCNPJ(value);
-    }
+    if (name === "telefone") novoValor = aplicarMascaraTelefone(value);
+    if (name === "cnpj") novoValor = aplicarMascaraCNPJ(value);
 
     setForm({ ...form, [name]: novoValor });
 
-    // Validação em tempo real
+    // Validações
     if (name === "email") {
-       if (value && !validarEmail(value)) {
-          setErros((prev) => ({ ...prev, email: "E-mail inválido" }));
-       } else {
-          setErros((prev) => ({ ...prev, email: "" }));
-       }
+       setErros((prev) => ({ ...prev, email: (value && !validarEmail(value)) ? "E-mail inválido" : "" }));
     }
 
+    // Valida Link se houver valor
     if (name === "link") {
-        if (value && !validarUrl(value)) {
-            setErros((prev) => ({ ...prev, link: "Link inválido (inclua http:// ou https://)" }));
-        } else {
-            setErros((prev) => ({ ...prev, link: "" }));
-        }
+        setErros((prev) => ({ ...prev, link: (value && !validarUrl(value)) ? "Link inválido" : "" }));
     }
 
+    // Valida CNPJ APENAS SE houver valor (agora é opcional)
     if (name === "cnpj") {
       if (value) {
         const cnpjLimpo = value.replace(/\D/g, '');
@@ -144,31 +147,36 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
         } else {
           setErros((prev) => ({ ...prev, cnpj: "" }));
         }
+      } else {
+        setErros((prev) => ({ ...prev, cnpj: "" })); // Limpa erro se apagar tudo
       }
     }
   };
 
-  const handleLogoChange = (e) => {
+  const handleLogoChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setErros((prev) => ({ ...prev, logo: "Arquivo muito grande. Máximo 5MB." }));
+        Swal.fire({
+          icon: 'warning',
+          title: 'Arquivo muito grande',
+          text: 'O tamanho máximo permitido é 5MB.',
+        });
         return;
       }
-
       if (!file.type.startsWith('image/')) {
-        setErros((prev) => ({ ...prev, logo: "Apenas imagens são permitidas." }));
+        Swal.fire('Erro', 'Apenas imagens são permitidas', 'error');
         return;
       }
 
-      setErros((prev) => ({ ...prev, logo: "" }));
-      setForm({ ...form, logo: file });
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewLogo(reader.result);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const base64 = await convertToBase64(file);
+        setForm({ ...form, logo: base64 });
+        setPreviewLogo(base64);
+        setErros((prev) => ({ ...prev, logo: "" }));
+      } catch (error) {
+        console.error("Erro ao converter imagem", error);
+      }
     }
   };
 
@@ -176,28 +184,76 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     e.preventDefault();
 
     const novosErros = {};
+    // === VALIDAÇÕES OBRIGATÓRIAS (APENAS NOME E EMAIL) ===
     if (!form.nome.trim()) novosErros.nome = "Nome é obrigatório";
-    if (!form.empresa.trim()) novosErros.empresa = "Empresa é obrigatória";
-    if (!validarCNPJ(form.cnpj)) novosErros.cnpj = "CNPJ inválido";
     if (!validarEmail(form.email)) novosErros.email = "E-mail inválido";
-    if (!form.telefone.trim()) novosErros.telefone = "Telefone é obrigatório";
+    // if (!form.telefone.trim()) novosErros.telefone = "Telefone é obrigatório";
 
-    // Validação do Link (opcional: se for obrigatório, descomente a linha abaixo)
+    // === VALIDAÇÕES OPCIONAIS (Só valida se tiver preenchido) ===
+    if (form.cnpj && !validarCNPJ(form.cnpj)) novosErros.cnpj = "CNPJ inválido";
     if (form.link && !validarUrl(form.link)) novosErros.link = "Link inválido";
-    // if (!form.link.trim()) novosErros.link = "Link é obrigatório";
 
     if (Object.keys(novosErros).length > 0) {
       setErros(novosErros);
+      Swal.fire({
+        icon: 'error',
+        title: 'Atenção',
+        text: 'Preencha corretamente os campos obrigatórios.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      });
       return;
     }
 
     setSalvando(true);
+
     try {
-      await clientService.create(form)
+      const payload = {
+        nome: form.nome,
+        // Envia string vazia se não preencher, para evitar null se o backend permitir
+        empresa: form.empresa || "",
+        cnpj: form.cnpj ? form.cnpj.replace(/\D/g, '') : "",
+        email: form.email,
+        telefone: form.telefone || "",
+        link: form.link || "",
+        // logo: form.logo
+      };
+
+      await clientService.create(payload);
+
+      await Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: 'Cliente cadastrado com sucesso.',
+        confirmButtonColor: '#3085d6',
+        timer: 2000,
+        timerProgressBar: true
+      });
+
       setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", link: "", logo: null });
       setPreviewLogo(null);
+
+      if (onSave) onSave();
+
     } catch (error) {
-      alert("Erro ao salvar cliente");
+      console.error("Erro no cadastro:", error);
+
+      let msg = 'Erro ao salvar cliente.';
+      if (error.response?.status === 403) {
+        msg = 'Acesso Negado (403). Verifique se você está logado ou se seu Token expirou.';
+      } else if (error.response?.status === 500) {
+        // AVISO SOBRE O BANCO DE DADOS
+        msg = 'Erro Interno (500). O banco de dados pode estar rejeitando campos vazios (CNPJ/Empresa).';
+      }
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: msg,
+        footer: `Status: ${error.response?.status || 'Erro de Rede'}`
+      });
     } finally {
       setSalvando(false);
     }
@@ -206,14 +262,15 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
   return (
     <div className="cadastro-cliente-overlay">
       <div className="cadastro-cliente-modal">
-        <button className="btn-fechar" onClick={onCancel} type="button">
-          ✕
-        </button>
+        <button className="btn-fechar" onClick={onCancel} type="button">✕</button>
         <div className="cadastro-cliente-container">
           <h2>{cliente ? "Editar Cliente" : "Cadastro de Cliente"}</h2>
           <form className="cadastro-cliente-form" onSubmit={handleSubmit}>
+
             <div className="form-group">
-              <label htmlFor="nome">Nome</label>
+              <label htmlFor="nome">
+                Nome <span>*</span>
+              </label>
               <input
                 id="nome"
                 name="nome"
@@ -225,6 +282,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
               {erros.nome && <span className="erro-campo">{erros.nome}</span>}
             </div>
 
+            {/* EMPRESA (OPCIONAL) */}
             <div className="form-group">
               <label htmlFor="empresa">Empresa</label>
               <input
@@ -233,11 +291,11 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
                 value={form.empresa}
                 onChange={handleChange}
                 className={erros.empresa ? "input-erro" : ""}
-                required
+                // Removido required
               />
-              {erros.empresa && <span className="erro-campo">{erros.empresa}</span>}
             </div>
 
+            {/* CNPJ (OPCIONAL) */}
             <div className="form-group">
               <label htmlFor="cnpj">CNPJ</label>
               <input
@@ -247,13 +305,15 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
                 onChange={handleChange}
                 placeholder="00.000.000/0000-00"
                 className={erros.cnpj ? "input-erro" : ""}
-                required
+                // Removido required
               />
               {erros.cnpj && <span className="erro-campo">{erros.cnpj}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">
+                Email <span>*</span>
+              </label>
               <input
                 id="email"
                 type="email"
@@ -267,6 +327,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
               {erros.email && <span className="erro-campo">{erros.email}</span>}
             </div>
 
+            {/* TELEFONE (OPCIONAL) */}
             <div className="form-group">
               <label htmlFor="telefone">Telefone</label>
               <input
@@ -276,12 +337,11 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
                 onChange={handleChange}
                 placeholder="(00) 00000-0000"
                 className={erros.telefone ? "input-erro" : ""}
-                required
+                // Removido required
               />
               {erros.telefone && <span className="erro-campo">{erros.telefone}</span>}
             </div>
 
-            {/* NOVO CAMPO LINK */}
             <div className="form-group">
               <label htmlFor="link">Link Personalizado (IA)</label>
               <input
@@ -291,7 +351,6 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
                 onChange={handleChange}
                 placeholder="https://exemplo.com/ia-do-cliente"
                 className={erros.link ? "input-erro" : ""}
-                // Adicione 'required' aqui se o campo for obrigatório
               />
               {erros.link && <span className="erro-campo">{erros.link}</span>}
             </div>
@@ -299,58 +358,19 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
             <div className="form-group">
               <label htmlFor="logo">Logo da Empresa</label>
               <div className="logo-upload-container">
-                <div
-                  className="logo-upload-box"
-                  onClick={() => document.getElementById('logo').click()}
-                >
+                <div className="logo-upload-box" onClick={() => document.getElementById('logo').click()}>
                   {previewLogo ? (
                     <div className="logo-preview">
-                      <img src={previewLogo} alt="Preview logo" />
-                      <div className="logo-overlay">
-                        <svg
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                          <circle cx="12" cy="13" r="4"></circle>
-                        </svg>
-                      </div>
+                      <img src={previewLogo} alt="Preview" />
                     </div>
                   ) : (
                     <div className="logo-placeholder">
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                      </svg>
                       <span>Clique para adicionar logo</span>
                     </div>
                   )}
                 </div>
-                <input
-                  id="logo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
-                  className="input-file"
-                  style={{ display: 'none' }}
-                />
+                <input id="logo" type="file" accept="image/*" onChange={handleLogoChange} style={{ display: 'none' }} />
               </div>
-              {erros.logo && <span className="erro-campo">{erros.logo}</span>}
             </div>
 
             <div className="cadastro-actions">
