@@ -1,196 +1,219 @@
-import React, { useState } from "react";
-import { LayoutGrid, Archive, Home, User, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { LayoutGrid, Archive, Home, Users, Search, Moon, Sun, LogOut, Menu } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import "./Kanban.css";
+
+const THEME_KEY = "flap_theme";
 
 function Kanban({
   onSwitchDashboard,
   onSwitchProjetos,
-  onLogout,
   onSwitchUsuarios,
   onSwitchClientes,
   onSwitchKanban,
-  onSwitchArquivados,
+  onSwitchPerfil,
+  onLogout,
   children,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mostrarNotif, setMostrarNotif] = useState(false);
-  const navigate = useNavigate();
+  const [userData, setUserData] = useState({ nome: "Carregando...", inicial: "" });
+  
+  // Lógica do Tema Escuro (Dark Mode)
+  const [dark, setDark] = useState(() => {
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored) return stored === "dark";
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
 
-  // Mock de notificações - substituir por dados reais
-  const notificacoes = [
-    { id: 1, texto: "Nova tarefa atribuída a você", tempo: "5 min", lida: false },
-    { id: 2, texto: "Prazo do projeto se aproximando", tempo: "1 hora", lida: false },
-    { id: 3, texto: "Comentário em sua tarefa", tempo: "2 horas", lida: true },
-  ];
-
-  const naoLidas = notificacoes.filter((n) => !n.lida).length;
+  const location = useLocation();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const handleMenuClick = (callback) => {
-    callback();
+    if (callback) callback();
     setMenuOpen(false);
   };
 
+  // --- CORREÇÃO DO LOGOUT ---
+  const handleLogout = (e) => {
+    e.preventDefault(); 
+    e.stopPropagation(); // Garante que o clique não suba para elementos pais
+    
+    console.log("Tentando realizar logout...");
+
+    if (onLogout && typeof onLogout === 'function') {
+      onLogout();
+    } else {
+      console.error("Função onLogout não encontrada ou inválida. Forçando redirecionamento.");
+      // Fallback de segurança: limpa o token e vai para login manualmente se a prop falhar
+      localStorage.removeItem('token'); 
+      window.location.href = "/";
+    }
+  };
+
+  const isActive = (path) => location.pathname.startsWith(path);
+
+  // Efeito para aplicar a classe 'dark-mode' no HTML e salvar no LocalStorage
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", dark);
+    localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+  }, [dark]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+         setUserData({ nome: "Visitante", inicial: "V" });
+         return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8090/v1/user/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          
+          // Lógica: Tenta Nome + Sobrenome. Se falhar, tenta email.
+          const nome = data.nome || "";
+          const sobrenome = data.sobrenome || "";
+          
+          let nomeExibicao = "";
+          if (nome || sobrenome) {
+             nomeExibicao = `${nome} ${sobrenome}`.trim();
+          } else {
+             nomeExibicao = data.email || "Usuário";
+          }
+          
+          // Gera iniciais
+          let iniciais = "";
+          if (nome) iniciais += nome.charAt(0).toUpperCase();
+          if (sobrenome) iniciais += sobrenome.charAt(0).toUpperCase();
+          
+          if (!iniciais && nomeExibicao) {
+            iniciais = nomeExibicao.substring(0, 2).toUpperCase();
+          }
+
+          setUserData({
+            nome: nomeExibicao,
+            inicial: iniciais
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar usuário:", error);
+        setUserData({ nome: "Erro ao carregar", inicial: "?" });
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className="kanban-wrapper">
-      <button className="hamburger-btn" onClick={toggleMenu} aria-label="Menu">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+      {menuOpen && <div className="sidebar-overlay" onClick={() => setMenuOpen(false)} />}
 
-      {menuOpen && <div className="sidebar-overlay" onClick={toggleMenu}></div>}
+      <aside className={`kanban-sidebar ${menuOpen ? "open" : ""}`}>
+        <div className="sidebar-header">
+           <img src="/Logo_flap.png" alt="Flap" className="sidebar-logo" onError={(e) => e.target.style.display='none'} />
+        </div>
 
-      <aside className={`kanban-sidebar ${menuOpen ? "sidebar-open" : ""}`}>
-        <img src="/Logo_flap.png" alt="Flap" className="kanban-logo" />
-
-        <nav className="sidebar-main-menu">
-          <button
-            onClick={() => handleMenuClick(onSwitchDashboard)}
-            className="sidebar-btn"
+        <nav className="sidebar-nav">
+          <button 
+            type="button"
+            onClick={() => handleMenuClick(onSwitchDashboard)} 
+            className={`sidebar-btn ${isActive('/dashboard') ? 'active' : ''}`}
           >
-            <Home size={18} style={{ marginRight: 10 }} /> Dashboard
+            <Home size={20} /> <span>Dashboard</span>
           </button>
-
-          <button
-            onClick={() => handleMenuClick(onSwitchKanban)}
-            className="sidebar-btn"
+          
+          <button 
+            type="button"
+            onClick={() => handleMenuClick(onSwitchKanban)} 
+            className={`sidebar-btn ${isActive('/kanban') ? 'active' : ''}`}
           >
-            <LayoutGrid size={18} style={{ marginRight: 10 }} /> Kanban
+            <LayoutGrid size={20} /> <span>Kanban</span>
           </button>
-
-          <button
-            onClick={() => handleMenuClick(onSwitchUsuarios)}
-            className="sidebar-btn"
+          
+          <button 
+            type="button"
+            onClick={() => handleMenuClick(onSwitchUsuarios)} 
+            className={`sidebar-btn ${isActive('/usuarios') ? 'active' : ''}`}
           >
-            <User size={18} style={{ marginRight: 10 }} /> Usuários
+            <Users size={20} /> <span>Usuários</span>
           </button>
-
-          <button
-            onClick={() => handleMenuClick(onSwitchClientes)}
-            className="sidebar-btn"
+          
+          <button 
+            type="button"
+            onClick={() => handleMenuClick(onSwitchClientes)} 
+            className={`sidebar-btn ${isActive('/clientes') ? 'active' : ''}`}
           >
-            <Users size={18} style={{ marginRight: 10 }} /> Clientes
+            <Users size={20} /> <span>Clientes</span>
           </button>
-
-          <button
-            onClick={() => handleMenuClick(onSwitchProjetos)}
-            className="sidebar-btn"
+          
+          <button 
+            type="button"
+            onClick={() => handleMenuClick(onSwitchProjetos)} 
+            className={`sidebar-btn ${isActive('/projetos') ? 'active' : ''}`}
           >
-            <Archive size={18} style={{ marginRight: 10 }} /> Arquivados
+            <Archive size={20} /> <span>Arquivados</span>
           </button>
         </nav>
 
-        <div className="kanban-user">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span
-              style={{
-                background: "#ececec",
-                borderRadius: "50%",
-                padding: 10,
-                fontSize: 20,
-              }}
-            >
-              👤
-            </span>
-            <div>
-              <span style={{ fontWeight: 600 }}>Usuario1</span>
-              <br />
-              <small style={{ color: "#888" }}>Design</small>
+        {/* Rodapé da Sidebar */}
+        <div className="sidebar-footer">
+          <div className="user-profile">
+            <div className="user-avatar">{userData.inicial}</div>
+            <div className="user-info">
+               <p className="user-name" title={userData.nome}>{userData.nome}</p>
             </div>
+          </div>
+          
+          <div className="user-actions">
+             {/* Botão Modo Noturno */}
+             <button 
+                type="button"
+                className="sidebar-action-btn" 
+                onClick={() => setDark(!dark)}
+                title={dark ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
+             >
+                {dark ? <Sun size={18} /> : <Moon size={18} />}
+             </button>
+
+             {/* Botão Sair - Chama handleLogout */}
+             <button 
+                type="button"
+                className="sidebar-action-btn logout" 
+                onClick={handleLogout} 
+                title="Sair"
+             >
+                <LogOut size={18} />
+             </button>
           </div>
         </div>
       </aside>
 
-      <main className="kanban-main">
-        {/* BOTÃO FLUTUANTE DE NOTIFICAÇÕES */}
-        <div className="notif-container-flutuante">
-          <button
-            className="btn-sino"
-            onClick={() => setMostrarNotif(!mostrarNotif)}
-            aria-label="Notificações"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            </svg>
-            {naoLidas > 0 && <span className="badge-notif">{naoLidas}</span>}
-          </button>
+      <div className="kanban-content-wrapper">
+        <header className="top-header">
+           <div className="header-left">
+             <button type="button" className="mobile-menu-btn" onClick={toggleMenu}>
+               <Menu size={24} />
+             </button>
+             
+             <div className="search-bar-container">
+                <input type="text" placeholder="Pesquisar tarefas..." className="search-input" />
+                <Search className="search-icon" size={18}/>
+             </div>
+           </div>
+        </header>
 
-          {mostrarNotif && (
-            <>
-              <div
-                className="notif-overlay"
-                onClick={() => setMostrarNotif(false)}
-              />
-              <div className="notif-dropdown">
-                <div className="notif-header">
-                  <h3>Notificações</h3>
-                  <button className="btn-marcar-lidas">Marcar como lidas</button>
-                </div>
-
-                <div className="notif-lista">
-                  {notificacoes.length === 0 ? (
-                    <div className="notif-vazia">
-                      <p>Nenhuma notificação</p>
-                    </div>
-                  ) : (
-                    notificacoes.map((n) => (
-                      <div
-                        key={n.id}
-                        className={`notif-item ${!n.lida ? "nao-lida" : ""}`}
-                      >
-                        <div className="notif-conteudo">
-                          <p className="notif-texto">{n.texto}</p>
-                          <span className="notif-tempo">Há {n.tempo}</span>
-                        </div>
-                        {!n.lida && <div className="notif-indicador" />}
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="notif-footer">
-                  <button
-                    className="btn-ver-todas"
-                    onClick={() => {
-                      setMostrarNotif(false);
-                      navigate("/notificacoes");
-                    }}
-                  >
-                    Ver todas as notificações
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* CONTEÚDO DA PÁGINA */}
-        {children}
-      </main>
+        <main className="main-content">
+           {children}
+        </main>
+      </div>
     </div>
   );
 }

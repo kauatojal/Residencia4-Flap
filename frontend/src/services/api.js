@@ -9,29 +9,40 @@ const api = axios.create({
 // 🟢 Interceptor para adicionar o token JWT automaticamente
 api.interceptors.request.use(
   (config) => {
+    // Debug: Vamos ver qual URL está sendo chamada
+    // console.log("Chamando API:", config.url);
+
     if (!config.url?.includes("/auth/login")) {
-      console.log("entrou no if do authlogin")
       const token = getToken();
+
+      // === DEBUG IMPORTANTE ===
+      // Abra o console do navegador (F12) e veja se isso aparece
       if (token) {
+        console.log("Token encontrado, anexando ao header..."); 
         config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        console.warn("ALERTA: Tentando fazer requisição SEM token!");
       }
+      // ========================
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// 🔴 Interceptor para tratar respostas (ex: token expirado)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Só faz logout automático se for 401 (Sessão Expirada/Token Inválido)
     if (error.response && error.response.status === 401) {
-      console.warn("Sessão expirada. Fazendo logout automático...");
+      console.warn("Sessão expirada (401). Fazendo logout...");
       logout();
-      window.location.href = "/"; // redireciona para login
+      window.location.href = "/"; 
     }
+    
+    // Se for 403 (Sem permissão), NÃO faz logout. 
+    // Apenas retorna o erro para o CadastroCliente mostrar o alerta.
     return Promise.reject(error);
   }
 );
-
 export default api;
