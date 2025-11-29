@@ -4,22 +4,19 @@
 .cadastro-cliente-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(17, 24, 39, 0.7);
+  background: rgba(17, 24, 39, 0.75); /* Escureci um pouco mais para focar no modal */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  /* Z-INDEX AJUSTADO: Precisa ser menor que o do SweetAlert (1060) */
+  z-index: 998; 
   backdrop-filter: blur(4px);
   animation: fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ===============================
@@ -36,7 +33,8 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   position: relative;
   animation: slideUp 0.3s ease;
-  z-index: 10001;
+  /* Z-INDEX AJUSTADO: Precisa ser menor que o do SweetAlert */
+  z-index: 999; 
 }
 
 @keyframes slideUp {
@@ -74,7 +72,8 @@
 
 .btn-fechar:hover {
   background: #e9ecef;
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.1);
+  color: #ef4444;
 }
 
 /* ===============================
@@ -90,6 +89,7 @@
   color: #1a202c;
   text-align: center;
   font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 /* ===============================
@@ -109,8 +109,17 @@
 
 .cadastro-cliente-form label {
   font-weight: 600;
-  color: #4a5568;
+  color: #374151;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+/* NOVO: Estilo para o asterisco (*) */
+.cadastro-cliente-form label span {
+  color: #ef4444 !important; /* Força o vermelho */
+  margin-left: 4px;
+  font-weight: bold;
 }
 
 .cadastro-cliente-form input {
@@ -122,25 +131,38 @@
   transition: all 0.3s ease;
   box-sizing: border-box;
   background: #fafbfc;
+  color: #1f2937;
+}
+
+.cadastro-cliente-form input::placeholder {
+  color: #a0aec0;
 }
 
 .cadastro-cliente-form input:focus {
   outline: none;
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  border-color: #2248c5;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1); /* Aumentei um pouco o glow */
   background: white;
 }
 
 .cadastro-cliente-form input.input-erro {
   border-color: #ef4444;
   background: #fef2f2;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 .erro-campo {
   display: block;
   color: #ef4444;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 /* ===============================
@@ -149,43 +171,53 @@
 .cadastro-actions {
   display: flex;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .cadastro-actions button {
   flex: 1;
   padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-cadastrar {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, #2248c5, #2248c5);
   color: white;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
 }
 
 .btn-cadastrar:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 6px 16px rgb(112, 157, 214);
+  filter: brightness(1.05);
+}
+
+.btn-cadastrar:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn-cadastrar:disabled {
-  opacity: 0.6;
+  background: #cbd5e0;
+  color: #145bc5;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
 .btn-cancelar {
-  background: #e5e7eb;
-  color: #374151;
+  background: white;
+  color: #4b5563;
+  border: 2px solid #e5e7eb !important; /* Adicionei borda para destacar */
 }
 
 .btn-cancelar:hover {
-  background: #d1d5db;
+  background: #f9fafb;
+  border-color: #d1d5db !important;
+  color: #1f2937;
 }
 
 /* ===============================
@@ -209,72 +241,6 @@
 }
 
 /* ===============================
-   RESPONSIVIDADE
-   =============================== */
-@media (max-width: 640px) {
-  .cadastro-cliente-modal {
-    width: 95%;
-    padding: 24px 20px;
-    max-height: 90vh;
-  }
-
-  .cadastro-cliente-container h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-
-  .cadastro-cliente-form {
-    gap: 16px;
-  }
-
-  .cadastro-cliente-form label {
-    font-size: 13px;
-  }
-
-  .cadastro-cliente-form input {
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-
-  .cadastro-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .cadastro-actions button {
-    width: 100%;
-    padding: 11px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .cadastro-cliente-modal {
-    padding: 20px 16px;
-  }
-
-  .cadastro-cliente-container h2 {
-    font-size: 1.25rem;
-  }
-
-  .cadastro-cliente-form input {
-    padding: 9px 11px;
-    font-size: 13px;
-  }
-
-  .cadastro-actions button {
-    padding: 10px;
-    font-size: 13px;
-  }
-
-  .btn-fechar {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-  }
-}
-
-/* ===============================
    UPLOAD DE LOGO
    =============================== */
 .logo-upload-container {
@@ -289,13 +255,13 @@
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: #f7fafc;
+  background: #f8fafc;
   position: relative;
 }
 
 .logo-upload-box:hover {
-  border-color: #4a67ff;
-  background: #f0f4ff;
+  border-color: #2248c5; /* Mudado para verde para combinar com o tema */
+  background: #f0fdf4;
 }
 
 .logo-placeholder {
@@ -306,13 +272,13 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: #718096;
+  color: #94a3b8;
   transition: all 0.3s ease;
   pointer-events: none;
 }
 
 .logo-upload-box:hover .logo-placeholder {
-  color: #4a67ff;
+  color: #2248c5;
 }
 
 .logo-placeholder svg {
@@ -342,45 +308,53 @@
 }
 
 .logo-preview img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 90%;
+  max-height: 90%;
   object-fit: contain;
-  padding: 12px;
 }
 
 .logo-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(2px);
 }
 
 .logo-upload-box:hover .logo-overlay {
   opacity: 1;
 }
 
-.input-file {
-  display: none;
-}
-
 /* ===============================
-   RESPONSIVIDADE DO UPLOAD
+   RESPONSIVIDADE
    =============================== */
 @media (max-width: 640px) {
-  .logo-upload-box {
-    height: 140px;
+  .cadastro-cliente-modal {
+    width: 95%;
+    padding: 24px 20px;
+    max-height: 90vh;
   }
 
-  .logo-placeholder svg {
-    width: 40px;
-    height: 40px;
+  .cadastro-cliente-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
   }
 
-  .logo-placeholder span {
-    font-size: 13px;
+  .cadastro-cliente-form {
+    gap: 16px;
+  }
+
+  .cadastro-actions {
+    flex-direction: column-reverse; /* Inverter ordem no mobile é boa prática */
+    gap: 10px;
+  }
+
+  .cadastro-actions button {
+    width: 100%;
+    padding: 14px;
   }
 }

@@ -20,27 +20,32 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: #343a40;
+  margin: 0;
 }
 
 .year-nav-btn {
-  background-color: #4c6ef5;
-  color: white;
-  border: none;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  color: #495057;
   border-radius: 8px;
   width: 40px;
   height: 40px;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .year-nav-btn:hover {
-  background-color: #3b5bdb;
+  background-color: #f8f9fa;
+  color: #4c6ef5;
+  border-color: #4c6ef5;
 }
 
 .year-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
@@ -48,15 +53,21 @@
   background-color: #fff;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   border: 1px solid #f1f3f5;
+  transition: box-shadow 0.2s;
+}
+
+.month-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .month-title {
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1rem;
   color: #495057;
+  text-transform: capitalize;
 }
 
 .weekdays-header {
@@ -66,37 +77,39 @@
   font-size: 0.75rem;
   color: #adb5bd;
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 4px;
 }
 
 .day-cell {
   border: none;
   background: none;
   cursor: pointer;
-  border-radius: 8px;
-  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  height: 32px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
   position: relative;
   font-weight: 500;
+  font-size: 0.85rem;
+  color: #495057;
 }
 
 .day-cell.inactive {
-  color: #dee2e6;
-  cursor: default;
+  visibility: hidden;
 }
 
 .day-cell:not(.inactive):hover {
-  background-color: #f1f3f5;
+  background-color: #e7f5ff;
+  color: #1c7ed6;
 }
 
 .day-cell.today {
@@ -106,146 +119,154 @@
 }
 
 .day-cell.has-tasks {
-  background-color: #dbe4ff;
+  background-color: #e7f5ff;
+  font-weight: 600;
 }
 
 .day-cell.has-tasks::after {
   content: '';
   position: absolute;
-  bottom: 5px;
-  width: 5px;
-  height: 5px;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background-color: #4c6ef5;
 }
 
-.day-cell.selected {
-  background-color: #4c6ef5;
-  color: white;
-  font-weight: 700;
-}
-
-.day-cell.selected::after {
-    background-color: white;
+/* Reuso de classes do modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .task-modal-content {
-    padding: 1.5rem;
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  overflow: hidden;
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .task-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  background-color: #4c6ef5;
+  padding: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.task-modal-header h3 {
-    margin: 0;
-    font-size: 1.5rem;
+.modal-day-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+}
+
+.modal-day-text {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.modal-close-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.3);
 }
 
 .task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  padding: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .task-item {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid #4c6ef5;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.task-item:hover {
+  border-color: #4c6ef5;
 }
 
 .task-item-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
 }
 
-.task-item-body {
-    font-size: 0.9rem;
-    color: #495057;
-    margin-top: 0.5rem;
-}
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
-
-@media (max-width: 1024px) {
-  .calendario-container {
-    padding: 30px 20px;
-  }
-
-  .months-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
+.task-item-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #343a40;
+  font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .calendario-container {
-    padding: 20px 15px;
-  }
-
-  .calendario-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .calendario-header h1 {
-    font-size: 22px;
-  }
-
-  .months-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .month-card {
-    padding: 12px;
-  }
+.task-priority {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: #e9ecef;
 }
 
-@media (max-width: 640px) {
-  .calendario-container {
-    padding: 15px 10px;
-  }
-
-  .calendario-header h1 {
-    font-size: 20px;
-  }
-
-  .months-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .month-card {
-    padding: 10px;
-  }
-
-  .month-name {
-    font-size: 15px;
-  }
-
-  .calendar-days {
-    font-size: 12px;
-  }
+.task-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f8f9fa;
 }
 
-@media (max-width: 480px) {
-  .calendario-header h1 {
-    font-size: 18px;
-  }
+.task-company {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: #495057;
+  font-weight: 500;
+}
 
-  .calendar-days {
-    font-size: 11px;
-  }
-
-  .month-card {
-    padding: 8px;
-  }
+.no-tasks {
+  text-align: center;
+  color: #adb5bd;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }

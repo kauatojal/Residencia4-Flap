@@ -35,22 +35,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginUser = async (email, password) => {
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      const { token } = res.data;
-      setAccessToken(token)
+    const res = await api.post("/auth/login", { email, password })
+    const { token } = res.data
+    saveToken(token)
 
-      saveToken(token);
-      api.defaults.headers.Authorization = `Bearer ${token}`;
-      const user = await api.get("/user/me").data
-
-      setUser(user);
-      setAuthenticated(true);
-      return { success: true };
-    } catch (err) {
-      console.error("Erro no login:", err);
-      return { success: false, message: err.response?.data?.message || "Falha no login" };
-    }
+    const user = await api.get("/user/me").data
+    setUser(user)
+    setAuthenticated(true)
   };
 
   const logoutUser = () => {
