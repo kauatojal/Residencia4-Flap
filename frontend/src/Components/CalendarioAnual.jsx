@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, X, Briefcase, Clock } from 'lucide-react';
 import './CalendarioAnual.css';
 
+
 // Subcomponente de Mês
 const Month = ({ year, month, tasksByDate, onDayClick }) => {
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];

@@ -10,8 +10,8 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     cnpj: "",
     email: "",
     telefone: "",
-    link: "",
-    logo: null,
+    link: "", 
+    logo: null, 
   });
 
   const [erros, setErros] = useState({});
@@ -132,7 +132,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     if (name === "email") {
        setErros((prev) => ({ ...prev, email: (value && !validarEmail(value)) ? "E-mail inválido" : "" }));
     }
-
+    
     // Valida Link se houver valor
     if (name === "link") {
         setErros((prev) => ({ ...prev, link: (value && !validarUrl(value)) ? "Link inválido" : "" }));
@@ -187,8 +187,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     // === VALIDAÇÕES OBRIGATÓRIAS (APENAS NOME E EMAIL) ===
     if (!form.nome.trim()) novosErros.nome = "Nome é obrigatório";
     if (!validarEmail(form.email)) novosErros.email = "E-mail inválido";
-    // if (!form.telefone.trim()) novosErros.telefone = "Telefone é obrigatório";
-
+    
     // === VALIDAÇÕES OPCIONAIS (Só valida se tiver preenchido) ===
     if (form.cnpj && !validarCNPJ(form.cnpj)) novosErros.cnpj = "CNPJ inválido";
     if (form.link && !validarUrl(form.link)) novosErros.link = "Link inválido";
@@ -213,16 +212,18 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
       const payload = {
         nome: form.nome,
         // Envia string vazia se não preencher, para evitar null se o backend permitir
-        empresa: form.empresa || "",
-        cnpj: form.cnpj ? form.cnpj.replace(/\D/g, '') : "",
+        empresa: form.empresa || "", 
+        cnpj: form.cnpj ? form.cnpj.replace(/\D/g, '') : "", 
         email: form.email,
         telefone: form.telefone || "",
         link: form.link || "",
-        // logo: form.logo
+        logo: form.logo
       };
 
-      await clientService.create(payload);
+      console.log("Enviando Payload:", payload);
 
+      await clientService.create(payload);
+      
       await Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
@@ -234,12 +235,12 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
 
       setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", link: "", logo: null });
       setPreviewLogo(null);
-
+      
       if (onSave) onSave();
-
+      
     } catch (error) {
       console.error("Erro no cadastro:", error);
-
+      
       let msg = 'Erro ao salvar cliente.';
       if (error.response?.status === 403) {
         msg = 'Acesso Negado (403). Verifique se você está logado ou se seu Token expirou.';
@@ -266,7 +267,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
         <div className="cadastro-cliente-container">
           <h2>{cliente ? "Editar Cliente" : "Cadastro de Cliente"}</h2>
           <form className="cadastro-cliente-form" onSubmit={handleSubmit}>
-
+            
             <div className="form-group">
               <label htmlFor="nome">
                 Nome <span>*</span>

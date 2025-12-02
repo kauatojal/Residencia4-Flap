@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Plus, Search, Edit, Trash2, Archive, Mail, Phone, Building } from "lucide-react";
 import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
-import clientService from "../services/clientService";
 import Swal from "sweetalert2";
+import '../styles/DarkMode.css';
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -13,59 +13,30 @@ export default function Clientes() {
   const [clienteParaArquivar, setClienteParaArquivar] = useState(null);
   const [busca, setBusca] = useState("");
 
-  // async function loadClients() {
-  //   const clientes = await clientService.list()
-  //   setClientes(clientes)
-  // }
-
-  // useEffect(() => {
-  //   loadClients()
-  // }, []);
-
-  const handleSalvarCliente = (clienteNovo) => {
-    const processarLogo = (logo) => {
-      return new Promise((resolve) => {
-        if (!logo || typeof logo === "string") return resolve(logo);
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(logo);
-      });
-    };
-
-    processarLogo(clienteNovo.logo).then((logoBase64) => {
-      const clienteFormatado = { ...clienteNovo, logo: logoBase64 };
-
-      let novaLista = [];
-
-      if (clienteEditando) {
-        novaLista = clientes.map((c) =>
-          c.id === clienteEditando.id ? { ...clienteFormatado, id: c.id } : c
-        );
-      } else {
-        novaLista = [
-          ...clientes,
-          { ...clienteFormatado, id: Date.now(), arquivado: false },
-        ];
-      }
-
-      setClientes(novaLista);
-      setMostrarCadastro(false);
-      setClienteEditando(null);
-    });
-  };
+  const getHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
 
   const fetchClientes = async () => {
     setLoading(true);
-
     try {
-      const clientes = await clientService.list()
-      setClientes(clientes)
-    } catch(e) {
-      console.error("Erro ao carregar clientes: ", e)
+      const response = await fetch('http://localhost:8090/v1/cliente/all', {
+        headers: getHeaders()
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setClientes(data || []);
+      } else if (response.status === 403) {
+        console.error("Acesso negado. Verifique o login.");
+      }
+    } catch (error) {
+      console.error("Erro ao carregar clientes:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchClientes();
@@ -85,7 +56,10 @@ export default function Clientes() {
 
     if (result.isConfirmed) {
       try {
-        const response = await clientService.remove(id)
+        const response = await fetch(`http://localhost:8090/v1/cliente/${id}`, {
+          method: 'DELETE',
+          headers: getHeaders()
+        });
 
         if (response.ok) {
           setClientes(clientes.filter((c) => c.id !== id));
@@ -94,10 +68,7 @@ export default function Clientes() {
           Swal.fire('Erro', 'Não foi possível excluir.', 'error');
         }
       } catch (error) {
-        console.error("Erro ao remover cliente: ", error)
         Swal.fire('Erro', 'Erro de conexão.', 'error');
-      } finally {
-        setLoading(false)
       }
     }
   };
@@ -107,14 +78,21 @@ export default function Clientes() {
 
     try {
       const clienteAtualizado = { ...clienteParaArquivar, arquivado: true };
+      
+      const response = await fetch(`http://localhost:8090/v1/cliente/${clienteParaArquivar.id}`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify(clienteAtualizado)
+      });
 
-      await clientService.update(clienteParaArquivar.id)
-
-      setClientes(clientes.map(c => c.id === clienteParaArquivar.id ? clienteAtualizado : c));
-      setClienteParaArquivar(null);
-      Swal.fire('Arquivado!', 'Cliente arquivado com sucesso.', 'success');
+      if (response.ok) {
+        setClientes(clientes.map(c => c.id === clienteParaArquivar.id ? clienteAtualizado : c));
+        setClienteParaArquivar(null);
+        Swal.fire('Arquivado!', 'Cliente arquivado com sucesso.', 'success');
+      } else {
+        Swal.fire('Erro', 'Falha ao arquivar.', 'error');
+      }
     } catch (error) {
-      console.error("Erro ao alterar cliente: ", error)
       Swal.fire('Erro', 'Erro de conexão.', 'error');
     }
   };

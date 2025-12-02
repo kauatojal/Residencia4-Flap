@@ -402,3 +402,67 @@
     font-size: 1.1rem;
   }
 }
+/* Filtro de Data */
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.date-input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.btn-filtrar {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-filtrar:hover {
+  background-color: #0056b3;
+}
+
+/* Novos Grids */
+.dashboard-grid-3col {
+  grid-template-columns: 1fr 2fr;
+}
+
+.dashboard-grid-2col {
+  grid-template-columns: 1fr 2fr;
+}
+
+.dashboard-grid-1col {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 1280px) {
+  .dashboard-grid-3col,
+  .dashboard-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .date-filter {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .date-input,
+  .btn-filtrar {
+    width: 100%;
+  }
+}

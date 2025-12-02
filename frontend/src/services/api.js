@@ -15,8 +15,10 @@ api.interceptors.request.use(
     if (!config.url?.includes("/auth/login")) {
       const token = getToken();
 
+      // === DEBUG IMPORTANTE ===
+      // Abra o console do navegador (F12) e veja se isso aparece
       if (token) {
-        console.log("Token encontrado, anexando ao header...");
+        console.log("Token encontrado, anexando ao header..."); 
         config.headers.Authorization = `Bearer ${token}`;
       } else {
         console.warn("ALERTA: Tentando fazer requisição SEM token!");
@@ -35,10 +37,10 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.warn("Sessão expirada (401). Fazendo logout...");
       logout();
-      window.location.href = "/";
+      window.location.href = "/"; 
     }
-
-    // Se for 403 (Sem permissão), NÃO faz logout.
+    
+    // Se for 403 (Sem permissão), NÃO faz logout. 
     // Apenas retorna o erro para o CadastroCliente mostrar o alerta.
     return Promise.reject(error);
   }

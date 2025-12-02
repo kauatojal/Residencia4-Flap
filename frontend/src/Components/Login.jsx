@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../context/AuthContext";
+import useAuth from "../hooks/useAuth";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { loginUser } = useAuthContext();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function Login() {
     setError("");
 
     try {
-      await loginUser(email, password)
+      await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       console.error(err);

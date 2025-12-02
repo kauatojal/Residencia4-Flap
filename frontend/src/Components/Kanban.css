@@ -49,7 +49,6 @@ body {
 }
 
 .sidebar-btn {
-  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -223,110 +222,6 @@ body {
 }
 
 /* Responsividade */
-@media (max-width: 1024px) {
-  .kanban-board-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .header-actions {
-    width: 100%;
-  }
-
-  .search-input {
-    flex: 1;
-  }
-}
-
-.kanban-board-container {
-  width: 100%;
-  height: 100%;
-}
-
-.kanban-board-header-top {
-  background: white;
-  padding: 16px 24px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 0;
-}
-
-.btn-voltar-home {
-  text-decoration: none;
-  padding: 8px 16px;
-  background: transparent;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  color: #4a5568;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-}
-
-.btn-voltar-home:hover {
-  background: #f7fafc;
-  border-color: #4a67ff;
-  color: #4a67ff;
-}
-
-.quadro-nome {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0;
-}
-
-/* Botão Adicionar Cartão */
-.btn-adicionar-cartao {
-  width: 100%;
-  padding: 10px 12px;
-  margin-top: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  color: #718096;
-  font-size: 14px;
-  font-weight: 500;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-adicionar-cartao:hover {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.btn-adicionar-cartao:active {
-  background: #cbd5e0;
-}
-
-/* ============================================
-   RESPONSIVIDADE MELHORADA
-   ============================================ */
-
-@media (max-width: 1024px) {
-  .kanban-sidebar {
-    width: 220px;
-  }
-
-  .kanban-main {
-    padding: 1.5rem;
-  }
-
-  .kanban-columns {
-    gap: 16px;
-  }
-
-  .kanban-column {
-    min-width: 300px;
-  }
-}
-
 @media (max-width: 768px) {
   .kanban-sidebar {
     position: fixed;
@@ -349,14 +244,14 @@ body {
     display: block;
     color: white;
   }
-
+  
   .search-bar-container {
     display: none;
   }
 }
 
 /* --- MODO NOTURNO --- */
-.dark-mode body,
+.dark-mode body, 
 .dark-mode .kanban-content-wrapper,
 .dark-mode .main-content,
 .dark-mode .kanban-main {
@@ -414,4 +309,133 @@ body {
   background-color: #1a202c;
   border-color: #2d3748;
   color: rgb(63, 8, 192);
+}
+
+/* --- MODO NOTURNO APRIMORADO --- */
+body.dark-mode,
+.dark-mode body {
+  background-color: #0d1117;
+  color: #c9d1d9;
+}
+
+.dark-mode .kanban-wrapper {
+  background-color: #0d1117;
+}
+
+.dark-mode .kanban-content-wrapper,
+.dark-mode .main-content {
+  background-color: #0d1117;
+  color: #c9d1d9;
+}
+
+.dark-mode .kanban-sidebar {
+  background-color: #161b22;
+  border-right-color: #30363d;
+}
+
+.dark-mode .sidebar-header {
+  border-bottom-color: #30363d;
+}
+
+.dark-mode .sidebar-btn {
+  color: #8b949e;
+}
+
+.dark-mode .sidebar-btn:hover {
+  background-color: #21262d;
+  color: #58a6ff;
+}
+
+.dark-mode .sidebar-btn.active {
+  background-color: #1c2128;
+  color: #58a6ff;
+}
+
+.dark-mode .sidebar-footer {
+  border-top-color: #30363d;
+  background-color: #161b22;
+}
+
+.dark-mode .user-name {
+  color: #c9d1d9;
+}
+
+.dark-mode .user-avatar {
+  background-color: #21262d;
+  color: #c9d1d9;
+}
+
+.dark-mode .sidebar-action-btn {
+  color: #8b949e;
+}
+
+.dark-mode .sidebar-action-btn:hover {
+  background-color: #21262d;
+  color: #58a6ff;
+}
+
+.dark-mode .sidebar-action-btn.logout:hover {
+  background-color: #3d1f1f;
+  color: #f85149;
+}
+
+.dark-mode .top-header {
+  background-color: #161b22;
+  border-bottom-color: #30363d;
+}
+
+.dark-mode .search-input {
+  background-color: #0d1117;
+  border-color: #30363d;
+  color: #c9d1d9;
+}
+
+.dark-mode .search-input::placeholder {
+  color: #6e7681;
+}
+
+.dark-mode .search-input:focus {
+  border-color: #58a6ff;
+  background-color: #0d1117;
+}
+
+.dark-mode .search-icon {
+  color: #6e7681;
+}
+
+.dark-mode .mobile-menu-btn {
+  color: #c9d1d9;
+}
+
+/* Cards e boxes em modo noturno */
+.dark-mode .card,
+.dark-mode .box,
+.dark-mode .panel {
+  background-color: #161b22;
+  border-color: #30363d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+  color: #c9d1d9;
+}
+
+.dark-mode p,
+.dark-mode span {
+  color: #8b949e;
+}
+
+.dark-mode button:not(.sidebar-btn):not(.sidebar-action-btn) {
+  background-color: #21262d;
+  color: #c9d1d9;
+  border-color: #30363d;
+}
+
+.dark-mode button:not(.sidebar-btn):not(.sidebar-action-btn):hover {
+  background-color: #30363d;
 }

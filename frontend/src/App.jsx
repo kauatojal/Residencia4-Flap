@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Link, Routes, Route, Navigate, useNavigate, BrowserRouter } from "react-router-dom";
-import { AuthProvider, useAuthContext, useIsAuthenticated } from "./context/AuthContext";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import useAuth from "./context/useAuth";
+import DropboxCallback from "./Components/DropboxCallback";
 
+// Componentes
 import Login from "./Components/Login";
 import Dashboard from "./Components/Dashboard";
 import Kanban from "./Components/Kanban";
 import KanbanHome from "./Components/KanbanHome";
-import KanbanBoard from "./Components/KanbanBoard";
 import Configuracoes from "./Components/Configuracoes";
 import Arquivados from "./Components/Arquivados";
 import Notificacoes from "./Components/Notificacoes";
@@ -16,80 +19,142 @@ import CadastroCliente from "./Components/CadastroCliente";
 import EditarPerfil from "./Components/EditarPerfil";
 import Cadastro from "./Components/Cadastro";
 
-function MainApp() {
-  const { user, logoutUser } = useAuthContext();
-  const [kanbanSelecionado, setKanbanSelecionado] = useState(null);
-  const navigate = useNavigate();
+// Rota protegida
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) return <Navigate to="/" replace />;
+  return children;
+}
 
-  const handleSelectKanban = (kanban) => {
-    setKanbanSelecionado(kanban);
-    navigate(`/kanban/${kanban.id}`);
-  };
+// App principal com rotas internas
+function MainApp() {
+  const { user, logout } = useAuth();
 
   return (
-    <Kanban onLogout={logoutUser}>
+    <Kanban
+      onSwitchDashboard={() => (window.location.href = "/dashboard")}
+      onSwitchKanban={() => (window.location.href = "/kanban")}
+      onSwitchProjetos={() => (window.location.href = "/arquivados")} 
+      onSwitchConfiguracoes={() => (window.location.href = "/configuracoes")}
+      onSwitchNotificacoes={() => (window.location.href = "/notificacoes")}
+      onSwitchUsuarios={() => (window.location.href = "/usuarios")}
+      onSwitchClientes={() => (window.location.href = "/clientes")}
+      onSwitchPerfil={() => (window.location.href = "/perfil")}
+      onLogout={logout}
+    >
       <Routes>
-        <Route path="/dashboard" element={<Dashboard userRole={user?.role} />} />
-        <Route
-          path="/kanban"
-          element={<KanbanHome onSelectKanban={handleSelectKanban} />}
-        />
-        <Route
-          path="/kanban/:id"
+        <Route 
+          path="/dashboard" 
           element={
-            <div className="kanban-board-container">
-              <div className="kanban-board-header-top">
-                <Link className="btn-voltar-home" to="/kanban">
-                  ← Voltar
-                </Link>
-                <h2 className="quadro-nome">{kanbanSelecionado?.nome}</h2>
-              </div>
-              <KanbanBoard />
-            </div>
-          }
+            <ProtectedRoute>
+              <Dashboard userRole={user?.role} />
+            </ProtectedRoute>
+          } 
         />
-        <Route path="/arquivados" element={<Arquivados />} />
+        
+        <Route 
+          path="/kanban" 
+          element={
+            <ProtectedRoute>
+              <KanbanHome />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/arquivados" 
+          element={
+            <ProtectedRoute>
+              <Arquivados />
+            </ProtectedRoute>
+          } 
+        />
+        
         <Route path="/projetos" element={<Navigate to="/arquivados" replace />} />
-        <Route path="/configuracoes" element={<Configuracoes />} />
-        <Route path="/notificacoes" element={<Notificacoes />} />
-        <Route path="/usuarios" element={<ListaFuncionarios />} />
-        <Route path="/clientes" element={<Clientes />} />
-        <Route path="/clientes/novo" element={<CadastroCliente />} />
-        <Route path="/perfil" element={<EditarPerfil />} />
-        <Route path="/cadastro-func" element={<Cadastro />} />
+
+        <Route path="/dropbox-callback" element={<DropboxCallback />} />
+        
+        <Route 
+          path="/configuracoes" 
+          element={
+            <ProtectedRoute>
+              <Configuracoes />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/notificacoes" 
+          element={
+            <ProtectedRoute>
+              <Notificacoes />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/usuarios" 
+          element={
+            <ProtectedRoute>
+              <ListaFuncionarios />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/clientes" 
+          element={
+            <ProtectedRoute>
+              <Clientes />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/clientes/novo" 
+          element={
+            <ProtectedRoute>
+              <CadastroCliente />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/perfil" 
+          element={
+            <ProtectedRoute>
+              <EditarPerfil />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/cadastro-func" 
+          element={
+            <ProtectedRoute>
+              <Cadastro />
+            </ProtectedRoute>
+          } 
+        />
+        
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Kanban>
   );
 }
 
-function AppRoutes() {
-  const isAuthenticated = useIsAuthenticated()
-
+// Componente App principal - APENAS UMA DECLARAÇÃO
+function App() {
   return (
-    <BrowserRouter>
-      {!isAuthenticated && (
-        <div>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-      )}
-
-      {isAuthenticated && (
-        <div>
-          <MainApp />
-        </div>
-      )}
-    </BrowserRouter>
-  )
-}
-
-export default function App() {
-  return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/*" element={<MainApp />} />
+        </Routes>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
+
+export default App;

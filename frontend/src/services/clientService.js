@@ -16,7 +16,8 @@ async function getByName(name) {
 }
 
 async function create(data) {
-  const response = await api.post("/cliente", data);
+  // Sem headers manuais. O axios saberá que é JSON.
+  const response = await api.post("/cliente", data); 
   return response.data;
 }
 
