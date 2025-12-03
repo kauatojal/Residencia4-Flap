@@ -4,6 +4,7 @@ import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
 import clientService from "../services/clientService";
 import Swal from "sweetalert2";
+import '../styles/DarkMode.css';
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
