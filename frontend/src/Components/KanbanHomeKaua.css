@@ -269,3 +269,85 @@
   border: 1px solid #e9ecef;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+
+/* SELETOR DE QUADROS */
+.quadros-selector {
+  display: flex;
+  gap: 8px;
+  padding: 0 1.5rem 1rem 1.5rem;
+  overflow-x: auto;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.quadro-tab {
+  padding: 8px 20px;
+  border: none;
+  background-color: transparent;
+  border-radius: 6px 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #868e96;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  position: relative;
+}
+
+.quadro-tab:hover {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.quadro-tab.active {
+  background-color: #4a67ff;
+  color: white;
+}
+
+.quadro-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #4a67ff;
+}
+
+/* COLUNA VAZIA */
+.empty-column {
+  text-align: center;
+  padding: 40px 20px;
+  color: #adb5bd;
+  font-size: 14px;
+}
+
+.empty-column p {
+  margin: 0;
+}
+
+/* PARTICIPANTES VAZIO */
+.card-participants.empty {
+  opacity: 0.5;
+}
+
+/* DARK MODE */
+body.dark-mode .quadros-selector {
+  border-bottom-color: #30363d;
+}
+
+body.dark-mode .quadro-tab {
+  color: #8b949e;
+}
+
+body.dark-mode .quadro-tab:hover {
+  background-color: #161b22;
+  color: #c9d1d9;
+}
+
+body.dark-mode .quadro-tab.active {
+  background-color: #58a6ff;
+}
+
+body.dark-mode .empty-column {
+  color: #6e7681;
+}
