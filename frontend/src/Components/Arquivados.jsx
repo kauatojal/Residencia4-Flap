@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Arquivados.css";
 import Swal from "sweetalert2";
 import { Search, Eye, RotateCcw, Trash2, Layout, User, Calendar, Briefcase, Mail, Phone, Building } from "lucide-react";
+import kanbanService from "../services/kanbanService";
 
 export default function Arquivados() {
   const [activeTab, setActiveTab] = useState("quadros"); // 'quadros' ou 'clientes'
@@ -24,25 +25,12 @@ export default function Arquivados() {
       if (activeTab === "quadros") {
         // --- QUADROS ---
         const response = await fetch('http://localhost:8090/v1/quadro/all', { headers: getHeaders() });
+
+
         if (response.ok) {
-            const todosQuadros = await response.json();
-            const archivedIds = JSON.parse(localStorage.getItem("quadros_arquivados") || "[]");
-            
-            const lista = todosQuadros
-              .filter(q => archivedIds.includes(q.id))
-              .map(q => ({
-                  ...q,
-                  type: 'quadro',
-                  // Mock de dados extras se a API não trouxer
-                  dataCriacao: q.dataCriacao ? new Date(q.dataCriacao).toLocaleDateString('pt-BR') : "10/01/2024",
-                  dataArquivamento: new Date().toLocaleDateString('pt-BR'),
-                  prioridade: q.prioridade || "Alta",
-                  cliente: {
-                    nome: "Flap Soluções",
-                    logo: null, // null gera a inicial
-                    ...q.cliente
-                  }
-              }));
+            const todosQuadros = await kanbanService.listQuadros();
+
+            const lista = todosQuadros.filter(quadro => quadro.arquivado)
             setItems(lista);
         }
       } else {
@@ -75,13 +63,13 @@ export default function Arquivados() {
   // --- VISUALIZAR ---
   const handleVisualizar = (item) => {
     const isQuadro = item.type === 'quadro';
-    
+
     // Logo e Nome Principal
     const logoUrl = isQuadro ? item.cliente?.logo : item.logo;
     const logoLetter = (isQuadro ? item.cliente?.nome : item.titulo)?.charAt(0) || 'C';
     const mainTitle = isQuadro ? item.titulo : item.titulo; // Título do quadro ou nome do cliente
 
-    const logoHtml = logoUrl 
+    const logoHtml = logoUrl
       ? `<img src="${logoUrl}" class="modal-logo-img" />`
       : `<div class="modal-logo-placeholder">${logoLetter}</div>`;
 
@@ -160,7 +148,7 @@ export default function Arquivados() {
         </div>
       `,
       showConfirmButton: false,
-      showCloseButton: false, 
+      showCloseButton: false,
       width: '450px',
       padding: '0',
       customClass: { popup: 'rounded-popup' }
@@ -193,7 +181,7 @@ export default function Arquivados() {
         delete clienteAtualizado.dataArquivamento;
         delete clienteAtualizado.titulo;
         delete clienteAtualizado.descricao;
-        
+
         await fetch(`http://localhost:8090/v1/cliente/${item.id}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -224,7 +212,7 @@ export default function Arquivados() {
            const list = JSON.parse(localStorage.getItem(key) || "[]");
            const novoLocal = list.filter(id => id !== item.id);
            localStorage.setItem(key, JSON.stringify(novoLocal));
-           
+
            await fetch(`http://localhost:8090/v1/quadro/${item.id}`, {
               method: 'DELETE',
               headers: getHeaders()
@@ -240,7 +228,7 @@ export default function Arquivados() {
     }
   };
 
-  const filteredItems = items.filter(item => 
+  const filteredItems = items.filter(item =>
     (item.titulo && item.titulo.toLowerCase().includes(busca.toLowerCase())) ||
     (item.descricao && item.descricao.toLowerCase().includes(busca.toLowerCase()))
   );
@@ -256,13 +244,13 @@ export default function Arquivados() {
 
       <div className="arquivados-controls">
         <div className="arquivados-tabs">
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'quadros' ? 'active' : ''}`}
             onClick={() => setActiveTab('quadros')}
           >
             <Layout size={18} /> Quadros
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'clientes' ? 'active' : ''}`}
             onClick={() => setActiveTab('clientes')}
           >
@@ -272,9 +260,9 @@ export default function Arquivados() {
 
         <div className="arquivados-search">
           <Search size={18} className="search-icon" />
-          <input 
-            type="text" 
-            placeholder={`Buscar em ${activeTab}...`} 
+          <input
+            type="text"
+            placeholder={`Buscar em ${activeTab}...`}
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
           />
@@ -320,7 +308,7 @@ export default function Arquivados() {
                     )}
                  </div>
               )}
-              
+
               {/* LOGO (CLIENTES) */}
               {item.type === 'cliente' && (
                   <div className="card-meta-row">
