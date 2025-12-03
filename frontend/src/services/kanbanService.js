@@ -4,6 +4,7 @@ const kanbanService = {
   // 🟦 QUADROS
   listQuadros: async () => (await api.get("/quadro/all")).data,
   createQuadro: async (data) => (await api.post("/quadro", data)).data,
+  updateQuadro: async (id, data) => (await api.put(`/quadro/${id}`, data)).data,
   getQuadro: async (id) => (await api.get(`/quadro/${id}`)).data,
   archiveQuadro: async (id) => (await api.post(`/quadro/${id}/arquivar`)).data,
 
