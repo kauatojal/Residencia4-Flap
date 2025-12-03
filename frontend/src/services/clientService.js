@@ -29,4 +29,8 @@ async function remove(id) {
   await api.delete(`/cliente/${id}`);
 }
 
-export default { list, getByName, getById, create, update, remove };
+async function archive(id) {
+  await api.post(`/cliente/${id}/arquivar`);
+}
+
+export default { archive, list, getByName, getById, create, update, remove };

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, Routes, Route, Navigate, useNavigate, BrowserRouter } from "react-router-dom";
 import { AuthProvider, useAuthContext, useIsAuthenticated } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
+import DropboxCallback from "./Components/DropboxCallback";
 import Login from "./Components/Login";
 import Dashboard from "./Components/Dashboard";
 import Kanban from "./Components/Kanban";
@@ -57,6 +59,7 @@ function MainApp() {
         <Route path="/clientes/novo" element={<CadastroCliente />} />
         <Route path="/perfil" element={<EditarPerfil />} />
         <Route path="/cadastro-func" element={<Cadastro />} />
+        <Route path="/dropbox-callback" element={<DropboxCallback />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Kanban>
@@ -88,8 +91,10 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

@@ -33,7 +33,8 @@ export default function KanbanHome({ onSelectKanban }) {
   async function loadQuadros() {
     try {
       const data = await kanbanService.listQuadros();
-      setQuadros(data);
+      const quadrosNaoArquivados = data.filter(quadro => quadro.arquivado == false || quadro.arquivado == null)
+      setQuadros(quadrosNaoArquivados);
     } catch (error) {
       console.error("Erro ao carregar quadros:", error);
     }
@@ -64,7 +65,7 @@ export default function KanbanHome({ onSelectKanban }) {
 
     try {
       // 🔥 MOCK POR ENQUANTO (chamará /v1/quadro/{id}/arquivar depois)
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      kanbanService.archiveQuadro(quadroSelecionado.id)
 
       const atualizados = quadros.map((q) =>
         q.id === quadroSelecionado.id ? { ...q, arquivado: true } : q

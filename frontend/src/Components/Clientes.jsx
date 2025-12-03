@@ -4,6 +4,7 @@ import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
 import clientService from "../services/clientService";
 import Swal from "sweetalert2";
+// import '../styles/DarkMode.css'; /// ???? onde ta esse arquivo?
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -12,47 +13,6 @@ export default function Clientes() {
   const [clienteEditando, setClienteEditando] = useState(null);
   const [clienteParaArquivar, setClienteParaArquivar] = useState(null);
   const [busca, setBusca] = useState("");
-
-  // async function loadClients() {
-  //   const clientes = await clientService.list()
-  //   setClientes(clientes)
-  // }
-
-  // useEffect(() => {
-  //   loadClients()
-  // }, []);
-
-  const handleSalvarCliente = (clienteNovo) => {
-    const processarLogo = (logo) => {
-      return new Promise((resolve) => {
-        if (!logo || typeof logo === "string") return resolve(logo);
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(logo);
-      });
-    };
-
-    processarLogo(clienteNovo.logo).then((logoBase64) => {
-      const clienteFormatado = { ...clienteNovo, logo: logoBase64 };
-
-      let novaLista = [];
-
-      if (clienteEditando) {
-        novaLista = clientes.map((c) =>
-          c.id === clienteEditando.id ? { ...clienteFormatado, id: c.id } : c
-        );
-      } else {
-        novaLista = [
-          ...clientes,
-          { ...clienteFormatado, id: Date.now(), arquivado: false },
-        ];
-      }
-
-      setClientes(novaLista);
-      setMostrarCadastro(false);
-      setClienteEditando(null);
-    });
-  };
 
   const fetchClientes = async () => {
     setLoading(true);
@@ -71,6 +31,12 @@ export default function Clientes() {
     fetchClientes();
   }, []);
 
+  const handleSaveSuccess = () => {
+    setMostrarCadastro(false);
+    setClienteEditando(null);
+    fetchClientes();
+  };
+
   const handleExcluirCliente = async (id) => {
     const result = await Swal.fire({
       title: 'Tem certeza?',
@@ -85,17 +51,13 @@ export default function Clientes() {
 
     if (result.isConfirmed) {
       try {
-        const response = await clientService.remove(id)
+        await clientService.remove(id)
 
-        if (response.ok) {
-          setClientes(clientes.filter((c) => c.id !== id));
-          Swal.fire('Excluído!', 'Cliente removido.', 'success');
-        } else {
-          Swal.fire('Erro', 'Não foi possível excluir.', 'error');
-        }
+        setClientes(clientes.filter((c) => c.id !== id));
+        Swal.fire('Excluído!', 'Cliente removido.', 'success');
       } catch (error) {
         console.error("Erro ao remover cliente: ", error)
-        Swal.fire('Erro', 'Erro de conexão.', 'error');
+        Swal.fire('Erro', 'Não foi possível excluir.', 'error');
       } finally {
         setLoading(false)
       }
@@ -117,12 +79,6 @@ export default function Clientes() {
       console.error("Erro ao alterar cliente: ", error)
       Swal.fire('Erro', 'Erro de conexão.', 'error');
     }
-  };
-
-  const handleSaveSuccess = () => {
-    setMostrarCadastro(false);
-    setClienteEditando(null);
-    fetchClientes();
   };
 
   const clientesFiltrados = clientes.filter((cliente) => {
@@ -183,11 +139,12 @@ export default function Clientes() {
 
               <div className="cliente-card-header">
                 <div className="cliente-avatar animated-avatar">
-                  {cliente.logo ? (
+                  {/* {cliente.logo ? (
                     <img src={cliente.logo} alt="Logo" className="cliente-logo-img" />
                   ) : (
                     cliente.nome ? cliente.nome.charAt(0).toUpperCase() : '#'
-                  )}
+                  )} */}
+                  {cliente.nome ? cliente.nome.charAt(0).toUpperCase() : '#'}
                 </div>
 
                 <div className="cliente-info">

@@ -6,12 +6,12 @@ import Swal from "sweetalert2";
 export default function CadastroCliente({ cliente, onSave, onCancel }) {
   const [form, setForm] = useState({
     nome: "",
-    empresa: "",
-    cnpj: "",
+    empresa: null,
+    cnpj: null,
     email: "",
-    telefone: "",
-    link: "",
-    logo: null,
+    telefone: null,
+    link: null,
+    // logo: null,
   });
 
   const [erros, setErros] = useState({});
@@ -22,16 +22,16 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
     if (cliente) {
       setForm({
         nome: cliente.nome || "",
-        empresa: cliente.empresa || "",
-        cnpj: cliente.cnpj || "",
+        empresa: cliente.empresa || null,
+        cnpj: cliente.cnpj || null,
         email: cliente.email || "",
-        telefone: cliente.telefone || "",
-        link: cliente.link || "",
-        logo: cliente.logo || null,
+        telefone: cliente.telefone || null,
+        link: cliente.link || null,
+        // logo: cliente.logo || null,
       });
-      if (cliente.logo) {
-        setPreviewLogo(cliente.logo);
-      }
+      // if (cliente.logo) {
+      //   setPreviewLogo(cliente.logo);
+      // }
     }
   }, [cliente]);
 
@@ -213,15 +213,18 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
       const payload = {
         nome: form.nome,
         // Envia string vazia se não preencher, para evitar null se o backend permitir
-        empresa: form.empresa || "",
-        cnpj: form.cnpj ? form.cnpj.replace(/\D/g, '') : "",
+        empresa: form.empresa || null,
+        cnpj: form.cnpj ? form.cnpj.replace(/\D/g, '') : null,
         email: form.email,
-        telefone: form.telefone || "",
-        link: form.link || "",
-        // logo: form.logo
+        telefone: form.telefone || null,
+        link: form.link || null,
+        // logo: form.logo || null
       };
 
-      await clientService.create(payload);
+      if (cliente)
+        await clientService.update(cliente.id, payload)
+      else
+        await clientService.create(payload);
 
       await Swal.fire({
         icon: 'success',
@@ -232,7 +235,7 @@ export default function CadastroCliente({ cliente, onSave, onCancel }) {
         timerProgressBar: true
       });
 
-      setForm({ nome: "", empresa: "", cnpj: "", email: "", telefone: "", link: "", logo: null });
+      setForm({ nome: "", empresa: null, cnpj: null, email: "", telefone: null, link: null });
       setPreviewLogo(null);
 
       if (onSave) onSave();
