@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, Check, Plus } from 'lucide-react';
+import api from '../config/api';
 import './KanbanFilter.css';
 
 export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
@@ -11,36 +12,26 @@ export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
   const [newFlagColor, setNewFlagColor] = useState('#4a67ff');
   const [searchMember, setSearchMember] = useState('');
 
-  const token = localStorage.getItem('token');
-  const headers = { 
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  };
-
   useEffect(() => {
     if (isOpen) {
       loadData();
     }
   }, [isOpen]);
 
-  const loadData = () => {
-    // Carregar Usuários
-    fetch('http://localhost:8090/v1/user', { headers })
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setMembers(data))
-      .catch(err => console.error("Erro ao carregar usuários", err));
+  const loadData = async () => {
+    try {
+      const [membersRes, companiesRes, flagsRes] = await Promise.all([
+        api.get('/user').catch(() => ({ data: [] })),
+        api.get('/cliente/all').catch(() => ({ data: [] })),
+        api.get('/flag/all').catch(() => ({ data: [] }))
+      ]);
 
-    // Carregar Clientes
-    fetch('http://localhost:8090/v1/cliente/all', { headers })
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setCompanies(data))
-      .catch(err => console.error("Erro ao carregar clientes", err));
-
-    // Carregar FLAGS
-    fetch('http://localhost:8090/v1/flag/all', { headers })
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setFlags(data.filter(f => f.ativo !== false)))
-      .catch(err => console.error("Erro ao carregar flags", err));
+      setMembers(membersRes.data || []);
+      setCompanies(companiesRes.data || []);
+      setFlags((flagsRes.data || []).filter(f => f.ativo !== false));
+    } catch (err) {
+      console.error("Erro ao carregar dados", err);
+    }
   };
 
   const handleCreateFlag = async () => {
@@ -50,28 +41,22 @@ export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
     }
 
     try {
-      const response = await fetch('http://localhost:8090/v1/flag', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          nome: newFlagName.trim(),
-          cor: newFlagColor,
-          ativo: true
-        })
+      const response = await api.post('/flag', {
+        nome: newFlagName.trim(),
+        cor: newFlagColor,
+        ativo: true
       });
 
-      if (response.ok) {
-        const newFlag = await response.json();
+      if (response.data) {
+        const newFlag = response.data;
         setFlags([...flags, newFlag]);
         setNewFlagName('');
         setNewFlagColor('#4a67ff');
         setShowCreateFlag(false);
-      } else {
-        alert('Erro ao criar flag. Talvez já exista uma com esse nome.');
       }
     } catch (error) {
       console.error('Erro ao criar flag:', error);
-      alert('Erro ao criar flag.');
+      alert('Erro ao criar flag. Talvez já exista uma com esse nome.');
     }
   };
 
@@ -100,7 +85,6 @@ export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
         </div>
         
         <div className="filter-body filter-body-3col">
-          {/* Coluna Membros */}
           <div className="filter-column border-right">
             <h3>Pesquisar membro</h3>
             <div className="filter-search">
@@ -132,7 +116,6 @@ export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
             </div>
           </div>
 
-          {/* Coluna Empresas */}
           <div className="filter-column border-right">
             <h3>Empresa</h3>
             <div className="filter-list mt-4">
@@ -149,7 +132,6 @@ export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {
             </div>
           </div>
 
-          {/* Coluna FLAGS */}
           <div className="filter-column">
             <div className="filter-column-header">
               <h3>Prioridade (Flags)</h3>

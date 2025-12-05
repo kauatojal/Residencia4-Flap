@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import api from '../config/api';
 import kanbanService from '../services/kanbanService';
 import clientService from '../services/clientService';
 import flagService from '../services/flagService';
@@ -70,14 +71,8 @@ export default function ModalTarefa({
 
   async function carregarUsuarioLogado() {
     try {
-      const response = await fetch('http://localhost:8090/v1/user/me', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      const user = await response.json();
-      setUsuarioLogado(user);
+      const response = await api.get('/user/me');
+      setUsuarioLogado(response.data);
     } catch (error) {
       console.error('Erro ao carregar usuário logado:', error);
     }
@@ -105,23 +100,17 @@ export default function ModalTarefa({
       const [clientesData, flagsData, usuariosData] = await Promise.all([
         clientService.list(),
         flagService.list(),
-        fetch('http://localhost:8090/v1/user', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        }).then(res => res.json())
+        api.get('/user')
       ]);
 
       setClientes(clientesData);
       setFlags(flagsData.filter(f => f.ativo !== false));
-      setUsuarios(usuariosData);
+      setUsuarios(usuariosData.data);
     } catch (error) {
       console.error('❌ Erro ao carregar dados:', error);
     }
   }
 
-  // ✅ Ajustado para trabalhar só com IDs simples, alinhado ao payload
   function preencherFormulario(tarefa) {
     setFormData({
       titulo: tarefa.titulo || '',
@@ -294,7 +283,6 @@ export default function ModalTarefa({
         localStorage.setItem(`comentarios_tarefa_${tarefaParaEditar.id}`, JSON.stringify(comentarios));
       }
 
-      // ✅ aguarda o onSucesso (que recarrega quadro/listas) antes de fechar
       if (onSucesso) {
         await onSucesso();
       }
@@ -440,9 +428,7 @@ export default function ModalTarefa({
         </button>
 
         <form onSubmit={handleSubmit} className="modal-form">
-          {/* COLUNA ESQUERDA */}
           <div className="modal-left">
-            {/* TÍTULO */}
             <div className="form-group">
               <input
                 type="text"
@@ -457,7 +443,6 @@ export default function ModalTarefa({
               />
             </div>
 
-            {/* CLIENTE */}
             <div className="form-group">
               <label>
                 <User size={16} />
@@ -481,7 +466,6 @@ export default function ModalTarefa({
               </select>
             </div>
 
-            {/* PRIORIDADE */}
             <div className="form-group">
               <label>
                 <Tag size={16} />
@@ -553,7 +537,6 @@ export default function ModalTarefa({
               )}
             </div>
 
-            {/* PRAZO */}
             <div className="form-group">
               <label>
                 <Clock size={16} />
@@ -571,7 +554,6 @@ export default function ModalTarefa({
               />
             </div>
 
-            {/* DESCRIÇÃO */}
             <div className="form-group">
               <label>
                 <FileText size={16} />
@@ -593,7 +575,6 @@ export default function ModalTarefa({
               />
             </div>
 
-            {/* LINKS */}
             <div className="form-group">
               <label>
                 <LinkIcon size={16} />
@@ -633,7 +614,6 @@ export default function ModalTarefa({
               </div>
             </div>
 
-            {/* CHECKLIST */}
             <div className="form-group">
               <label>
                 <CheckSquare size={16} />
@@ -684,15 +664,12 @@ export default function ModalTarefa({
               </div>
             </div>
 
-            {/* BOTÃO SALVAR */}
             <button type="submit" className="btn-criar-tarefa" disabled={loading}>
               {loading ? 'Salvando...' : (tarefaParaEditar ? 'Atualizar Tarefa' : 'Criar Tarefa')}
             </button>
           </div>
 
-          {/* COLUNA DIREITA */}
           <div className="modal-right">
-            {/* COMENTÁRIOS */}
             <div className="section-comentarios">
               <h3>
                 <MessageCircle size={16} />
@@ -740,7 +717,6 @@ export default function ModalTarefa({
               </div>
             </div>
 
-            {/* HISTÓRICO */}
             <div className="section-historico">
               <h3>HISTÓRICO</h3>
               <div className="historico-list">
@@ -753,7 +729,6 @@ export default function ModalTarefa({
               </div>
             </div>
 
-            {/* MEMBROS */}
             <div className="section-membros">
               <h3>
                 <Users size={16} />
@@ -792,7 +767,6 @@ export default function ModalTarefa({
               )}
             </div>
 
-            {/* DROPBOX */}
             <div className="section-anexos">
               <h3>
                 <Paperclip size={16} />

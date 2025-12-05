@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../config/api';
 import { 
   HiX, HiUser, HiTag, HiClock, HiDocumentText, 
   HiPaperClip, HiLink, HiCheckCircle, HiPlus 
@@ -8,8 +8,6 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateTaskModal.css';
-
-const API_URL = 'http://localhost:8090/v1';
 
 const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) => {
   const { user } = useContext(AuthContext);
@@ -30,14 +28,12 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
   
-  // Estados para UI
   const [showMembrosPicker, setShowMembrosPicker] = useState(false);
   const [searchMembro, setSearchMembro] = useState('');
   const [novoLink, setNovoLink] = useState('');
   const [novaChecklist, setNovaChecklist] = useState('');
   const [historico, setHistorico] = useState([]);
 
-  // ✅ Sistema de controle de histórico ÚNICO
   const historicoActionsRef = useRef(new Set());
 
   useEffect(() => {
@@ -48,25 +44,14 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
     }
   }, [isOpen]);
 
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    };
-  };
-
-  // ✅ CARREGAR DADOS COM DEBUG COMPLETO
   const carregarDados = async () => {
     try {
       console.log('🔄 Iniciando carregamento de dados...');
       
       const [clientesRes, flagsRes, usuariosRes] = await Promise.all([
-        axios.get(`${API_URL}/cliente/all`, getAuthHeaders()),
-        axios.get(`${API_URL}/flag/all`, getAuthHeaders()),
-        axios.get(`${API_URL}/user`, getAuthHeaders())
+        api.get('/cliente/all'),
+        api.get('/flag/all'),
+        api.get('/user')
       ]);
 
       console.log('📊 Respostas completas:');
@@ -74,7 +59,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
       console.log('Flags Response:', flagsRes);
       console.log('Usuários Response:', usuariosRes);
 
-      // ✅ Extrai dados com diferentes possibilidades de estrutura
       const clientesData = clientesRes.data?.data || clientesRes.data || [];
       const flagsData = flagsRes.data?.data || flagsRes.data || [];
       const usuariosData = usuariosRes.data?.data || usuariosRes.data || [];
@@ -84,7 +68,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
       console.log('Flags:', flagsData);
       console.log('Usuários:', usuariosData);
 
-      // ✅ Garante que são arrays
       const clientesArray = Array.isArray(clientesData) ? clientesData : [];
       const flagsArray = Array.isArray(flagsData) ? flagsData : [];
       const usuariosArray = Array.isArray(usuariosData) ? usuariosData : [];
@@ -110,7 +93,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
     }
   };
 
-  // ✅ Sistema de histórico ÚNICO (sem duplicações)
   const resetHistorico = () => {
     setHistorico([]);
     historicoActionsRef.current = new Set();
@@ -151,7 +133,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
     setLoading(true);
 
     try {
-      // 1. Criar a tarefa
       const tarefaPayload = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -162,39 +143,25 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
         flagId: formData.flagId || null
       };
 
-      const tarefaResponse = await axios.post(
-        `${API_URL}/tarefa`,
-        tarefaPayload,
-        getAuthHeaders()
-      );
+      const tarefaResponse = await api.post('/tarefa', tarefaPayload);
 
       const tarefaId = tarefaResponse.data.id;
 
-      // 2. Adicionar membros (se houver)
       if (formData.membros.length > 0) {
         await Promise.all(
           formData.membros.map(membroId =>
-            axios.post(
-              `${API_URL}/tarefa/${tarefaId}/membros`,
-              { usuarioId: membroId },
-              getAuthHeaders()
-            )
+            api.post(`/tarefa/${tarefaId}/membros`, { usuarioId: membroId })
           )
         );
       }
 
-      // 3. Adicionar checklists (se houver)
       if (formData.checklists.length > 0) {
         await Promise.all(
           formData.checklists.map(checklist =>
-            axios.post(
-              `${API_URL}/checklists`,
-              {
-                nome: checklist,
-                tarefaId: tarefaId
-              },
-              getAuthHeaders()
-            )
+            api.post('/checklists', {
+              nome: checklist,
+              tarefaId: tarefaId
+            })
           )
         );
       }
@@ -296,7 +263,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
     adicionarHistoricoMultiplo('Checklist removida');
   };
 
-  // ✅ DROPBOX SEM SALVAR NO BACKEND
   const conectarDropbox = () => {
     const DROPBOX_APP_KEY = '25553epqpjq0r83';
     const REDIRECT_URI = encodeURIComponent(window.location.origin + '/dropbox-callback');
@@ -307,7 +273,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
     
     adicionarHistoricoUnico('dropbox', 'Conectando ao Dropbox...');
 
-    // Listener para capturar o token
     const messageListener = (event) => {
       if (event.origin !== window.location.origin) return;
       
@@ -319,7 +284,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
         alert('✅ Dropbox conectado com sucesso!\nToken salvo localmente.');
         adicionarHistoricoUnico('dropbox-sucesso', 'Dropbox conectado');
         
-        // Remove o listener após uso
         window.removeEventListener('message', messageListener);
       }
     };
@@ -364,10 +328,8 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
         </button>
 
         <div className="modal-layout">
-          {/* COLUNA ESQUERDA - FORMULÁRIO */}
           <div className="modal-left">
             <form onSubmit={handleSubmit}>
-              {/* Título */}
               <div className="form-group-task">
                 <input
                   type="text"
@@ -384,7 +346,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 />
               </div>
 
-              {/* Linha: Cliente e Prioridade */}
               <div className="form-row-task">
                 <div className="form-group-task">
                   <label>
@@ -410,7 +371,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                   </select>
                 </div>
 
-                {/* ✅ PRIORIDADE COM CORES DO BACKEND */}
                 <div className="form-group-task">
                   <label>
                     <HiTag /> Prioridade
@@ -432,7 +392,7 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                     ) : (
                       flags.map(flag => {
                         const nome = flag.nome || flag.name || '';
-                        const cor = flag.cor || '#6c757d'; // ✅ USA COR DO BACKEND
+                        const cor = flag.cor || '#6c757d';
                         return (
                           <option 
                             key={flag.id} 
@@ -448,7 +408,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                       })
                     )}
                   </select>
-                  {/* Debug temporário */}
                   {flags.length === 0 && (
                     <small style={{ color: '#dc3545', fontSize: '11px', marginTop: '4px', display: 'block' }}>
                       ⚠️ Nenhuma flag carregada. Verifique a API.
@@ -457,7 +416,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 </div>
               </div>
 
-              {/* Prazo com DatePicker */}
               <div className="form-group-task">
                 <label>
                   <HiClock /> Prazo de Entrega
@@ -479,7 +437,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 />
               </div>
 
-              {/* Descrição */}
               <div className="form-group-task">
                 <label>
                   <HiDocumentText /> Descrição
@@ -493,7 +450,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 />
               </div>
 
-              {/* Links */}
               <div className="form-group-task">
                 <label>
                   <HiLink /> Links
@@ -528,7 +484,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 )}
               </div>
 
-              {/* Checklists */}
               <div className="form-group-task">
                 <label>
                   <HiCheckCircle /> Checklists
@@ -564,7 +519,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
                 )}
               </div>
 
-              {/* Botão Submit */}
               <div className="modal-footer-task">
                 <button type="submit" className="btn-submit-task" disabled={loading}>
                   {loading ? 'Criando...' : 'Criar Tarefa'}
@@ -573,9 +527,7 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
             </form>
           </div>
 
-          {/* COLUNA DIREITA - SIDEBAR */}
           <div className="modal-right">
-            {/* Histórico */}
             <div className="sidebar-section">
               <h4>Histórico</h4>
               <div className="historico-list">
@@ -592,7 +544,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
               </div>
             </div>
 
-            {/* Membros */}
             <div className="sidebar-section">
               <h4>Membros</h4>
               <div className="membros-avatares">
@@ -649,7 +600,6 @@ const CreateTaskModal = ({ isOpen, onClose, listaId, quadroId, onTaskCreated }) 
               )}
             </div>
 
-            {/* Anexos / Dropbox */}
             <div className="sidebar-section">
               <h4>
                 <HiPaperClip /> Anexos

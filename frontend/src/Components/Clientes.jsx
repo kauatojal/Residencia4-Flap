@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Edit, Trash2, Archive, Mail, Phone, Building, Eye, Link as LinkIcon, User, Briefcase } from "lucide-react";
+import api from "../config/api";
 import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
 import Swal from "sweetalert2";
@@ -11,27 +12,14 @@ export default function Clientes() {
   const [mostrarCadastro, setMostrarCadastro] = useState(false);
   const [clienteEditando, setClienteEditando] = useState(null);
   const [clienteParaArquivar, setClienteParaArquivar] = useState(null);
-  const [clienteVisualizando, setClienteVisualizando] = useState(null); // ✅ NOVO ESTADO
+  const [clienteVisualizando, setClienteVisualizando] = useState(null);
   const [busca, setBusca] = useState("");
-
-  const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
 
   const fetchClientes = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8090/v1/cliente/all', {
-        headers: getHeaders()
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setClientes(data || []);
-      } else if (response.status === 403) {
-        console.error("Acesso negado. Verifique o login.");
-      }
+      const response = await api.get('/cliente/all');
+      setClientes(response.data || []);
     } catch (error) {
       console.error("Erro ao carregar clientes:", error);
     } finally {
@@ -57,19 +45,11 @@ export default function Clientes() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:8090/v1/cliente/${id}`, {
-          method: 'DELETE',
-          headers: getHeaders()
-        });
-
-        if (response.ok) {
-          setClientes(clientes.filter((c) => c.id !== id));
-          Swal.fire('Excluído!', 'Cliente removido.', 'success');
-        } else {
-          Swal.fire('Erro', 'Não foi possível excluir.', 'error');
-        }
+        await api.delete(`/cliente/${id}`);
+        setClientes(clientes.filter((c) => c.id !== id));
+        Swal.fire('Excluído!', 'Cliente removido.', 'success');
       } catch (error) {
-        Swal.fire('Erro', 'Erro de conexão.', 'error');
+        Swal.fire('Erro', 'Não foi possível excluir.', 'error');
       }
     }
   };
@@ -78,20 +58,12 @@ export default function Clientes() {
     if (!clienteParaArquivar) return;
 
     try {
-      const response = await fetch(`http://localhost:8090/v1/cliente/${clienteParaArquivar.id}/arquivar`, {
-        method: 'POST',
-        headers: getHeaders()
-      });
-
-      if (response.ok) {
-        setClientes(clientes.filter(c => c.id !== clienteParaArquivar.id));
-        setClienteParaArquivar(null);
-        Swal.fire('Arquivado!', 'Cliente arquivado com sucesso.', 'success');
-      } else {
-        Swal.fire('Erro', 'Falha ao arquivar.', 'error');
-      }
+      await api.post(`/cliente/${clienteParaArquivar.id}/arquivar`);
+      setClientes(clientes.filter(c => c.id !== clienteParaArquivar.id));
+      setClienteParaArquivar(null);
+      Swal.fire('Arquivado!', 'Cliente arquivado com sucesso.', 'success');
     } catch (error) {
-      Swal.fire('Erro', 'Erro de conexão.', 'error');
+      Swal.fire('Erro', 'Falha ao arquivar.', 'error');
     }
   };
 
@@ -184,7 +156,6 @@ export default function Clientes() {
               </div>
 
               <div className="cliente-card-body">
-                {/* ✅ EMAIL NO LUGAR DO CNPJ */}
                 <div className="cliente-detalhe">
                   <Mail size={16} />
                   <span>{cliente.email || "Sem email"}</span>
@@ -196,7 +167,6 @@ export default function Clientes() {
               </div>
 
               <div className="cliente-card-actions">
-                {/* ✅ BOTÃO VISUALIZAR */}
                 <button 
                   className="btn-visualizar" 
                   onClick={() => setClienteVisualizando(cliente)}
@@ -221,7 +191,6 @@ export default function Clientes() {
         </div>
       )}
 
-      {/* MODAL ARQUIVAR */}
       {clienteParaArquivar && (
         <div className="modal-overlay">
           <div className="modal-arquivar">
@@ -244,7 +213,6 @@ export default function Clientes() {
         </div>
       )}
 
-      {/* ✅ MODAL VISUALIZAÇÃO */}
       {clienteVisualizando && (
         <div className="modal-overlay" onClick={() => setClienteVisualizando(null)}>
           <div className="modal-visualizar" onClick={(e) => e.stopPropagation()}>
@@ -323,7 +291,6 @@ export default function Clientes() {
         </div>
       )}
 
-      {/* MODAL CADASTRO */}
       {mostrarCadastro && (
         <CadastroCliente
           cliente={clienteEditando}

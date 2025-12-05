@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LayoutGrid, Archive, Home, UserCog, Building2, Search, Moon, Sun, LogOut, Menu } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import api from "../config/api";
 import "./Kanban.css";
 import '../styles/DarkMode.css';
 
@@ -25,11 +26,7 @@ function Kanban({ children }) {
     e.stopPropagation();
     
     console.log("Realizando logout...");
-    
-    // Limpa o token
     localStorage.removeItem('token');
-    
-    // Redireciona para login
     navigate('/');
   };
 
@@ -44,22 +41,15 @@ function Kanban({ children }) {
       }
 
       try {
-        const response = await fetch('http://localhost:8090/v1/user/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await api.get('/user/me');
         
-        if (response.ok) {
-          const data = await response.json();
-          
+        if (response.data) {
+          const data = response.data;
           const nome = data.name || data.nome || "";
           const email = data.email || "";
           
           let nomeExibicao = nome || email || "Usuário";
           
-          // Gera iniciais
           let iniciais = "";
           const partesNome = nomeExibicao.split(' ');
           if (partesNome.length >= 2) {

@@ -1,22 +1,8 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8090/v1';
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  };
-};
+import api from '../config/api';
 
 export const atividadeService = {
-  // ✅ BUSCAR TODAS AS ATIVIDADES DO SISTEMA
   getAtividadesRecentes: async () => {
     try {
-      // Buscar dados de múltiplas fontes em paralelo
       const [
         tarefasResponse,
         quadrosResponse,
@@ -24,11 +10,11 @@ export const atividadeService = {
         clientesResponse,
         usuariosResponse
       ] = await Promise.all([
-        axios.get(`${API_URL}/tarefa/all`, getAuthHeaders()).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/quadro/all`, getAuthHeaders()).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/comentario/all`, getAuthHeaders()).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/cliente/all`, getAuthHeaders()).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/user`, getAuthHeaders()).catch(() => ({ data: [] }))
+        api.get('/tarefa/all').catch(() => ({ data: [] })),
+        api.get('/quadro/all').catch(() => ({ data: [] })),
+        api.get('/comentario/all').catch(() => ({ data: [] })),
+        api.get('/cliente/all').catch(() => ({ data: [] })),
+        api.get('/user').catch(() => ({ data: [] }))
       ]);
 
       const tarefas = tarefasResponse.data || [];
@@ -37,19 +23,16 @@ export const atividadeService = {
       const clientes = clientesResponse.data || [];
       const usuarios = usuariosResponse.data || [];
 
-      // Criar mapa de usuários para resolver nomes
       const usuariosMap = new Map();
       usuarios.forEach(user => {
         usuariosMap.set(user.id, user.name || user.email || 'Usuário');
       });
 
-      // Formatar cada tipo de atividade
       const atividadesTarefas = formatarAtividadesTarefas(tarefas, usuariosMap);
       const atividadesQuadros = formatarAtividadesQuadros(quadros, usuariosMap);
       const atividadesComentarios = formatarAtividadesComentarios(comentarios, usuariosMap);
       const atividadesClientes = formatarAtividadesClientes(clientes);
 
-      // Combinar todas as atividades
       const todasAtividades = [
         ...atividadesTarefas,
         ...atividadesQuadros,
@@ -57,7 +40,6 @@ export const atividadeService = {
         ...atividadesClientes
       ];
 
-      // Ordenar por data (mais recente primeiro) e limitar a 10
       return todasAtividades
         .sort((a, b) => new Date(b.dataRaw) - new Date(a.dataRaw))
         .slice(0, 10);
@@ -69,11 +51,6 @@ export const atividadeService = {
   }
 };
 
-// ==========================================
-// FORMATADORES DE ATIVIDADES
-// ==========================================
-
-// 📋 ATIVIDADES DE TAREFAS
 const formatarAtividadesTarefas = (tarefas, usuariosMap) => {
   return tarefas
     .sort((a, b) => {
@@ -81,16 +58,15 @@ const formatarAtividadesTarefas = (tarefas, usuariosMap) => {
       const dataB = new Date(b.dataAtualizacao || b.dataCriacao);
       return dataB - dataA;
     })
-    .slice(0, 20) // Pegar as 20 mais recentes
+    .slice(0, 20)
     .map(tarefa => {
       let acao = 'atualizou a tarefa';
       let tipo = 'move';
       let icone = '→';
 
-      // Determinar tipo de ação baseado no estado
       if (tarefa.concluida && tarefa.dataConclusao) {
         const diferencaConclusao = Date.now() - new Date(tarefa.dataConclusao).getTime();
-        if (diferencaConclusao < 86400000) { // Menos de 24h
+        if (diferencaConclusao < 86400000) {
           acao = 'completou a tarefa';
           tipo = 'success';
           icone = '✓';
@@ -109,7 +85,6 @@ const formatarAtividadesTarefas = (tarefas, usuariosMap) => {
         icone = '+';
       }
 
-      // Pegar nome do responsável
       const usuarioId = tarefa.responsaveisIds && tarefa.responsaveisIds.length > 0
         ? tarefa.responsaveisIds[0].usuarioId
         : null;
@@ -131,7 +106,6 @@ const formatarAtividadesTarefas = (tarefas, usuariosMap) => {
     });
 };
 
-// 🗂️ ATIVIDADES DE QUADROS
 const formatarAtividadesQuadros = (quadros, usuariosMap) => {
   return quadros
     .sort((a, b) => {
@@ -139,7 +113,7 @@ const formatarAtividadesQuadros = (quadros, usuariosMap) => {
       const dataB = new Date(b.atualizadoEm || b.criadoEm);
       return dataB - dataA;
     })
-    .slice(0, 15) // Pegar os 15 mais recentes
+    .slice(0, 15)
     .map(quadro => {
       let acao = 'atualizou o quadro';
       let tipo = 'move';
@@ -172,10 +146,9 @@ const formatarAtividadesQuadros = (quadros, usuariosMap) => {
     });
 };
 
-// 💬 ATIVIDADES DE COMENTÁRIOS
 const formatarAtividadesComentarios = (comentarios, usuariosMap) => {
   return comentarios
-    .slice(0, 15) // Pegar os 15 mais recentes
+    .slice(0, 15)
     .map(comentario => {
       const usuarioId = comentario.usuarioId?.usuarioId;
       const nomeUsuario = usuarioId && usuariosMap.has(usuarioId)
@@ -199,10 +172,9 @@ const formatarAtividadesComentarios = (comentarios, usuariosMap) => {
     });
 };
 
-// 👥 ATIVIDADES DE CLIENTES
 const formatarAtividadesClientes = (clientes) => {
   return clientes
-    .slice(0, 10) // Pegar os 10 mais recentes
+    .slice(0, 10)
     .map(cliente => {
       let acao = 'atualizou o cliente';
       let tipo = 'move';
@@ -231,11 +203,6 @@ const formatarAtividadesClientes = (clientes) => {
     });
 };
 
-// ==========================================
-// FUNÇÕES AUXILIARES
-// ==========================================
-
-// Verificar se foi criado recentemente (menos de 24h)
 const isRecemCriada = (dataCriacao) => {
   if (!dataCriacao) return false;
   const agora = new Date();
@@ -244,7 +211,6 @@ const isRecemCriada = (dataCriacao) => {
   return diferencaHoras < 24;
 };
 
-// Calcular tempo relativo
 const calcularTempo = (data) => {
   if (!data) return 'recentemente';
   

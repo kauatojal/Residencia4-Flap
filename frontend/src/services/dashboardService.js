@@ -1,22 +1,9 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8090/v1';
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  };
-};
+import api from '../config/api';
 
 export const dashboardService = {
-  // Buscar aniversariantes do dia
   getAniversariantes: async () => {
     try {
-      const response = await axios.get(`${API_URL}/user`, getAuthHeaders());
+      const response = await api.get('/user');
       const hoje = new Date();
       const mesHoje = hoje.getMonth();
       const diaHoje = hoje.getDate();
@@ -34,12 +21,9 @@ export const dashboardService = {
     }
   },
 
-  // Enviar notificação de parabéns
   enviarParabens: async (usuarioId, remetente) => {
     try {
-      // Ajuste conforme sua API de notificações
       const mensagem = `${remetente.name} te desejou parabéns! 🎉🎂`;
-      // Implementar endpoint de notificação quando disponível
       console.log('Enviando parabéns para usuário:', usuarioId, mensagem);
       return { success: true, mensagem };
     } catch (error) {
@@ -48,10 +32,9 @@ export const dashboardService = {
     }
   },
 
-  // Buscar tarefas por prioridade
   getTarefasPorPrioridade: async () => {
     try {
-      const response = await axios.get(`${API_URL}/tarefa/all`, getAuthHeaders());
+      const response = await api.get('/tarefa/all');
       const tarefas = response.data;
       
       const prioridades = {
@@ -77,10 +60,9 @@ export const dashboardService = {
     }
   },
 
-  // Buscar tarefas próximas do vencimento
   getTarefasProximasVencimento: async () => {
     try {
-      const response = await axios.get(`${API_URL}/tarefa/all`, getAuthHeaders());
+      const response = await api.get('/tarefa/all');
       const tarefas = response.data;
       const hoje = new Date();
 
@@ -100,10 +82,9 @@ export const dashboardService = {
     }
   },
 
-  // Buscar total de clientes
   getTotalClientes: async () => {
     try {
-      const response = await axios.get(`${API_URL}/cliente/all`, getAuthHeaders());
+      const response = await api.get('/cliente/all');
       return response.data.length;
     } catch (error) {
       console.error('Erro ao buscar total de clientes:', error);
@@ -111,10 +92,9 @@ export const dashboardService = {
     }
   },
 
-  // Buscar total de funcionários
   getTotalFuncionarios: async () => {
     try {
-      const response = await axios.get(`${API_URL}/user`, getAuthHeaders());
+      const response = await api.get('/user');
       return response.data.length;
     } catch (error) {
       console.error('Erro ao buscar total de funcionários:', error);
@@ -122,10 +102,9 @@ export const dashboardService = {
     }
   },
 
-  // Buscar métricas de tarefas por período
   getMetricasPorPeriodo: async (dataInicio, dataFim) => {
     try {
-      const response = await axios.get(`${API_URL}/tarefa/all`, getAuthHeaders());
+      const response = await api.get('/tarefa/all');
       const tarefas = response.data;
 
       const inicio = new Date(dataInicio);

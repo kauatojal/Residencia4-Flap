@@ -1,18 +1,11 @@
-import axios from "axios";
-import { getToken } from "./auth";
-
-const API_URL = "http://localhost:8090/lista";
-
-const authHeader = () => ({
-  headers: { Authorization: `Bearer ${getToken()}` },
-});
+import api from "../config/api";
 
 export const getLists = async (boardId) => {
-  const res = await axios.get(`${API_URL}/quadro/${boardId}`, authHeader());
+  const res = await api.get(`/lista/quadro/${boardId}`);
   return res.data;
 };
 
 export const createList = async (data) => {
-  const res = await axios.post(`${API_URL}/criar`, data, authHeader());
+  const res = await api.post('/lista/criar', data);
   return res.data;
 };

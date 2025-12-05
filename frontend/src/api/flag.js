@@ -1,13 +1,6 @@
-import axios from "axios";
-import { getToken } from "./auth";
-
-const API_URL = "http://localhost:8090/v1/flagTarefa";
-
-const authHeader = () => ({
-  headers: { Authorization: `Bearer ${getToken()}` },
-});
+import api from "../config/api";
 
 export const getFlags = async () => {
-  const res = await axios.get(`${API_URL}/listar`, authHeader());
+  const res = await api.get('/flagTarefa/listar');
   return res.data;
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import api from "../config/api";
 import "./Arquivados.css";
 import Swal from "sweetalert2";
 import { Search, Eye, RotateCcw, Trash2, Layout, User, Calendar, CheckSquare } from "lucide-react";
@@ -9,11 +10,6 @@ export default function Arquivados() {
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState("");
 
-  const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
-
   useEffect(() => {
     loadItems();
   }, [activeTab]);
@@ -22,58 +18,53 @@ export default function Arquivados() {
     setLoading(true);
     try {
       if (activeTab === "quadros") {
-        const response = await fetch('http://localhost:8090/v1/quadro/all', { headers: getHeaders() });
-        if (response.ok) {
-          const todosQuadros = await response.json();
-          
-          const lista = todosQuadros
-            .filter(q => q.arquivado === true)
-            .map(q => ({
-              ...q,
-              type: 'quadro',
-              dataCriacao: q.dataCriacao ? new Date(q.dataCriacao).toLocaleDateString('pt-BR') : "N/A",
-              dataArquivamento: q.dataArquivamento ? new Date(q.dataArquivamento).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR'),
-              prioridade: q.prioridade || "Média",
-              cliente: {
-                nome: "Flap Soluções",
-                logo: null,
-                ...q.cliente
-              }
-            }));
-          setItems(lista);
-        }
-      } else if (activeTab === "clientes") {
-        const response = await fetch('http://localhost:8090/v1/cliente/all', { headers: getHeaders() });
-        if (response.ok) {
-          const todosClientes = await response.json();
-          const lista = todosClientes
-            .filter(c => c.arquivado === true)
-            .map(c => ({
-              ...c,
-              type: 'cliente',
-              titulo: c.nome,
-              descricao: c.empresa || "Empresa não informada",
-              dataCriacao: "N/A",
-              dataArquivamento: "Recentemente"
-            }));
-          setItems(lista);
-        }
-      } else if (activeTab === "tarefas") {
-        const quadrosResponse = await fetch('http://localhost:8090/v1/quadro/all', { headers: getHeaders() });
+        const response = await api.get('/quadro/all');
+        const todosQuadros = response.data;
         
-        if (quadrosResponse.ok) {
-          const todosQuadros = await quadrosResponse.json();
+        const lista = todosQuadros
+          .filter(q => q.arquivado === true)
+          .map(q => ({
+            ...q,
+            type: 'quadro',
+            dataCriacao: q.dataCriacao ? new Date(q.dataCriacao).toLocaleDateString('pt-BR') : "N/A",
+            dataArquivamento: q.dataArquivamento ? new Date(q.dataArquivamento).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR'),
+            prioridade: q.prioridade || "Média",
+            cliente: {
+              nome: "Flap Soluções",
+              logo: null,
+              ...q.cliente
+            }
+          }));
+        setItems(lista);
+      } else if (activeTab === "clientes") {
+        const response = await api.get('/cliente/all');
+        const todosClientes = response.data;
+        const lista = todosClientes
+          .filter(c => c.arquivado === true)
+          .map(c => ({
+            ...c,
+            type: 'cliente',
+            titulo: c.nome,
+            descricao: c.empresa || "Empresa não informada",
+            dataCriacao: "N/A",
+            dataArquivamento: "Recentemente"
+          }));
+        setItems(lista);
+      } else if (activeTab === "tarefas") {
+        const quadrosResponse = await api.get('/quadro/all');
+        
+        if (quadrosResponse.data) {
+          const todosQuadros = quadrosResponse.data;
           let todasTarefasArquivadas = [];
           
           for (const quadro of todosQuadros) {
-            const tarefasResponse = await fetch(
-              `http://localhost:8090/v1/tarefa/all/arquivadas/${quadro.id}`,
-              { headers: getHeaders() }
-            );
-            
-            if (tarefasResponse.ok) {
-              const tarefasArquivadas = await tarefasResponse.json();
-              todasTarefasArquivadas.push(...tarefasArquivadas);
+            try {
+              const tarefasResponse = await api.get(`/tarefa/all/arquivadas/${quadro.id}`);
+              if (tarefasResponse.data) {
+                todasTarefasArquivadas.push(...tarefasResponse.data);
+              }
+            } catch (error) {
+              console.error(`Erro ao buscar tarefas arquivadas do quadro ${quadro.id}:`, error);
             }
           }
           
@@ -231,13 +222,8 @@ export default function Arquivados() {
 
     if (result.isConfirmed) {
       try {
-        let response;
-        
         if (item.type === "quadro") {
-          response = await fetch(`http://localhost:8090/v1/quadro/${item.id}/desarquivar`, {
-            method: 'POST',
-            headers: getHeaders()
-          });
+          await api.post(`/quadro/${item.id}/desarquivar`);
         } else if (item.type === "cliente") {
           const clienteAtualizado = { ...item, arquivado: false };
           delete clienteAtualizado.type;
@@ -246,24 +232,11 @@ export default function Arquivados() {
           delete clienteAtualizado.titulo;
           delete clienteAtualizado.descricao;
           
-          response = await fetch(`http://localhost:8090/v1/cliente/${item.id}`, {
-            method: 'PUT',
-            headers: getHeaders(),
-            body: JSON.stringify(clienteAtualizado)
-          });
+          await api.put(`/cliente/${item.id}`, clienteAtualizado);
         } else if (item.type === "tarefa") {
-          // ✅ NOVO: Usa o endpoint POST /v1/tarefa/{id}/desarquivar
-          response = await fetch(`http://localhost:8090/v1/tarefa/${item.id}/desarquivar`, {
-            method: 'POST',
-            headers: getHeaders()
-          });
+          await api.post(`/tarefa/${item.id}/desarquivar`);
         }
         
-        if (!response.ok) {
-          throw new Error(`Erro ao restaurar ${item.type}`);
-        }
-        
-        // Remove da lista localmente
         setItems(prev => prev.filter(i => i.id !== item.id));
         Swal.fire('Restaurado!', 'O item foi restaurado com sucesso.', 'success');
       } catch (error) {
@@ -287,26 +260,12 @@ export default function Arquivados() {
 
     if (result.isConfirmed) {
       try {
-        let response;
         if (item.type === "quadro") {
-          response = await fetch(`http://localhost:8090/v1/quadro/${item.id}`, {
-            method: 'DELETE',
-            headers: getHeaders()
-          });
+          await api.delete(`/quadro/${item.id}`);
         } else if (item.type === "cliente") {
-          response = await fetch(`http://localhost:8090/v1/cliente/${item.id}`, {
-            method: 'DELETE',
-            headers: getHeaders()
-          });
+          await api.delete(`/cliente/${item.id}`);
         } else if (item.type === "tarefa") {
-          response = await fetch(`http://localhost:8090/v1/tarefa/${item.id}`, {
-            method: 'DELETE',
-            headers: getHeaders()
-          });
-        }
-        
-        if (!response.ok) {
-          throw new Error('Erro ao excluir item');
+          await api.delete(`/tarefa/${item.id}`);
         }
         
         setItems(prev => prev.filter(i => i.id !== item.id));
