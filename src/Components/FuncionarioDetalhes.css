@@ -1,0 +1,332 @@
+.detalhes-sidebar {
+  width: 320px;
+  min-width: 320px;
+  padding: 2rem 1.5rem;
+  background-color: #f9f9fb;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.profile-card {
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.profile-role {
+  font-size: 1rem;
+  color: #888;
+  margin: 0.25rem 0 0 0;
+  transition: color 0.3s ease;
+}
+
+.info-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.info-card h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0.8rem 0;
+  color: #555;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.info-icon {
+  font-size: 1.2rem;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.metric-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.metric-value {
+  position: absolute;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.metric-label {
+  position: absolute;
+  top: 2.5rem;
+  font-size: 0.85rem;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode .detalhes-sidebar {
+  background-color: #0f172a;
+  border-left-color: #334155;
+}
+
+body.dark-mode .profile-avatar {
+  border-color: #1e293b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .profile-name {
+  color: #e2e8f0;
+}
+
+body.dark-mode .profile-role {
+  color: #94a3b8;
+}
+
+body.dark-mode .info-card {
+  background-color: #1e293b;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .info-card h4 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .contact-info p {
+  color: #cbd5e0;
+}
+
+body.dark-mode .info-icon {
+  color: #94a3b8;
+}
+
+body.dark-mode .metric-value {
+  color: #e2e8f0;
+}
+
+body.dark-mode .metric-label {
+  color: #94a3b8;
+}
+
+/* Gráficos no Dark Mode */
+body.dark-mode .recharts-text {
+  fill: #cbd5e0 !important;
+}
+
+body.dark-mode .recharts-cartesian-axis-line,
+body.dark-mode .recharts-cartesian-axis-tick-line {
+  stroke: #475569 !important;
+}
+
+body.dark-mode .recharts-tooltip-wrapper {
+  outline: none;
+}
+
+body.dark-mode .recharts-default-tooltip {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+}
+
+body.dark-mode .recharts-tooltip-label {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .recharts-tooltip-item {
+  color: #cbd5e0 !important;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .header button,
+  .header .search-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .main-content {
+    padding: 15px;
+  }
+
+  h1, h2 {
+    font-size: 20px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .detalhes-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  body.dark-mode .detalhes-sidebar {
+    border-top-color: #334155;
+  }
+}
+
+@media (max-width: 640px) {
+  .container,
+  .main-content {
+    padding: 12px;
+  }
+
+  h1, h2 {
+    font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .modal-content {
+    padding: 18px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-name {
+    font-size: 1.3rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .main-content {
+    padding: 10px;
+  }
+
+  h1, h2 {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 15px;
+  }
+
+  .detalhes-sidebar {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  h1, h2 {
+    font-size: 15px;
+  }
+
+  .container,
+  .main-content {
+    padding: 8px;
+  }
+
+  .detalhes-sidebar {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}

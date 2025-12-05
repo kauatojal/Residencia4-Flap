@@ -1,0 +1,388 @@
+/* ========================================
+   GESTÃO DE EQUIPE - LAYOUT PRINCIPAL
+   ======================================== */
+.gestao-equipe {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+  background: #f9fafb;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+/* ======== HEADER ======== */
+.gestao-equipe .ge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.gestao-equipe .ge-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gestao-equipe .ge-icon {
+  color: #2563eb;
+}
+
+.gestao-equipe .ge-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.gestao-equipe .ge-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+  transition: color 0.3s ease;
+}
+
+/* ======== CONTROLES ======== */
+.gestao-equipe .ge-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.gestao-equipe .ge-search {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.gestao-equipe .ge-search input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-family: inherit;
+  background: white;
+  color: #111827;
+}
+
+.gestao-equipe .ge-search input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.gestao-equipe .ge-search .search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  transition: color 0.3s ease;
+}
+
+/* ======== ABAS ======== */
+.gestao-equipe .ge-tabs {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 6px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.gestao-equipe .tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.gestao-equipe .tab-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.gestao-equipe .tab-btn.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ======== BOTÃO NOVO ======== */
+.gestao-equipe .btn-novo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.gestao-equipe .btn-novo:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* ======== FEEDBACK ======== */
+.gestao-equipe .ge-feedback {
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  animation: slideDown 0.3s ease;
+}
+
+.gestao-equipe .ge-feedback.sucesso {
+  background: #dcfce7;
+  color: #166534;
+  border-left: 4px solid #22c55e;
+}
+
+.gestao-equipe .ge-feedback.erro {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-left: 4px solid #ef4444;
+}
+
+/* ======== LOADING ======== */
+.gestao-equipe .ge-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.gestao-equipe .spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gestao-equipe .ge-loading p {
+  color: #6b7280;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+/* ======== CONTEÚDO ======== */
+.gestao-equipe .ge-content {
+  animation: fadeIn 0.4s ease;
+}
+
+/* GRID USUÁRIOS */
+.gestao-equipe .ge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* LISTA CARGOS */
+.gestao-equipe .ge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ======== VAZIO ======== */
+.gestao-equipe .ge-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #9ca3af;
+  gap: 16px;
+  transition: color 0.3s ease;
+}
+
+.gestao-equipe .ge-empty p {
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* ======== ANIMAÇÕES ======== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode .gestao-equipe {
+  background: #0f172a;
+}
+
+body.dark-mode .gestao-equipe .ge-header h1 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .gestao-equipe .ge-header p {
+  color: #94a3b8;
+}
+
+body.dark-mode .gestao-equipe .ge-icon {
+  color: #60a5fa;
+}
+
+/* BUSCA DARK MODE */
+body.dark-mode .gestao-equipe .ge-search input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .gestao-equipe .ge-search input::placeholder {
+  color: #64748b;
+}
+
+body.dark-mode .gestao-equipe .ge-search input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+body.dark-mode .gestao-equipe .ge-search .search-icon {
+  color: #64748b;
+}
+
+/* ABAS DARK MODE */
+body.dark-mode .gestao-equipe .ge-tabs {
+  background: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .gestao-equipe .tab-btn {
+  color: #94a3b8;
+}
+
+body.dark-mode .gestao-equipe .tab-btn:hover {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .gestao-equipe .tab-btn.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* BOTÃO NOVO DARK MODE */
+body.dark-mode .gestao-equipe .btn-novo {
+  background: #3b82f6;
+}
+
+body.dark-mode .gestao-equipe .btn-novo:hover {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* FEEDBACK DARK MODE */
+body.dark-mode .gestao-equipe .ge-feedback.sucesso {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-left-color: #10b981;
+}
+
+body.dark-mode .gestao-equipe .ge-feedback.erro {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-left-color: #ef4444;
+}
+
+/* LOADING DARK MODE */
+body.dark-mode .gestao-equipe .spinner {
+  border-color: #334155;
+  border-top-color: #60a5fa;
+}
+
+body.dark-mode .gestao-equipe .ge-loading p {
+  color: #94a3b8;
+}
+
+/* VAZIO DARK MODE */
+body.dark-mode .gestao-equipe .ge-empty {
+  color: #64748b;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+  .gestao-equipe {
+    padding: 20px 16px;
+  }
+
+  .gestao-equipe .ge-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .gestao-equipe .ge-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gestao-equipe .ge-search {
+    min-width: 100%;
+  }
+
+  .gestao-equipe .ge-tabs {
+    width: 100%;
+  }
+
+  .gestao-equipe .btn-novo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gestao-equipe .ge-grid {
+    grid-template-columns: 1fr;
+  }
+}

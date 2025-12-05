@@ -1,0 +1,570 @@
+/* ================================
+   VISUAL ORIGINAL — SEM MEXER
+================================ */
+
+.trello-container {
+  width: 100%;
+  height: calc(100vh - 90px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px;
+  background: #f4f5f7;
+  display: flex;
+}
+
+.columns-wrapper {
+  display: flex;
+  gap: 16px;
+}
+
+.column {
+  background: #ebecf0;
+  padding: 12px;
+  border-radius: 8px;
+  width: 280px;
+  min-width: 280px;
+  max-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.column-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #172b4d;
+}
+
+.task-count {
+  background: #dfe1e6;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #6b778c;
+  font-weight: 600;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.kanban-card {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(9,30,66,.25);
+  border: 1px solid rgba(9,30,66,.1);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kanban-card:hover {
+  background: #f9fafc;
+  box-shadow: 0 3px 6px rgba(9,30,66,.15);
+}
+
+.kanban-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #172b4d;
+  margin-bottom: 4px;
+}
+
+.kanban-card p {
+  font-size: 13px;
+  color: #5e6c84;
+  line-height: 1.4;
+}
+
+.btn-add-card {
+  background: transparent;
+  border: none;
+  margin-top: 8px;
+  padding: 8px;
+  text-align: left;
+  font-size: 14px;
+  color: #5e6c84;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-add-card:hover {
+  background: rgba(9,30,66,.08);
+}
+
+.add-column {
+  background: #091e4214;
+  border-radius: 8px;
+  width: 280px;
+  min-width: 280px;
+  padding: 12px;
+  height: fit-content;
+}
+
+.btn-add-column {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: #5e6c84;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.btn-add-column:hover {
+  background: rgba(9,30,66,.08);
+}
+
+/* SCROLL */
+.columns-wrapper::-webkit-scrollbar {
+  height: 10px;
+}
+
+.columns-wrapper::-webkit-scrollbar-thumb {
+  background: #bfc4ce;
+  border-radius: 6px;
+}
+
+.tasks-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: #d0d4da;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   ESTILOS NOVOS — TOTALMENTE ISOLADOS DENTRO DE .kanban-page
+============================================================ */
+
+.kanban-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-wrapper {
+  width: 100%;
+}
+
+.kanban-header {
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #dfe1e6;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.switch-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: #42526e;
+}
+
+.switch-btn.active {
+  background: #0052cc;
+  border-color: #0052cc;
+  color: white;
+}
+
+.add-btn,
+.filter-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: #0052cc;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.add-btn:hover,
+.filter-btn:hover {
+  background: #0065ff;
+}
+
+.filter-box {
+  padding: 8px 20px;
+  background: white;
+  border-bottom: 1px solid #dfe1e6;
+}
+
+.filter-box input {
+  width: 260px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #dfe1e6;
+}
+
+.column-actions button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #6b778c;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: white;
+  width: 360px;
+  max-width: 95vw;
+  padding: 16px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-actions .cancel {
+  background: transparent;
+  color: #6b778c;
+}
+
+.modal-actions button:not(.cancel) {
+  background: #0052cc;
+  color: white;
+}
+
+.kanban-page.calendar-view {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+.kanban-page.calendar-view .kanban-wrapper {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* ============================================================
+   ✅ NOVOS ESTILOS - FILTROS E MELHORIAS
+============================================================ */
+
+/* Busca rápida */
+.quick-search {
+  padding: 0 20px 10px 20px;
+  background: white;
+  border-bottom: 1px solid #dfe1e6;
+}
+
+.search-input-board {
+  width: 100%;
+  padding: 10px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.search-input-board:focus {
+  outline: none;
+  border-color: #4a67ff;
+  box-shadow: 0 0 0 3px rgba(74, 103, 255, 0.1);
+}
+
+/* Botão de filtro atualizado com badge */
+.filter-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #4a67ff;
+  color: #4a67ff;
+  background: white;
+}
+
+.filter-btn.active {
+  background: #4a67ff;
+  border-color: #4a67ff;
+  color: white;
+}
+
+.filter-badge {
+  background: white;
+  color: #4a67ff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.filter-btn.active .filter-badge {
+  background: #ffc107;
+  color: #333;
+}
+
+/* Contador de tarefas com total */
+.task-count-total {
+  opacity: 0.5;
+  font-size: 12px;
+  margin-left: 2px;
+}
+
+/* Flags nos cards */
+.card-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.card-flag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  white-space: nowrap;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #6b778c;
+  font-weight: 500;
+}
+
+/* ============================================================
+   DARK MODE
+============================================================ */
+
+body.dark-mode .kanban-page {
+  background: #1a202c;
+}
+
+body.dark-mode .kanban-header,
+body.dark-mode .quick-search,
+body.dark-mode .filter-box {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+body.dark-mode .trello-container {
+  background: #1a202c;
+}
+
+body.dark-mode .column {
+  background: #374151;
+}
+
+body.dark-mode .column-header h2 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .task-count {
+  background: #4a5568;
+  color: #cbd5e0;
+}
+
+body.dark-mode .kanban-card {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+body.dark-mode .kanban-card:hover {
+  background: #374151;
+}
+
+body.dark-mode .kanban-card h4 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .kanban-card p {
+  color: #cbd5e0;
+}
+
+body.dark-mode .btn-add-card {
+  color: #cbd5e0;
+}
+
+body.dark-mode .btn-add-card:hover {
+  background: rgba(255,255,255,.08);
+}
+
+body.dark-mode .search-input-board {
+  background: #1a202c;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+body.dark-mode .filter-btn {
+  background: #2d3748;
+  border-color: #4a5568;
+  color: #cbd5e0;
+}
+
+body.dark-mode .filter-btn:hover {
+  border-color: #4a67ff;
+  color: #4a67ff;
+}
+
+body.dark-mode .filter-btn.active {
+  background: #4a67ff;
+  border-color: #4a67ff;
+  color: white;
+}
+
+body.dark-mode .switch-btn {
+  color: #cbd5e0;
+}
+
+body.dark-mode .switch-btn.active {
+  background: #4a67ff;
+  border-color: #4a67ff;
+  color: white;
+}
+
+body.dark-mode .add-btn {
+  background: #4a67ff;
+}
+
+body.dark-mode .add-btn:hover {
+  background: #3b5bdb;
+}
+
+body.dark-mode .modal-backdrop {
+  background: rgba(0,0,0,0.7);
+}
+
+body.dark-mode .modal-box {
+  background: #2d3748;
+  color: #e2e8f0;
+}
+
+body.dark-mode .modal-box input {
+  background: #1a202c;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+body.dark-mode .loading {
+  color: #cbd5e0;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+
+@media (max-width: 768px) {
+  .kanban-header {
+    padding: 8px 12px;
+  }
+
+  .header-left,
+  .header-right {
+    gap: 6px;
+  }
+
+  .switch-btn,
+  .add-btn,
+  .filter-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .quick-search {
+    padding: 0 12px 8px 12px;
+  }
+
+  .trello-container {
+    padding: 12px;
+  }
+
+  .column {
+    width: 260px;
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kanban-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-btn span {
+    display: none;
+  }
+
+  .column {
+    width: 240px;
+    min-width: 240px;
+  }
+}
