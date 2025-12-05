@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../config/api";
+import api from "../services/api";
 import "./Arquivados.css";
 import Swal from "sweetalert2";
 import { Search, Eye, RotateCcw, Trash2, Layout, User, Calendar, CheckSquare } from "lucide-react";

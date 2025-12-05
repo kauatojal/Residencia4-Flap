@@ -1,4 +1,4 @@
-import api from "../config/api";
+import api from "../services/api";
 
 export const getFlags = async () => {
   const res = await api.get('/flagTarefa/listar');

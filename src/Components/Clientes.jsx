@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Edit, Trash2, Archive, Mail, Phone, Building, Eye, Link as LinkIcon, User, Briefcase } from "lucide-react";
-import api from "../config/api";
+import api from "../services/api";
 import "./Clientes.css";
 import CadastroCliente from "./CadastroCliente";
 import Swal from "sweetalert2";

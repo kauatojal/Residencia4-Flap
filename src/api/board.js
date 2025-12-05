@@ -1,4 +1,4 @@
-import api from "../config/api";
+import api from "../services/api";
 
 export const getBoards = async () => {
   const res = await api.get('/quadro/listar');

@@ -1,4 +1,4 @@
-import api from "../config/api";
+import api from "../services/api";
 
 export const getTasksByList = async (listId) => {
   const res = await api.get(`/tarefa/lista/${listId}`);

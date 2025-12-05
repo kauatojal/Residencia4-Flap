@@ -1,4 +1,4 @@
-import api from "../config/api";
+import api from "../services/api";
 
 const API_URL_AUTH = "/auth";
 

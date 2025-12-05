@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LayoutGrid, Archive, Home, UserCog, Building2, Search, Moon, Sun, LogOut, Menu } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import api from "../config/api";
+import api from "../services/api";
 import "./Kanban.css";
 import '../styles/DarkMode.css';
 
