@@ -1,0 +1,235 @@
+/* ========================================
+   MODAL CONFIRMAÇÃO
+   ======================================== */
+
+.modal-confirmacao-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-confirmacao-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.btn-close-confirmacao {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f8f9fa;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #495057;
+}
+
+.btn-close-confirmacao:hover {
+  background-color: #e9ecef;
+  transform: rotate(90deg);
+}
+
+.modal-confirmacao-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.modal-confirmacao-icon.danger {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.modal-confirmacao-icon.warning {
+  background-color: #fef3c7;
+  color: #f59e0b;
+}
+
+.modal-confirmacao-icon.primary {
+  background-color: #dbeafe;
+  color: #2248c5;
+}
+
+.modal-confirmacao-titulo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 12px 0;
+}
+
+.modal-confirmacao-mensagem {
+  font-size: 15px;
+  color: #6c757d;
+  margin: 0 0 28px 0;
+  line-height: 1.6;
+}
+
+.modal-confirmacao-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancelar,
+.btn-confirmar {
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-cancelar {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.btn-cancelar:hover {
+  background-color: #e9ecef;
+}
+
+.btn-confirmar {
+  color: white;
+}
+
+.btn-confirmar.danger {
+  background-color: #dc2626;
+}
+
+.btn-confirmar.danger:hover {
+  background-color: #b91c1c;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.btn-confirmar.warning {
+  background-color: #f59e0b;
+}
+
+.btn-confirmar.warning:hover {
+  background-color: #d97706;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn-confirmar.primary {
+  background-color: #2248c5;
+}
+
+.btn-confirmar.primary:hover {
+  background-color: #1a3a9e;
+  box-shadow: 0 4px 12px rgba(34, 72, 197, 0.4);
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+body.dark-mode .modal-confirmacao-content {
+  background-color: #1a1d29;
+}
+
+body.dark-mode .btn-close-confirmacao {
+  background-color: #2d3748;
+  color: #c9d1d9;
+}
+
+body.dark-mode .btn-close-confirmacao:hover {
+  background-color: #3d4758;
+}
+
+body.dark-mode .modal-confirmacao-icon.danger {
+  background-color: #3d1f1f;
+  color: #f85149;
+}
+
+body.dark-mode .modal-confirmacao-icon.warning {
+  background-color: #3d2f0f;
+  color: #f59e0b;
+}
+
+body.dark-mode .modal-confirmacao-icon.primary {
+  background-color: #1c2d41;
+  color: #58a6ff;
+}
+
+body.dark-mode .modal-confirmacao-titulo {
+  color: #c9d1d9;
+}
+
+body.dark-mode .modal-confirmacao-mensagem {
+  color: #8b949e;
+}
+
+body.dark-mode .btn-cancelar {
+  background-color: #21262d;
+  border-color: #30363d;
+  color: #c9d1d9;
+}
+
+body.dark-mode .btn-cancelar:hover {
+  background-color: #2d3748;
+}
+
+/* ========================================
+   RESPONSIVO
+   ======================================== */
+
+@media (max-width: 480px) {
+  .modal-confirmacao-content {
+    padding: 24px;
+  }
+
+  .modal-confirmacao-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .modal-confirmacao-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .modal-confirmacao-titulo {
+    font-size: 18px;
+  }
+
+  .modal-confirmacao-mensagem {
+    font-size: 14px;
+  }
+
+  .modal-confirmacao-footer {
+    flex-direction: column;
+  }
+
+  .btn-cancelar,
+  .btn-confirmar {
+    width: 100%;
+  }
+}

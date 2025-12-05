@@ -1,0 +1,664 @@
+/* ===============================
+   OVERLAY DO MODAL
+   =============================== */
+.editar-usuario-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* ===============================
+   CONTEÚDO DO MODAL
+   =============================== */
+.editar-usuario-modal form {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 34px 36px 28px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  animation: popUp 0.28s ease forwards;
+  transform-origin: center;
+  transition: all 0.3s ease;
+
+  /* scroll */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
+}
+
+/* Scrollbar WebKit */
+.editar-usuario-modal form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.editar-usuario-modal form::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.editar-usuario-modal form::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.editar-usuario-modal form::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===============================
+   TÍTULO
+   =============================== */
+.editar-usuario-modal h2 {
+  margin-bottom: 6px;
+  text-align: center;
+  color: #111827;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+/* ===============================
+   LABELS E INPUTS
+   =============================== */
+.editar-usuario-modal label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease;
+}
+
+/* Indicador de opcional */
+.editar-usuario-modal label .opcional {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-weight: 400;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.editar-usuario-modal input,
+.editar-usuario-modal select {
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  color: #111827;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  font-family: inherit;
+}
+
+/* Melhorando UX do input de data */
+.editar-usuario-modal input[type="date"] {
+  cursor: pointer;
+}
+
+.editar-usuario-modal input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.editar-usuario-modal input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.editar-usuario-modal input:hover,
+.editar-usuario-modal select:hover {
+  background-color: #ffffff;
+  border-color: #9ca3af;
+}
+
+.editar-usuario-modal input:focus,
+.editar-usuario-modal select:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
+}
+
+/* ===============================
+   REACT-SELECT CUSTOMIZADO
+   =============================== */
+.editar-usuario-modal .react-select-container {
+  font-size: 14px;
+}
+
+.editar-usuario-modal .react-select__control {
+  min-height: 48px !important;
+  border-radius: 10px !important;
+  border: 1px solid #d1d5db !important;
+  background: #f9fafb !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.25s ease !important;
+  font-family: inherit !important;
+}
+
+.editar-usuario-modal .react-select__control:hover {
+  background-color: #ffffff !important;
+  border-color: #9ca3af !important;
+}
+
+.editar-usuario-modal .react-select__control--is-focused {
+  border-color: #2563eb !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+.editar-usuario-modal .react-select__value-container {
+  padding: 4px 12px !important;
+}
+
+.editar-usuario-modal .react-select__input-container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.editar-usuario-modal .react-select__placeholder {
+  color: #9ca3af !important;
+  font-size: 14px !important;
+}
+
+/* Multi-value (badges dos itens selecionados) */
+.editar-usuario-modal .react-select__multi-value {
+  background-color: #eff6ff !important;
+  border-radius: 8px !important;
+  padding: 2px 4px !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+.editar-usuario-modal .react-select__multi-value__label {
+  color: #1e40af !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  padding: 3px 6px !important;
+}
+
+.editar-usuario-modal .react-select__multi-value__remove {
+  color: #3b82f6 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+.editar-usuario-modal .react-select__multi-value__remove:hover {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+/* Dropdown menu */
+.editar-usuario-modal .react-select__menu {
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden !important;
+  border: 1px solid #e5e7eb !important;
+  z-index: 9999 !important;
+}
+
+.editar-usuario-modal .react-select__menu-list {
+  padding: 4px !important;
+}
+
+.editar-usuario-modal .react-select__option {
+  background: white !important;
+  color: #111827 !important;
+  padding: 12px 16px !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  margin-bottom: 2px !important;
+}
+
+.editar-usuario-modal .react-select__option:hover {
+  background: #f3f4f6 !important;
+}
+
+.editar-usuario-modal .react-select__option--is-selected {
+  background: #2563eb !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.editar-usuario-modal .react-select__option--is-focused {
+  background: #eff6ff !important;
+  color: #1e40af !important;
+}
+
+.editar-usuario-modal .react-select__option--is-selected:hover {
+  background: #1d4ed8 !important;
+}
+
+/* Indicadores */
+.editar-usuario-modal .react-select__indicator-separator {
+  background-color: #d1d5db !important;
+}
+
+.editar-usuario-modal .react-select__clear-indicator,
+.editar-usuario-modal .react-select__dropdown-indicator {
+  color: #6b7280 !important;
+  transition: color 0.2s !important;
+}
+
+.editar-usuario-modal .react-select__clear-indicator:hover,
+.editar-usuario-modal .react-select__dropdown-indicator:hover {
+  color: #2563eb !important;
+}
+
+/* Loading */
+.editar-usuario-modal .react-select__loading-indicator {
+  color: #2563eb !important;
+}
+
+/* No options message */
+.editar-usuario-modal .react-select__menu-notice {
+  color: #9ca3af !important;
+  font-style: italic !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+}
+
+/* ===============================
+   HINT/DICA INFORMATIVA
+   =============================== */
+.editar-usuario-modal .mu-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.5;
+  font-style: italic;
+  padding: 6px 10px;
+  background: #f0f4ff;
+  border-left: 2px solid #2563eb;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.editar-usuario-modal .mu-hint strong {
+  font-weight: 600;
+  color: #f59e0b;
+  font-style: normal;
+}
+
+/* ===============================
+   BOTÕES DE AÇÃO
+   =============================== */
+.editar-usuario-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.editar-usuario-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+/* Botão Confirmar */
+.editar-usuario-actions button[type="submit"] {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+.editar-usuario-actions button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(37, 99, 235, 0.35);
+}
+
+.editar-usuario-actions button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Botão Cancelar */
+.editar-usuario-actions button[type="button"] {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.editar-usuario-actions button[type="button"]:hover:not(:disabled) {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   FEEDBACK VISUAL
+   =============================== */
+.mensagem-sucesso,
+.mensagem-erro {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.mensagem-sucesso {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.mensagem-erro {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* Mensagem informativa no modal */
+.info-message-modal {
+  color: #4a5568;
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: -10px;
+  padding: 6px 10px;
+  background: #f0f4ff;
+  border-left: 2px solid #2563eb;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* ===============================
+   CAMPOS COM ERRO / VALIDAÇÃO
+   =============================== */
+.input-erro {
+  border-color: #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+.erro-campo {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin-top: -6px;
+  margin-bottom: 6px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ===============================
+   ANIMAÇÕES
+   =============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode .editar-usuario-modal {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+body.dark-mode .editar-usuario-modal form {
+  background: #1e293b;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+  scrollbar-color: #475569 transparent;
+}
+
+body.dark-mode .editar-usuario-modal form::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+body.dark-mode .editar-usuario-modal form::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+body.dark-mode .editar-usuario-modal h2 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .editar-usuario-modal label {
+  color: #cbd5e0;
+}
+
+body.dark-mode .editar-usuario-modal input,
+body.dark-mode .editar-usuario-modal select {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .editar-usuario-modal input::placeholder {
+  color: #64748b;
+}
+
+body.dark-mode .editar-usuario-modal input:hover,
+body.dark-mode .editar-usuario-modal select:hover {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.dark-mode .editar-usuario-modal input:focus,
+body.dark-mode .editar-usuario-modal select:focus {
+  background: #0f172a;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* REACT-SELECT DARK MODE */
+body.dark-mode .editar-usuario-modal .react-select__control {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__control:hover {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__control--is-focused {
+  background: #0f172a !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__placeholder {
+  color: #64748b !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__single-value {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__input-container {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__multi-value {
+  background-color: #1e3a8a !important;
+  border-color: #1e40af !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__multi-value__label {
+  color: #93c5fd !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__multi-value__remove {
+  color: #93c5fd !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__multi-value__remove:hover {
+  background-color: #1e40af !important;
+  color: #dbeafe !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__menu {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__option {
+  background: #0f172a !important;
+  color: #cbd5e0 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__option:hover {
+  background: #1e293b !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__option--is-selected {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__option--is-focused {
+  background: #1e3a8a !important;
+  color: #93c5fd !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__indicator-separator {
+  background-color: #475569 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__clear-indicator,
+body.dark-mode .editar-usuario-modal .react-select__dropdown-indicator {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__clear-indicator:hover,
+body.dark-mode .editar-usuario-modal .react-select__dropdown-indicator:hover {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .editar-usuario-modal .react-select__menu-notice {
+  color: #64748b !important;
+}
+
+/* HINT DARK MODE */
+body.dark-mode .editar-usuario-modal .mu-hint {
+  background: #1e3a8a;
+  border-left-color: #3b82f6;
+  color: #93c5fd;
+}
+
+body.dark-mode .info-message-modal {
+  background: #1e3a8a;
+  border-left-color: #3b82f6;
+  color: #93c5fd;
+}
+
+/* BOTÕES DARK MODE */
+body.dark-mode .editar-usuario-actions button[type="submit"] {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+body.dark-mode .editar-usuario-actions button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+body.dark-mode .editar-usuario-actions button[type="button"] {
+  background: #334155;
+  color: #cbd5e0;
+}
+
+body.dark-mode .editar-usuario-actions button[type="button"]:hover:not(:disabled) {
+  background: #475569;
+}
+
+/* FEEDBACK DARK MODE */
+body.dark-mode .mensagem-sucesso {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-color: #10b981;
+}
+
+body.dark-mode .mensagem-erro {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-color: #ef4444;
+}
+
+/* ERRO DARK MODE */
+body.dark-mode .input-erro {
+  border-color: #ef4444 !important;
+  background-color: #7f1d1d !important;
+}
+
+body.dark-mode .erro-campo {
+  color: #fca5a5;
+}
+
+/* ===============================
+   RESPONSIVIDADE
+   =============================== */
+@media (max-width: 768px) {
+  .editar-usuario-modal form {
+    width: 92%;
+    max-width: 95%;
+    padding: 26px;
+    border-radius: 14px;
+  }
+
+  .editar-usuario-modal h2 {
+    font-size: 1.25rem;
+  }
+
+  .editar-usuario-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .editar-usuario-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .editar-usuario-modal form {
+    padding: 20px;
+  }
+}

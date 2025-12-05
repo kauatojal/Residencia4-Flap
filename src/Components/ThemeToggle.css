@@ -1,0 +1,41 @@
+.theme-toggle-btn{
+  background: white;
+  border: 2px solid #e5e7eb;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: all .18s ease;
+}
+.theme-toggle-btn:hover{
+  transform: translateY(-2px);
+  border-color:#cbd5e0;
+}
+
+/* dark mode variables */
+:root {
+  --bg: #f4f7fe;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #718096;
+}
+
+.dark-mode {
+  --bg: #0f1724;
+  --surface: #0b1220;
+  --text: #e6eef8;
+  --muted: #9aa7b6;
+}
+
+/* apply a couple of global styles to leveraged classes already in your CSS */
+body, .kanban-main, .kanban-board-view {
+  background: var(--bg);
+  color: var(--text);
+}
+.kanban-sidebar, .kanban-board-header, .notif-dropdown {
+  background: var(--surface);
+}

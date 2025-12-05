@@ -1,0 +1,365 @@
+.filter-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.filter-modal-content {
+  background: white;
+  width: 600px;
+  height: 450px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: slideDown 0.3s ease;
+}
+
+/* ✅ NOVO: Modal mais largo para 3 colunas */
+.filter-modal-wide {
+  width: 900px;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #343a40;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+}
+
+.filter-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ✅ NOVO: 3 colunas */
+.filter-body-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.filter-column {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-column.border-right {
+  border-right: 1px solid #e9ecef;
+}
+
+.filter-column h3 {
+  font-size: 14px;
+  color: #495057;
+  margin: 0 0 12px 0;
+}
+
+/* ✅ NOVO: Header da coluna com botão */
+.filter-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filter-column-header h3 {
+  margin: 0;
+}
+
+.btn-add-flag {
+  background: #4a67ff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-add-flag:hover {
+  background: #3b5bdb;
+}
+
+/* ✅ NOVO: Formulário de criar flag */
+.create-flag-form {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flag-name-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.flag-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-input {
+  width: 50px;
+  height: 35px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.color-label {
+  font-size: 12px;
+  color: #6c757d;
+  font-family: monospace;
+}
+
+.flag-form-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.btn-flag-cancel,
+.btn-flag-create {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-flag-cancel {
+  background: white;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.btn-flag-create {
+  background: #4a67ff;
+  color: white;
+}
+
+.btn-flag-create:hover {
+  background: #3b5bdb;
+}
+
+/* ✅ NOVO: Item de flag */
+.flag-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flag-color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.flag-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.filter-search {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.filter-search input {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.filter-search .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+}
+
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filter-item:hover {
+  background-color: #f8f9fa;
+}
+
+.filter-item.active {
+  background-color: #e7f5ff;
+  border: 1px solid #a5d8ff;
+}
+
+.member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e64980;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #343a40;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-email {
+  margin: 0;
+  font-size: 12px;
+  color: #868e96;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.check-icon {
+  color: #4a67ff;
+  flex-shrink: 0;
+}
+
+.filter-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.btn-cancel, .btn-apply {
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+}
+
+.btn-cancel {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.btn-apply {
+  background-color: #4a67ff;
+  color: white;
+}
+
+.btn-apply:hover {
+  background: #3b5bdb;
+}
+
+/* Scrollbar customizada */
+.filter-list::-webkit-scrollbar,
+.filter-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-list::-webkit-scrollbar-track,
+.filter-column::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.filter-list::-webkit-scrollbar-thumb,
+.filter-column::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.filter-list::-webkit-scrollbar-thumb:hover,
+.filter-column::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}

@@ -1,0 +1,248 @@
+/* ========================================
+   CARD DE USUÁRIO
+   ======================================== */
+.card-usuario {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.card-usuario:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* HEADER */
+.cu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cu-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.cu-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cu-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.cu-info p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.cu-menu-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.cu-menu-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* DROPDOWN */
+.cu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  min-width: 140px;
+  z-index: 10;
+  animation: fadeIn 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+.cu-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cu-dropdown button:hover {
+  background: #f3f4f6;
+}
+
+.cu-dropdown button.delete {
+  color: #dc2626;
+}
+
+.cu-dropdown button.delete:hover {
+  background: #fee2e2;
+}
+
+/* CARGOS */
+.cu-cargos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  min-height: 32px;
+}
+
+.cu-cargo-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cu-sem-cargo {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+/* FOOTER */
+.cu-footer {
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+  transition: border-color 0.3s ease;
+}
+
+.cu-footer small {
+  color: #9ca3af;
+  font-size: 12px;
+  transition: color 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode .card-usuario {
+  background: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .card-usuario:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .cu-info h3 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .cu-info p {
+  color: #94a3b8;
+}
+
+body.dark-mode .cu-menu-btn {
+  color: #94a3b8;
+}
+
+body.dark-mode .cu-menu-btn:hover {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+/* DROPDOWN DARK MODE */
+body.dark-mode .cu-dropdown {
+  background: #0f172a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .cu-dropdown button {
+  color: #cbd5e0;
+}
+
+body.dark-mode .cu-dropdown button:hover {
+  background: #1e293b;
+}
+
+body.dark-mode .cu-dropdown button.delete {
+  color: #f87171;
+}
+
+body.dark-mode .cu-dropdown button.delete:hover {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* CARGOS DARK MODE */
+body.dark-mode .cu-cargo-badge {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
+body.dark-mode .cu-sem-cargo {
+  color: #64748b;
+}
+
+/* FOOTER DARK MODE */
+body.dark-mode .cu-footer {
+  border-top-color: #334155;
+}
+
+body.dark-mode .cu-footer small {
+  color: #64748b;
+}
