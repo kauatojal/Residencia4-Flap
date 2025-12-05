@@ -1,0 +1,413 @@
+.funcionarios-container {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.funcionarios-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.funcionarios-header h2 {
+  font-size: 1.6rem;
+  color: #222;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.btn-adicionar {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-adicionar:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.funcionarios-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.funcionarios-table th,
+.funcionarios-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.funcionarios-table th {
+  background-color: #f8fafc;
+  color: #374151;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.funcionarios-table tr:hover {
+  background-color: #f9fafb;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: border-color 0.3s ease;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #111827;
+  transition: color 0.3s ease;
+}
+
+/* TAG DE SETOR */
+.setor-tag {
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.setor-design {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.setor-comercial {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.setor-mídia,
+.setor-midia {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.setor-marketing {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+/* AÇÕES */
+.actions-cell {
+  position: relative;
+}
+
+.btn-actions {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 8px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.btn-actions:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.actions-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 10;
+  animation: fadeIn 0.15s ease;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.2s ease;
+  color: #374151;
+}
+
+.dropdown-item.edit:hover {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.dropdown-item.delete:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* FEEDBACK */
+.mensagem-sucesso,
+.mensagem-erro {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.mensagem-sucesso {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.mensagem-erro {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ======== COLUNA DE CARGOS ======== */
+.cargos-cell {
+  max-width: 250px;
+}
+
+.cargos-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.cargo-badge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.sem-cargo {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+}
+
+/* Variações de cores para múltiplos cargos */
+.cargo-badge:nth-child(2) {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+.cargo-badge:nth-child(3) {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.cargo-badge:nth-child(4) {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+/* LOADING SPINNER */
+.loading-spinner {
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  margin: 2rem auto;
+  animation: spin 0.9s linear infinite;
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode .funcionarios-container {
+  background: #1e293b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .funcionarios-header h2 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .btn-adicionar {
+  background-color: #3b82f6;
+}
+
+body.dark-mode .btn-adicionar:hover {
+  background-color: #2563eb;
+}
+
+/* TABELA DARK MODE */
+body.dark-mode .funcionarios-table th {
+  background-color: #0f172a;
+  color: #cbd5e0;
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .funcionarios-table td {
+  border-bottom-color: #334155;
+  color: #cbd5e0;
+}
+
+body.dark-mode .funcionarios-table tr:hover {
+  background-color: #334155;
+}
+
+body.dark-mode .user-name {
+  color: #e2e8f0;
+}
+
+body.dark-mode .user-avatar {
+  border-color: #475569;
+}
+
+/* AÇÕES DARK MODE */
+body.dark-mode .btn-actions {
+  color: #94a3b8;
+}
+
+body.dark-mode .btn-actions:hover {
+  background-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .actions-dropdown {
+  background: #0f172a;
+  border-color: #334155;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .dropdown-item {
+  color: #cbd5e0;
+}
+
+body.dark-mode .dropdown-item.edit:hover {
+  background-color: #1e3a8a;
+  color: #93c5fd;
+}
+
+body.dark-mode .dropdown-item.delete:hover {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* CARGOS DARK MODE */
+body.dark-mode .cargo-badge {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
+body.dark-mode .cargo-badge:nth-child(2) {
+  background: #701a75;
+  color: #f0abfc;
+}
+
+body.dark-mode .cargo-badge:nth-child(3) {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+body.dark-mode .cargo-badge:nth-child(4) {
+  background: #713f12;
+  color: #fde047;
+}
+
+body.dark-mode .sem-cargo {
+  color: #64748b;
+}
+
+/* FEEDBACK DARK MODE */
+body.dark-mode .mensagem-sucesso {
+  background-color: #064e3b;
+  color: #6ee7b7;
+}
+
+body.dark-mode .mensagem-erro {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* LOADING DARK MODE */
+body.dark-mode .loading-spinner {
+  border-color: #334155;
+  border-top-color: #60a5fa;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+  .funcionarios-container {
+    padding: 1.5rem;
+  }
+
+  .funcionarios-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .funcionarios-table th,
+  .funcionarios-table td {
+    padding: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-adicionar {
+    width: 100%;
+    justify-content: center;
+  }
+}

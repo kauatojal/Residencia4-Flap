@@ -1,0 +1,480 @@
+.calendario-container {
+  padding: 1rem 2rem;
+  animation: fadeIn 0.5s ease-out;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.year-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.year-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #343a40;
+  margin: 0;
+}
+
+.year-nav-btn {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.year-nav-btn:hover {
+  background-color: #f8f9fa;
+  color: #4c6ef5;
+  border-color: #4c6ef5;
+}
+
+/* ✅ GRID RESPONSIVO */
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.month-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #f1f3f5;
+  transition: box-shadow 0.2s;
+  min-width: 0;
+}
+
+.month-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.month-title {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #495057;
+  text-transform: capitalize;
+  font-size: 1rem;
+}
+
+.weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  color: #adb5bd;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  gap: 2px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day-cell {
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  position: relative;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #495057;
+  min-height: 32px;
+}
+
+.day-cell.inactive {
+  visibility: hidden;
+}
+
+.day-cell:not(.inactive):hover {
+  background-color: #e7f5ff;
+  color: #1c7ed6;
+}
+
+.day-cell.today {
+  background-color: #dbe4ff;
+  color: #3b5bdb;
+  font-weight: 700;
+}
+
+.day-cell.has-tasks {
+  background-color: #e7f5ff;
+  font-weight: 600;
+}
+
+.day-cell.has-tasks::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #4c6ef5;
+}
+
+/* ✅ MODAL RESPONSIVO */
+.modal-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.task-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  overflow: hidden;
+  animation: modalIn 0.2s ease-out;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.task-modal-header {
+  background-color: #4c6ef5;
+  padding: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.modal-day-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+}
+
+.modal-day-text {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.modal-close-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.task-list {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.task-item {
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.task-item:hover {
+  border-color: #4c6ef5;
+}
+
+.task-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+
+.task-item-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #343a40;
+  font-weight: 600;
+  flex: 1;
+}
+
+.task-priority {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: #e9ecef;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.task-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f8f9fa;
+}
+
+.task-company {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.no-tasks {
+  text-align: center;
+  color: #adb5bd;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ✅ DARK MODE */
+body.dark-mode .month-card {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .month-title {
+  color: #e2e8f0;
+}
+
+body.dark-mode .weekdays-header {
+  color: #64748b;
+}
+
+body.dark-mode .day-cell {
+  color: #cbd5e1;
+}
+
+body.dark-mode .day-cell:not(.inactive):hover {
+  background-color: #334155;
+  color: #60a5fa;
+}
+
+body.dark-mode .day-cell.today {
+  background-color: #1e40af;
+  color: #ffffff;
+}
+
+body.dark-mode .day-cell.has-tasks {
+  background-color: #1e3a5f;
+}
+
+body.dark-mode .year-title {
+  color: #e2e8f0;
+}
+
+body.dark-mode .year-nav-btn {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+body.dark-mode .year-nav-btn:hover {
+  background-color: #334155;
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+body.dark-mode .task-modal-content {
+  background: #1e293b;
+}
+
+body.dark-mode .task-item {
+  background-color: #0f172a;
+  border-color: #334155;
+}
+
+body.dark-mode .task-item:hover {
+  border-color: #60a5fa;
+}
+
+body.dark-mode .task-item-header h4 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .task-priority {
+  background-color: #334155;
+  color: #cbd5e1;
+}
+
+body.dark-mode .task-company {
+  color: #94a3b8;
+}
+
+body.dark-mode .no-tasks {
+  color: #64748b;
+}
+
+/* ✅ RESPONSIVIDADE MOBILE */
+@media (max-width: 1200px) {
+  .year-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendario-container {
+    padding: 1rem;
+  }
+
+  .year-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .month-card {
+    padding: 0.75rem;
+  }
+
+  .year-title {
+    font-size: 1.5rem;
+  }
+
+  .year-nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .month-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .weekdays-header {
+    font-size: 0.7rem;
+  }
+
+  .day-cell {
+    font-size: 0.8rem;
+    min-height: 28px;
+  }
+
+  .task-modal-content {
+    max-width: 95%;
+    margin: 0 1rem;
+  }
+
+  .task-modal-header {
+    padding: 1rem;
+  }
+
+  .modal-day-number {
+    font-size: 1.5rem;
+  }
+
+  .modal-day-text {
+    font-size: 0.875rem;
+  }
+
+  .task-list {
+    padding: 1rem;
+  }
+
+  .task-item {
+    padding: 0.75rem;
+  }
+
+  .task-item-header h4 {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendario-container {
+    padding: 0.5rem;
+  }
+
+  .year-navigation {
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .year-title {
+    font-size: 1.25rem;
+  }
+
+  .month-card {
+    padding: 0.5rem;
+  }
+
+  .days-grid {
+    gap: 2px;
+  }
+
+  .day-cell {
+    font-size: 0.75rem;
+    min-height: 24px;
+  }
+
+  .day-cell.has-tasks::after {
+    width: 3px;
+    height: 3px;
+    bottom: 2px;
+  }
+}
