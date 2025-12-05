@@ -3,7 +3,7 @@ import { getToken, logout } from "../api/auth";
 
 // 🔧 Configuração base da API
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8090/v1",
+  baseURL: process.env.REACT_APP_API_URL || "https://flap-backend-production.up.railway.app/v1",
   timeout: 15000, // ✅ Timeout de 15 segundos
   headers: {
     "Content-Type": "application/json",
