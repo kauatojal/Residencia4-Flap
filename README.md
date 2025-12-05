@@ -4,7 +4,7 @@ Plataforma Flap - Sistema frontend stack para gerenciamento da empresa (estilo T
 Dependências necessárias:
 - NodeJS
 
-##% Inicializando projeto
+### Inicializando projeto
 ```
 git clone https://github.com/kauatojal/Residencia4-Flap.git
 cd Residencia4-Flap/frontend/
