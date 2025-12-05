@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import api from '../config/api';
+import api from '../services/api';
 import { 
   HiX, HiUser, HiTag, HiClock, HiDocumentText, 
   HiPaperClip, HiLink, HiCheckCircle, HiPlus 

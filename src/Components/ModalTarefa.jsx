@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import api from '../config/api';
+import api from '../services/api';
 import kanbanService from '../services/kanbanService';
 import clientService from '../services/clientService';
 import flagService from '../services/flagService';

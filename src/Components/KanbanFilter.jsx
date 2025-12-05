@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, Check, Plus } from 'lucide-react';
-import api from '../config/api';
+import api from '../services/api';
 import './KanbanFilter.css';
 
 export default function KanbanFilter({ isOpen, onClose, filters, setFilters }) {

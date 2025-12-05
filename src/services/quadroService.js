@@ -1,4 +1,4 @@
-import api from '../config/api';
+import api from '../services/api';
 
 export const quadroService = {
   getQuadrosAtivos: async () => {
