@@ -1,6 +1,9 @@
 # Residencia4-Flap
 Plataforma Flap - Sistema frontend stack para gerenciamento da empresa (estilo Trello) desenvolvido em ReactJS.
 
+### Aplicação online:
+https://residencia4-flap.vercel.app
+
 Dependências necessárias:
 - NodeJS
 
