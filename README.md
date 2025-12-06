@@ -4,6 +4,9 @@ Plataforma Flap - Sistema frontend stack para gerenciamento da empresa (estilo T
 ### Aplicação online:
 https://residencia4-flap.vercel.app
 
+## Login: admin@flap.com
+## Senha: admin123
+
 Dependências necessárias:
 - NodeJS
 
